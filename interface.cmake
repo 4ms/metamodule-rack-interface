@@ -1,16 +1,15 @@
-add_library(metamodule-rack-interface STATIC ${CMAKE_CURRENT_LIST_DIR}/libc_stub.c)
+add_library(metamodule-rack-interface INTERFACE)
 
-target_compile_options(metamodule-rack-interface PUBLIC
+target_compile_options(metamodule-rack-interface INTERFACE
 	-shared
 	-fPIC
 	-nostartfiles
 	-nostdlib
 )
 
-target_include_directories(metamodule-rack-interface PUBLIC
+target_include_directories(metamodule-rack-interface INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/dep/include
-    ${CMAKE_CURRENT_LIST_DIR}/dep/include/cpputil
 )
 
 set_property(TARGET metamodule-rack-interface PROPERTY CXX_STANDARD 20)

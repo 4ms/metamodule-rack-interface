@@ -34,23 +34,44 @@ struct ParamQuantity : Quantity {
 
 	Param *getParam();
 
+	void setValue(float value) override;
+	float getValue() override;
+
 	void setImmediateValue(float value);
 	float getImmediateValue();
 
-	virtual std::string getDescription() {
-		return description;
-	}
+	float getMinValue() override;
+	float getMaxValue() override;
+	float getDefaultValue() override;
+	float getDisplayValue() override;
+	void setDisplayValue(float displayValue) override;
+	std::string getDisplayValueString() override;
+	void setDisplayValueString(std::string s) override;
+	int getDisplayPrecision() override;
+	std::string getLabel() override;
+	std::string getUnit() override;
+	void reset() override;
+	void randomize() override;
 
-	virtual json_t *toJson() {
-		return nullptr;
+	virtual std::string getDescription();
+
+	virtual json_t *toJson();
+	virtual void fromJson(json_t *rootJ);
+
+	DEPRECATED void setSmoothValue(float value) {
+		setValue(value);
 	}
-	virtual void fromJson(json_t *rootJ) {
+	DEPRECATED float getSmoothValue() {
+		return getValue();
 	}
 
 	//MM:
 	std::vector<std::string> labels;
 };
 
-struct SwitchQuantity : ParamQuantity {};
+struct SwitchQuantity : ParamQuantity {
+	std::string getDisplayValueString() override;
+	void setDisplayValueString(std::string s) override;
+};
 
 } // namespace rack::engine

@@ -20,11 +20,12 @@ struct Port {
 	};
 
 	void setVoltage(float v, uint8_t channel = 0) {
-		voltages[channel] = v;
+		if (channel < PORT_MAX_CHANNELS)
+			voltages[channel] = v;
 	}
 
 	float getVoltage(uint8_t chan = 0) const {
-		return voltages[chan];
+		return (chan < PORT_MAX_CHANNELS) ? voltages[chan] : 0.f;
 	}
 
 	float getPolyVoltage(uint8_t channel) const {
@@ -40,15 +41,20 @@ struct Port {
 	}
 
 	float *getVoltages(uint8_t firstChannel = 0) {
-		return &voltages[firstChannel];
+		if (firstChannel < PORT_MAX_CHANNELS)
+			return &voltages[firstChannel];
+		else
+			return &voltages[0]; // TODO: this could be a problem if caller requests a channel out of range
 	}
 
+	//UNSAFE: caller must guarentee v[] has at least channel elements
 	void readVoltages(float *v) const {
 		for (uint8_t c = 0; c < channels; c++) {
 			v[c] = voltages[c];
 		}
 	}
 
+	//UNSAFE: caller must guarentee v[] has at least channel elements
 	void writeVoltages(const float *v) {
 		for (uint8_t c = 0; c < channels; c++) {
 			voltages[c] = v[c];
@@ -63,37 +69,29 @@ struct Port {
 
 	float getVoltageSum() const {
 		return std::accumulate(voltages.begin(), voltages.begin() + channels, 0.f);
-		// float sum = 0.f;
-		// for (uint8_t c = 0; c < channels; c++) {
-		// 	sum += voltages[c];
-		// }
-		// return sum;
 	}
 
 	float getVoltageRMS() const {
 		if (channels == 0) {
 			return 0.f;
+
 		} else if (channels == 1) {
 			return std::fabs(voltages[0]);
+
 		} else {
 			auto sum_squares = [](float sum, float v) {
 				return sum + v * v;
 			};
 			return std::sqrt(std::accumulate(voltages.begin(), voltages.begin() + channels, 0.f, sum_squares));
-
-			// float sum = 0.f;
-			// for (uint8_t c = 0; c < channels; c++) {
-			// 	sum += std::pow(voltages[c], 2);
-			// }
-			// return std::sqrt(sum);
 		}
-		// return connected ? std::fabs(voltage) : 0;
 	}
 
 	template<typename T>
 	T getVoltageSimd(int firstChannel) const {
-		return T::load(&voltages[firstChannel]);
-		// return T(voltage); // return vector with all elements set to voltage
+		if (firstChannel < PORT_MAX_CHANNELS)
+			return T::load(&voltages[firstChannel]);
+		else
+			return T{0.f}; //try to handle error gracefully
 	}
 
 	template<typename T>
@@ -113,33 +111,22 @@ struct Port {
 
 	template<typename T>
 	void setVoltageSimd(T v, int firstChannel) {
-		// voltage = v[0];
-		v.store(&voltages[firstChannel]);
+		if (firstChannel < PORT_MAX_CHANNELS)
+			v.store(&voltages[firstChannel]);
 	}
 
-	// In VCV Rack:
-	//    Sets the number of polyphony channels.
-	//    Also clears voltages of higher channels.
-	//    If disconnected, this does nothing (`channels` remains 0).
-	//    If 0 is given, `channels` is set to 1 but all voltages are cleared.
-	// For MM, is this what we want? When would a Module call this?
 	void setChannels(int channels) {
 		// If disconnected, keep the number of channels at 0.
 		if (this->channels == 0) {
 			return;
 		}
-		// Set higher channel voltages to 0
 
-		// FIXME: if channels = 0, then this sets voltages[0] to 0,
-		// but then sets this->channels to 1. Is that the right behavoir?
-		for (uint8_t c = channels; c < this->channels; c++) {
-			voltages[c] = 0.f;
-		}
 		// Don't allow caller to set port as disconnected
-		if (channels == 0) {
-			channels = 1;
-		}
-		this->channels = channels;
+		// or out of range
+		this->channels = std::clamp(channels, 1, PORT_MAX_CHANNELS);
+
+		// VCV comment: "Set higher channel voltages to 0"
+		// TODO: do this when we enable polyphony
 	}
 
 	int getChannels() const {

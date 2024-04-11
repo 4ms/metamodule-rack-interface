@@ -10,9 +10,9 @@ namespace rack::app
 {
 
 struct SvgPort : PortWidget {
-	widget::FramebufferWidget *fb;
-	CircularShadow *shadow;
-	widget::SvgWidget *sw;
+	widget::FramebufferWidget *fb = &_fb;
+	CircularShadow *shadow = &_shadow;
+	widget::SvgWidget *sw = &_sw;
 
 	std::string svg_filename; //TODO: instead use sw->svg->filename;
 
@@ -22,6 +22,11 @@ struct SvgPort : PortWidget {
 	void setSVG(std::shared_ptr<window::Svg> svg) {
 		setSvg(svg);
 	}
+
+private:
+	widget::FramebufferWidget _fb;
+	CircularShadow _shadow;
+	widget::SvgWidget _sw;
 };
 
 struct ThemedSvgPort : SvgPort {

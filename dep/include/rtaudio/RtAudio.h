@@ -42,7 +42,7 @@
 /*!
   \file RtAudio.h
  */
-
+#if 0
 #ifndef __RTAUDIO_H
 #define __RTAUDIO_H
 
@@ -64,7 +64,7 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
+// #include <iostream>
 #include <functional>
 
 /*! \typedef typedef unsigned long RtAudioFormat;
@@ -1166,3 +1166,4 @@ public:
 // End:
 //
 // vim: et sts=2 sw=2
+#endif

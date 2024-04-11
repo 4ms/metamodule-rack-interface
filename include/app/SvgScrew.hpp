@@ -5,29 +5,30 @@
 #include <widget/SvgWidget.hpp>
 #include <widget/Widget.hpp>
 
-namespace rack::app {
+namespace rack::app
+{
 
 struct SvgScrew : widget::Widget {
-  widget::FramebufferWidget *fb = &_fb;
-  widget::SvgWidget *sw = &_sw;
+	widget::FramebufferWidget *fb=&_fb;
+	widget::SvgWidget *sw=&_sw;
 
-  void setSvg(std::shared_ptr<window::Svg> svg) {}
+	void setSvg(std::shared_ptr<window::Svg> svg) {
+	}
 
-private:
-  widget::FramebufferWidget _fb;
-  widget::SvgWidget _sw;
+	private:
+	widget::FramebufferWidget _fb;
+	widget::SvgWidget _sw;
 };
 
 struct ThemedSvgScrew : SvgScrew {
-  std::shared_ptr<window::Svg> lightSvg;
-  std::shared_ptr<window::Svg> darkSvg;
+	std::shared_ptr<window::Svg> lightSvg;
+	std::shared_ptr<window::Svg> darkSvg;
 
-  void setSvg(std::shared_ptr<window::Svg> lightSvg,
-              std::shared_ptr<window::Svg> darkSvg) {
-    this->lightSvg = lightSvg;
-    this->darkSvg = darkSvg;
-    SvgScrew::setSvg(settings::preferDarkPanels ? darkSvg : lightSvg);
-  }
+	void setSvg(std::shared_ptr<window::Svg> lightSvg, std::shared_ptr<window::Svg> darkSvg) {
+		this->lightSvg = lightSvg;
+		this->darkSvg = darkSvg;
+		SvgScrew::setSvg(settings::preferDarkPanels ? darkSvg : lightSvg);
+	}
 };
 
 } // namespace rack::app

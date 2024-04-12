@@ -2,7 +2,7 @@
 #include <jansson.h>
 
 #include <common.hpp>
-#include <math.hpp>
+#include "../math.hpp"
 #include <ui/common.hpp>
 
 

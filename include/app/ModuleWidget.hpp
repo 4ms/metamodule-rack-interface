@@ -22,7 +22,7 @@ struct ModuleWidget : widget::Widget {
 	//TODO:
 	// std::unique_ptr<engine::Module> module;
 
-	widget::Widget *panel = nullptr;
+	app::SvgPanel *panel = nullptr;
 	// std::unique_ptr<widget::Widget> panel;
 
 	std::string svg_filename;
@@ -56,6 +56,8 @@ struct ModuleWidget : widget::Widget {
 
 	void addChild(Widget *w);
 	void addChild(app::ModuleLightWidget *lightWidget);
+	void addChild(SvgPanel *child);
+	void addChildBottom(SvgPanel *child);
 	void addParam(ParamWidget *param);
 	void addInput(PortWidget *input);
 	void addOutput(PortWidget *output);

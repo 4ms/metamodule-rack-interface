@@ -67,7 +67,7 @@ Element make_element(rack::componentlibrary::TGrayModuleLightWidget<LightBaseT> 
 
 	std::string_view image = size <= 2.6f ? "rack-lib/SmallLight.png" : //4px => 2.14mm
 							 size <= 3.7f ? "rack-lib/MediumLight.png" : //6px => 3.21mm
-							 size <= 4.5f ? "4ms/comp/led_x.png" : //8px => 4.28mm
+							 size <= 4.5f ? "rack-lib/Light8px.png" : //8px => 4.28mm
 							 size <= 5.3f ? "rack-lib/LargeLight.png" : //9px => 4.82mm
 							 size <= 6.5f ? "rack-lib/VCVBezelLight.png" : //11px => 5.89mm
 							 size <= 18.f ? "rack-lib/VCVBezel.png" : //14px => 7.5mm

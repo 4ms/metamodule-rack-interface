@@ -18,8 +18,6 @@ Directly including Rack headers other than rack.hpp in your plugin is unsupporte
 #define PRIVATE __attribute__((error("Using internal Rack function or symbol")))
 #endif
 
-#include "metamodule/dynamic_cast.hpp"
-
 #include <asset.hpp>
 #include <audio.hpp>
 #include <common.hpp>

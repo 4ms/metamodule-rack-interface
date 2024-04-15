@@ -56,13 +56,13 @@ Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> const *wi
 template<typename LightBaseT>
 Element make_element(rack::componentlibrary::TSvgLight<LightBaseT> const *widget, BaseElement el) {
 	if (widget->getNumColors() == 1) {
-		return make_mono_led_element(widget->sw->svgfilename, widget, el);
+		return make_mono_led_element(widget->sw->svg_filename, widget, el);
 	}
 	if (widget->getNumColors() == 2) {
-		return make_dual_led_element(widget->sw->svgfilename, widget, el);
+		return make_dual_led_element(widget->sw->svg_filename, widget, el);
 	}
 	if (widget->getNumColors() == 3) {
-		return make_rgb_led_element(widget->sw->svgfilename, widget, el);
+		return make_rgb_led_element(widget->sw->svg_filename, widget, el);
 	}
 
 	// printf("Light widget not handled (%d colors)\n", widget->getNumColors());

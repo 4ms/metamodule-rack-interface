@@ -28,9 +28,9 @@ struct PortWidget : widget::OpaqueWidget {
 		if (!module)
 			return nullptr;
 		if (type == engine::Port::INPUT)
-			return (size_t)portId < module->inputInfos.size() ? module->inputInfos[portId].get() : nullptr;
+			return (size_t)portId < module->inputInfos.size() ? module->inputInfos[portId] : nullptr;
 		else
-			return (size_t)portId < module->outputInfos.size() ? module->outputInfos[portId].get() : nullptr;
+			return (size_t)portId < module->outputInfos.size() ? module->outputInfos[portId] : nullptr;
 	}
 
 	void createTooltip() {

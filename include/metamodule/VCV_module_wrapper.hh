@@ -53,7 +53,7 @@ struct VCVModuleWrapper : CoreProcessor {
 	std::vector<rack::engine::Output> outputs;
 	std::vector<rack::engine::Light> lights;
 
-	std::vector<std::unique_ptr<rack::engine::ParamQuantity>> paramQuantities;
+	std::vector<rack::engine::ParamQuantity*> paramQuantities;
 
 	ProcessArgs args{48000.f, 1.f / 48000.f, 0};
 };

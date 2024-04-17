@@ -18,7 +18,7 @@ struct ModuleLightWidget : MultiLightWidget {
 	engine::LightInfo *getLightInfo() {
 		if (!module || firstLightId < 0)
 			return nullptr;
-		return module->lightInfos[firstLightId].get();
+		return module->lightInfos[firstLightId];
 	}
 
 	void createTooltip() {

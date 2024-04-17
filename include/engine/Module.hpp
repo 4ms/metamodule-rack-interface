@@ -26,16 +26,13 @@ namespace engine
 {
 
 struct Module : VCVModuleWrapper {
-	// struct Internal;
-	// Internal *internal;
-
 	plugin::Model *model = nullptr;
 
 	int64_t id = -1;
 
-	std::vector<std::unique_ptr<PortInfo>> inputInfos;
-	std::vector<std::unique_ptr<PortInfo>> outputInfos;
-	std::vector<std::unique_ptr<LightInfo>> lightInfos;
+	std::vector<PortInfo*> inputInfos;
+	std::vector<PortInfo*> outputInfos;
+	std::vector<LightInfo*> lightInfos;
 
 	struct Expander {
 		int64_t moduleId = -1;
@@ -82,9 +79,9 @@ struct Module : VCVModuleWrapper {
 			return nullptr;
 
 		if (paramQuantities[paramId])
-			paramQuantities[paramId].reset();
+			delete paramQuantities[paramId];
 
-		paramQuantities[paramId] = std::make_unique<TParamQuantity>();
+		paramQuantities[paramId] = new TParamQuantity;
 
 		// TODO: is any of this necessary? In case a VCV module reads its own PQs?
 		paramQuantities[paramId]->ParamQuantity::module = this;
@@ -101,7 +98,7 @@ struct Module : VCVModuleWrapper {
 		Param *p = &params[paramId];
 		p->value = defaultValue;
 
-		return static_cast<TParamQuantity *>(paramQuantities[paramId].get());
+		return static_cast<TParamQuantity *>(paramQuantities[paramId]);
 	}
 
 	template<class TSwitchQuantity = SwitchQuantity>
@@ -131,16 +128,16 @@ struct Module : VCVModuleWrapper {
 			return nullptr;
 
 		if (inputInfos[portId])
-			inputInfos[portId].reset();
+			delete inputInfos[portId];
 
-		inputInfos[portId] = std::make_unique<TPortInfo>();
+		inputInfos[portId] = new TPortInfo;
 
 		// TODO: is any of this necessary? In case a VCV module reads its own inputInfos?
 		inputInfos[portId]->PortInfo::module = this;
 		inputInfos[portId]->PortInfo::type = Port::INPUT;
 		inputInfos[portId]->PortInfo::portId = portId;
 		inputInfos[portId]->PortInfo::name = name;
-		return static_cast<TPortInfo *>(inputInfos[portId].get());
+		return inputInfos[portId];
 	}
 
 	template<class TPortInfo = PortInfo>
@@ -149,16 +146,16 @@ struct Module : VCVModuleWrapper {
 			return nullptr;
 
 		if (outputInfos[portId])
-			outputInfos[portId].reset();
+			delete outputInfos[portId];
 
-		outputInfos[portId] = std::make_unique<TPortInfo>();
+		outputInfos[portId] = new TPortInfo;
 
 		// TODO: is any of this necessary? In case a VCV module reads its own outputInfos?
 		outputInfos[portId]->PortInfo::module = this;
 		outputInfos[portId]->PortInfo::type = Port::INPUT;
 		outputInfos[portId]->PortInfo::portId = portId;
 		outputInfos[portId]->PortInfo::name = name;
-		return static_cast<TPortInfo *>(outputInfos[portId].get());
+		return outputInfos[portId];
 	}
 
 	template<class TLightInfo = LightInfo>
@@ -167,16 +164,16 @@ struct Module : VCVModuleWrapper {
 			return nullptr;
 
 		if (lightInfos[lightId])
-			lightInfos[lightId].reset();
+			delete lightInfos[lightId];
 
-		lightInfos[lightId] = std::make_unique<TLightInfo>();
+		lightInfos[lightId] = new TLightInfo;
 
 		// TODO: is any of this necessary? In case a VCV module reads its own lightInfos?
 		lightInfos[lightId]->LightInfo::module = this;
 		lightInfos[lightId]->LightInfo::lightId = lightId;
 		lightInfos[lightId]->LightInfo::name = name;
 
-		return static_cast<TLightInfo *>(lightInfos[lightId].get());
+		return lightInfos[lightId];
 	}
 
 	void configBypass(int inputId, int outputId) {
@@ -238,22 +235,22 @@ struct Module : VCVModuleWrapper {
 	ParamQuantity *getParamQuantity(int index) {
 		if (index < 0 || index >= (int)paramQuantities.size())
 			return nullptr;
-		return paramQuantities[index].get();
+		return paramQuantities[index];
 	}
 	PortInfo *getInputInfo(int index) {
 		if (index < 0 || index >= (int)inputInfos.size())
 			return nullptr;
-		return inputInfos[index].get();
+		return inputInfos[index];
 	}
 	PortInfo *getOutputInfo(int index) {
 		if (index < 0 || index >= (int)outputInfos.size())
 			return nullptr;
-		return outputInfos[index].get();
+		return outputInfos[index];
 	}
 	LightInfo *getLightInfo(int index) {
 		if (index < 0 || index >= (int)lightInfos.size())
 			return nullptr;
-		return lightInfos[index].get();
+		return lightInfos[index];
 	}
 	Expander &getLeftExpander() {
 		return leftExpander;

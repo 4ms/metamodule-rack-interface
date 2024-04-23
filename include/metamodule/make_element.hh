@@ -7,6 +7,7 @@ namespace MetaModule
 
 Element make_element_output(rack::app::SvgPort const *widget, BaseElement b);
 Element make_element_input(rack::app::SvgPort const *widget, BaseElement b);
+Element make_element(rack::app::Knob const *widget, BaseElement b);
 Element make_element(rack::app::SvgKnob *widget, BaseElement b);
 Element make_element_slideswitch(rack::app::SvgSlider const *widget, BaseElement b);
 Element make_element(rack::app::SvgSlider const *widget, BaseElement b);

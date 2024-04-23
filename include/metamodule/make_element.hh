@@ -14,6 +14,7 @@ Element make_element(rack::componentlibrary::Rogan const *widget, BaseElement b)
 Element make_element(rack::app::SvgSwitch const *widget, BaseElement b);
 Element make_element(rack::app::SvgScrew const *widget, BaseElement);
 Element make_element(rack::widget::SvgWidget const *widget, BaseElement el);
+Element make_element(rack::app::SliderKnob const *widget, BaseElement b);
 Element make_element(rack::app::MultiLightWidget const *widget, BaseElement el);
 Element make_mono_led_element(std::string_view image, rack::app::MultiLightWidget const *widget, BaseElement const &el);
 Element make_dual_led_element(std::string_view image, rack::app::MultiLightWidget const *widget, BaseElement const &el);

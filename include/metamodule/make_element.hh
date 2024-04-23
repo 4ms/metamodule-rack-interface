@@ -13,6 +13,7 @@ Element make_element(rack::app::SvgSlider const *widget, BaseElement b);
 Element make_element(rack::componentlibrary::Rogan const *widget, BaseElement b);
 Element make_element(rack::app::SvgSwitch const *widget, BaseElement b);
 Element make_element(rack::app::SvgScrew const *widget, BaseElement);
+Element make_element(rack::app::ParamWidget const *widget, BaseElement el);
 Element make_element(rack::widget::SvgWidget const *widget, BaseElement el);
 Element make_element(rack::app::SliderKnob const *widget, BaseElement b);
 Element make_element(rack::app::MultiLightWidget const *widget, BaseElement el);

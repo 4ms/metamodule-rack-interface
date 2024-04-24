@@ -40,11 +40,9 @@ struct Svg {
 	std::string filename;
 
 	Svg() = default;
-	Svg(std::string_view fname)
-		: filename{fname} {
-	}
+	Svg(std::string_view fname);
+	~Svg();
 
-	~Svg() = default;
 	/** Don't call this directly. Use `Svg::load()` for caching. */
 	void loadFile(const std::string &filename);
 	/** Loads SVG data from a string. */

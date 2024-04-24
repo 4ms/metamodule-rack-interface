@@ -8,8 +8,6 @@ namespace rack::widget
 struct SvgWidget : Widget {
 	std::shared_ptr<window::Svg> svg;
 
-	//MM:
-	std::string svg_filename; //TODO: use svg->filename
 	NVGcolor bgColor{};
 
 	void wrap() {

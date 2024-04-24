@@ -18,13 +18,13 @@ Element make_element(rack::app::ParamWidget const *widget, BaseElement el);
 Element make_element(rack::widget::SvgWidget const *widget, BaseElement el);
 Element make_element(rack::app::SliderKnob const *widget, BaseElement b);
 Element make_element(rack::app::MultiLightWidget const *widget, BaseElement el);
-Element make_mono_led_element(std::string_view image, rack::app::MultiLightWidget const *widget, BaseElement const &el);
-Element make_dual_led_element(std::string_view image, rack::app::MultiLightWidget const *widget, BaseElement const &el);
-Element make_rgb_led_element(std::string_view image, rack::app::MultiLightWidget const *widget, BaseElement const &el);
+
+Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget const *, BaseElement const &);
 Element make_momentary_rgb(std::string_view image, BaseElement const &el);
 Element make_latching_rgb(std::string_view image, BaseElement const &el);
 Element make_latching_mono(std::string_view image, NVGcolor c, BaseElement const &el);
 Element make_momentary_mono(std::string_view image, NVGcolor c, BaseElement const &el);
+Element make_button_light(rack::app::MultiLightWidget const *, rack::app::SvgSwitch const *, BaseElement const &);
 
 //
 // Button with lights
@@ -32,24 +32,7 @@ Element make_momentary_mono(std::string_view image, NVGcolor c, BaseElement cons
 
 template<typename LightBaseT>
 Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> const *widget, BaseElement el) {
-
-	if (widget->light->getNumColors() == 1) {
-		auto c = widget->light->baseColors[0];
-		if (widget->momentary)
-			return make_momentary_mono(widget->frames[0], c, el);
-		else
-			return make_latching_mono(widget->frames[0], c, el);
-	}
-
-	if (widget->light->getNumColors() == 3) {
-		if (widget->momentary)
-			return make_momentary_rgb(widget->frames[0], el);
-		else
-			return make_latching_rgb(widget->frames[0], el);
-	}
-
-	// printf("make_element(): Unknown VCVLightBezel\n");
-	return NullElement{};
+	return make_button_light(widget->light, widget, el);
 }
 
 //
@@ -58,18 +41,7 @@ Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> const *wi
 
 template<typename LightBaseT>
 Element make_element(rack::componentlibrary::TSvgLight<LightBaseT> const *widget, BaseElement el) {
-	if (widget->getNumColors() == 1) {
-		return make_mono_led_element(widget->sw->svg_filename, widget, el);
-	}
-	if (widget->getNumColors() == 2) {
-		return make_dual_led_element(widget->sw->svg_filename, widget, el);
-	}
-	if (widget->getNumColors() == 3) {
-		return make_rgb_led_element(widget->sw->svg_filename, widget, el);
-	}
-
-	// printf("Light widget not handled (%d colors)\n", widget->getNumColors());
-	return NullElement{};
+	return make_multi_led_element(widget->sw->svg->filename, widget, el);
 }
 
 } // namespace MetaModule

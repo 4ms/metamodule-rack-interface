@@ -14,8 +14,6 @@ struct SvgPort : PortWidget {
 	CircularShadow *shadow = &_shadow;
 	widget::SvgWidget *sw = &_sw;
 
-	std::string svg_filename; //TODO: instead use sw->svg->filename;
-
 	SvgPort();
 
 	void setSvg(std::shared_ptr<window::Svg> svg);

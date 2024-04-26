@@ -18,6 +18,7 @@ Element make_element(rack::app::ParamWidget const *widget, BaseElement el);
 Element make_element(rack::widget::SvgWidget const *widget, BaseElement el);
 Element make_element(rack::app::SliderKnob const *widget, BaseElement b);
 Element make_element(rack::app::MultiLightWidget const *widget, BaseElement el);
+Element make_element_lightslider(rack::app::SvgSlider const *widget, BaseElement el);
 
 Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget const *, BaseElement const &);
 Element make_momentary_rgb(std::string_view image, BaseElement const &el);

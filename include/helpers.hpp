@@ -65,6 +65,25 @@ T *createElementParamWidget(
 	return widget;
 }
 
+template<typename T>
+T *createElementLightParamWidget(
+	math::Vec pos, MetaModule::Coords coord_ref, std::string_view name, engine::Module *module, int paramId)
+	requires(std::derived_from<T, app::SvgSlider>)
+{
+	auto *widget = new T;
+	widget->module = module;
+	widget->paramId = paramId;
+	widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
+
+	if (coord_ref == MetaModule::Coords::TopLeft) {
+		widget->box.pos = pos + widget->background->box.pos;
+	} else {
+		widget->box.pos = pos.minus(widget->background->box.size.div(2));
+	}
+
+	return widget;
+}
+
 template<class TWidget>
 TWidget *createWidget(math::Vec pos) {
 	return createElementWidget<TWidget>(pos, MetaModule::Coords::TopLeft, "Unknown");
@@ -245,12 +264,9 @@ TModuleLightWidget *createLightCentered(math::Vec pos, engine::Module *module, i
 template<class TParamWidget>
 TParamWidget *createLightParam(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
 	auto name = getParamName(module, paramId);
-	auto widget = createElementWidget<TParamWidget>(pos, MetaModule::Coords::TopLeft, name);
-	widget->box.pos = pos;
-	widget->paramId = paramId;
-
-	// TODO: how to do this?
-	// param->getLight()->firstLightId = firstLightId;
+	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::TopLeft, name);
+	widget->getLight()->module = module;
+	widget->getLight()->firstLightId = firstLightId;
 
 	return widget;
 }
@@ -258,12 +274,9 @@ TParamWidget *createLightParam(math::Vec pos, engine::Module *module, int paramI
 template<class TParamWidget>
 TParamWidget *createLightParamCentered(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
 	auto name = getParamName(module, paramId);
-	auto widget = createElementWidget<TParamWidget>(pos, MetaModule::Coords::Center, name);
-	widget->box.pos = pos.minus(widget->box.size.div(2));
-	widget->paramId = paramId;
-
-	// TODO: how to do this?
-	// param->getLight()->firstLightId = firstLightId;
+	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::Center, name);
+	widget->getLight()->module = module;
+	widget->getLight()->firstLightId = firstLightId;
 
 	return widget;
 }

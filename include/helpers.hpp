@@ -67,12 +67,10 @@ T *createElementParamWidget(
 
 template<typename T>
 T *createElementLightParamWidget(
-	math::Vec pos, MetaModule::Coords coord_ref, std::string_view name, engine::Module *module, int paramId)
+	math::Vec pos, MetaModule::Coords coord_ref, std::string_view name)
 	requires(std::derived_from<T, app::SvgSlider>)
 {
 	auto *widget = new T;
-	widget->module = module;
-	widget->paramId = paramId;
 	widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
 
 	if (coord_ref == MetaModule::Coords::TopLeft) {
@@ -265,6 +263,8 @@ template<class TParamWidget>
 TParamWidget *createLightParam(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
 	auto name = getParamName(module, paramId);
 	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::TopLeft, name);
+	widget->module = module;
+	widget->paramId = paramId;
 	widget->getLight()->module = module;
 	widget->getLight()->firstLightId = firstLightId;
 
@@ -275,6 +275,8 @@ template<class TParamWidget>
 TParamWidget *createLightParamCentered(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
 	auto name = getParamName(module, paramId);
 	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::Center, name);
+	widget->module = module;
+	widget->paramId = paramId;
 	widget->getLight()->module = module;
 	widget->getLight()->firstLightId = firstLightId;
 
@@ -354,3 +356,4 @@ ui::MenuItem *createIndexPtrSubmenuItem(std::string_view text, std::vector<std::
 }
 
 } // namespace rack
+

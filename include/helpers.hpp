@@ -65,23 +65,6 @@ T *createElementParamWidget(
 	return widget;
 }
 
-template<typename T>
-T *createElementLightParamWidget(
-	math::Vec pos, MetaModule::Coords coord_ref, std::string_view name)
-	requires(std::derived_from<T, app::SvgSlider>)
-{
-	auto *widget = new T;
-	widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
-
-	if (coord_ref == MetaModule::Coords::TopLeft) {
-		widget->box.pos = pos + widget->background->box.pos;
-	} else {
-		widget->box.pos = pos.minus(widget->background->box.size.div(2));
-	}
-
-	return widget;
-}
-
 template<class TWidget>
 TWidget *createWidget(math::Vec pos) {
 	return createElementWidget<TWidget>(pos, MetaModule::Coords::TopLeft, "Unknown");
@@ -259,30 +242,58 @@ TModuleLightWidget *createLightCentered(math::Vec pos, engine::Module *module, i
 	return widget;
 }
 
+//
+// Light + Params
+//
 template<class TParamWidget>
-TParamWidget *createLightParam(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
+TParamWidget *
+createLightParamImpl(math::Vec pos, engine::Module *module, MetaModule::Coords coord_ref, int paramId, int firstLightId)
+	requires(std::derived_from<TParamWidget, app::SvgSlider>)
+{
 	auto name = getParamName(module, paramId);
-	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::TopLeft, name);
+
+	auto *widget = new TParamWidget;
+	widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
+
+	if (coord_ref == MetaModule::Coords::TopLeft) {
+		widget->box.pos = pos + widget->background->box.pos;
+	} else {
+		widget->box.pos = pos.minus(widget->background->box.size.div(2));
+	}
+
 	widget->module = module;
 	widget->paramId = paramId;
 	widget->getLight()->module = module;
 	widget->getLight()->firstLightId = firstLightId;
 
 	return widget;
+}
+
+template<class TParamWidget>
+TParamWidget *createLightParamImpl(
+	math::Vec pos, engine::Module *module, MetaModule::Coords coords_ref, int paramId, int firstLightId)
+//requires(std::derived_from<TParamWidget, app::SvgSwitch>)
+{
+	auto name = getParamName(module, paramId);
+	auto widget = createElementWidget<TParamWidget>(pos, coords_ref, name);
+	widget->box.pos = pos.minus(widget->box.size.div(2));
+	widget->paramId = paramId;
+	return widget;
+}
+
+template<class TParamWidget>
+TParamWidget *createLightParam(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
+	return createLightParamImpl<TParamWidget>(pos, module, MetaModule::Coords::TopLeft, paramId, firstLightId);
 }
 
 template<class TParamWidget>
 TParamWidget *createLightParamCentered(math::Vec pos, engine::Module *module, int paramId, int firstLightId) {
-	auto name = getParamName(module, paramId);
-	auto widget = createElementLightParamWidget<TParamWidget>(pos, MetaModule::Coords::Center, name);
-	widget->module = module;
-	widget->paramId = paramId;
-	widget->getLight()->module = module;
-	widget->getLight()->firstLightId = firstLightId;
-
-	return widget;
+	return createLightParamImpl<TParamWidget>(pos, module, MetaModule::Coords::Center, paramId, firstLightId);
 }
 
+//
+// Menus
+//
 template<class TMenu = ui::Menu>
 TMenu *createMenu() {
 	return nullptr;
@@ -356,4 +367,3 @@ ui::MenuItem *createIndexPtrSubmenuItem(std::string_view text, std::vector<std::
 }
 
 } // namespace rack
-

@@ -22,7 +22,12 @@ struct VCVModuleWrapper : CoreProcessor {
 
 	VCVModuleWrapper();
 
-	virtual void process(const ProcessArgs &) = 0;
+	virtual void process(const ProcessArgs &) {
+		step();
+	}
+
+	virtual void step() {
+	}
 
 	void update() override;
 
@@ -53,7 +58,7 @@ struct VCVModuleWrapper : CoreProcessor {
 	std::vector<rack::engine::Output> outputs;
 	std::vector<rack::engine::Light> lights;
 
-	std::vector<rack::engine::ParamQuantity*> paramQuantities;
+	std::vector<rack::engine::ParamQuantity *> paramQuantities;
 
 	ProcessArgs args{48000.f, 1.f / 48000.f, 0};
 };

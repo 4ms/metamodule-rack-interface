@@ -30,7 +30,7 @@ template<typename T>
 T *createElementParamWidget(
 	math::Vec pos, MetaModule::Coords coord_ref, std::string_view name, engine::Module *module, int paramId) {
 	auto *widget = new T;
-	widget->module = module;
+	widget->ParamWidget::module = module;
 	widget->paramId = paramId;
 	widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
 	widget->box.pos = coord_ref == MetaModule::Coords::TopLeft ? pos : pos.minus(widget->box.size.div(2));

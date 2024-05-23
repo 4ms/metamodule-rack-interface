@@ -1,7 +1,7 @@
 #pragma once
 #include "CoreModules/CoreProcessor.hh"
-#include "CoreModules/moduleFactory.hh"
 #include <app/ModuleWidget.hpp>
+#include <memory>
 #include <plugin/Model.hpp>
 #include <string_view>
 
@@ -20,9 +20,6 @@ template<class ModuleT, class ModuleWidgetT>
 requires(std::derived_from<ModuleWidgetT, app::ModuleWidget>) && (std::derived_from<ModuleT, rack::engine::Module>)
 
 plugin::Model *createModel(std::string_view slug) {
-
-	MetaModule::ModuleFactory::registerModuleCreationFunc(slug, create_vcv_module<ModuleT>);
-
 	struct ModelT : plugin::Model {
 
 		rack::engine::Module *createModule() override {
@@ -42,6 +39,7 @@ plugin::Model *createModel(std::string_view slug) {
 
 	plugin::Model *model = new ModelT;
 	model->slug = slug;
+	model->creation_func = create_vcv_module<ModuleT>;
 	return model;
 }
 

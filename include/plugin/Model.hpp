@@ -5,6 +5,7 @@
 #include <deque>
 #include <jansson.h>
 #include <list>
+#include <memory>
 #include <plugin/Plugin.hpp>
 #include <vector>
 
@@ -28,6 +29,10 @@ namespace rack::plugin
 
 struct Model {
 	Plugin *plugin = nullptr;
+
+	//MetaModule:
+	using CreateModuleFunc = std::unique_ptr<CoreProcessor> (*)();
+	CreateModuleFunc creation_func;
 
 	std::string slug{};
 

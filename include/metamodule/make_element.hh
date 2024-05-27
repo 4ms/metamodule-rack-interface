@@ -22,10 +22,6 @@ Element make_element_lightslider(rack::app::SvgSlider const *widget, BaseElement
 Element make_element(rack::widget::Widget const *widget, BaseElement);
 
 Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget const *, BaseElement const &);
-Element make_momentary_rgb(std::string_view image, BaseElement const &el);
-Element make_latching_rgb(std::string_view image, BaseElement const &el);
-Element make_latching_mono(std::string_view image, NVGcolor c, BaseElement const &el);
-Element make_momentary_mono(std::string_view image, NVGcolor c, BaseElement const &el);
 Element make_button_light(rack::app::MultiLightWidget const *, rack::app::SvgSwitch const *, BaseElement const &);
 
 //

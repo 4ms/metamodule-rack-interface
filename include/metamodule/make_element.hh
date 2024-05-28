@@ -5,31 +5,31 @@
 namespace MetaModule
 {
 
-Element make_element_output(rack::app::SvgPort const *widget, BaseElement b);
-Element make_element_input(rack::app::SvgPort const *widget, BaseElement b);
-Element make_element(rack::app::Knob const *widget, BaseElement b);
+Element make_element_output(rack::app::SvgPort *widget, BaseElement b);
+Element make_element_input(rack::app::SvgPort *widget, BaseElement b);
+Element make_element(rack::app::Knob *widget, BaseElement b);
 Element make_element(rack::app::SvgKnob *widget, BaseElement b);
-Element make_element_slideswitch(rack::app::SvgSlider const *widget, BaseElement b);
-Element make_element(rack::app::SvgSlider const *widget, BaseElement b);
-Element make_element(rack::componentlibrary::Rogan const *widget, BaseElement b);
-Element make_element(rack::app::SvgSwitch const *widget, BaseElement b);
-Element make_element(rack::app::SvgScrew const *widget, BaseElement);
-Element make_element(rack::app::ParamWidget const *widget, BaseElement el);
-Element make_element(rack::widget::SvgWidget const *widget, BaseElement el);
-Element make_element(rack::app::SliderKnob const *widget, BaseElement b);
-Element make_element(rack::app::MultiLightWidget const *widget, BaseElement el);
-Element make_element_lightslider(rack::app::SvgSlider const *widget, BaseElement el);
-Element make_element(rack::widget::Widget const *widget, BaseElement);
+Element make_element_slideswitch(rack::app::SvgSlider *widget, BaseElement b);
+Element make_element(rack::app::SvgSlider *widget, BaseElement b);
+Element make_element(rack::componentlibrary::Rogan *widget, BaseElement b);
+Element make_element(rack::app::SvgSwitch *widget, BaseElement b);
+Element make_element(rack::app::SvgScrew *widget, BaseElement);
+Element make_element(rack::app::ParamWidget *widget, BaseElement el);
+Element make_element(rack::widget::SvgWidget *widget, BaseElement el);
+Element make_element(rack::app::SliderKnob *widget, BaseElement b);
+Element make_element(rack::app::MultiLightWidget *widget, BaseElement el);
+Element make_element_lightslider(rack::app::SvgSlider *widget, BaseElement el);
+Element make_element(rack::widget::Widget *widget, BaseElement);
 
-Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget const *, BaseElement const &);
-Element make_button_light(rack::app::MultiLightWidget const *, rack::app::SvgSwitch const *, BaseElement const &);
+Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget *, BaseElement const &);
+Element make_button_light(rack::app::MultiLightWidget *, rack::app::SvgSwitch *, BaseElement const &);
 
 //
 // Button with lights
 //
 
 template<typename LightBaseT>
-Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> const *widget, BaseElement el) {
+Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> *widget, BaseElement el) {
 	return make_button_light(widget->light, widget, el);
 }
 
@@ -38,7 +38,7 @@ Element make_element(rack::componentlibrary::VCVLightBezel<LightBaseT> const *wi
 //
 
 template<typename LightBaseT>
-Element make_element(rack::componentlibrary::TSvgLight<LightBaseT> const *widget, BaseElement el) {
+Element make_element(rack::componentlibrary::TSvgLight<LightBaseT> *widget, BaseElement el) {
 	return make_multi_led_element(widget->sw->svg->filename, widget, el);
 }
 

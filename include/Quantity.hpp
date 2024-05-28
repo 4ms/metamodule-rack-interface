@@ -7,8 +7,7 @@ namespace rack
 {
 
 struct Quantity {
-	virtual ~Quantity() {
-	}
+	virtual ~Quantity() = default;
 
 	virtual void setValue(float value) {
 	}

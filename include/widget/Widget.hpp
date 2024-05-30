@@ -5,7 +5,6 @@
 #include <color.hpp>
 #include <common.hpp>
 #include <math.hpp>
-#include <ranges>
 #include <weakptr.hpp>
 #include <widget/event.hpp>
 #include <window/Window.hpp>

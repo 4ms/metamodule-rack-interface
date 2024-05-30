@@ -82,6 +82,13 @@ TPanel *createPanel(std::string svgPath) {
 	return panel;
 }
 
+template<class TPanel = app::ThemedSvgPanel>
+TPanel *createPanel(std::string lightSvgPath, std::string darkSvgPath) {
+	auto *panel = new TPanel;
+	panel->setBackground(window::Svg::load(lightSvgPath), window::Svg::load(darkSvgPath));
+	return panel;
+}
+
 inline std::string_view getParamName(engine::Module *module, int id) {
 	if (auto pq = module->getParamQuantity(id)) {
 		if (pq->name.size()) {

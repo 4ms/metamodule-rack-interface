@@ -188,10 +188,10 @@ TPortWidget *createInput(math::Vec pos, engine::Module *module, int inputId) {
 	auto name = getInputName(module, inputId);
 	auto *widget = new TPortWidget;
 	widget->box.pos = pos;
-	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	widget->portId = inputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
+	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	return widget;
 }
 
@@ -200,10 +200,10 @@ TPortWidget *createInputCentered(math::Vec pos, engine::Module *module, int inpu
 	auto name = getInputName(module, inputId);
 	auto *widget = new TPortWidget;
 	widget->box.pos = pos.minus(widget->box.size.div(2));
-	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	widget->portId = inputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
+	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	return widget;
 }
 
@@ -212,10 +212,10 @@ TPortWidget *createOutput(math::Vec pos, engine::Module *module, int outputId) {
 	auto name = getOutputName(module, outputId);
 	auto *widget = new TPortWidget;
 	widget->box.pos = pos;
-	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	widget->portId = outputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
+	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	return widget;
 }
 
@@ -224,10 +224,10 @@ TPortWidget *createOutputCentered(math::Vec pos, engine::Module *module, int out
 	auto name = getOutputName(module, outputId);
 	auto *widget = new TPortWidget;
 	widget->box.pos = pos.minus(widget->box.size.div(2));
-	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	widget->portId = outputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
+	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	return widget;
 }
 

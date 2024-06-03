@@ -52,7 +52,7 @@ struct ModuleWidget : widget::Widget {
 	}
 
 	void place_at(std::vector<MetaModule::Element> &elements, int id, const MetaModule::Element &el);
-	void populate_elements(std::vector<MetaModule::Element> &elements);
+	void populate_elements(std::vector<MetaModule::Element> &elements, std::vector<ElementCount::Indices> &indices);
 
 	void addChild(Widget *w);
 	void addChild(app::ModuleLightWidget *lightWidget);

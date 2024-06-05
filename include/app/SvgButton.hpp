@@ -13,9 +13,7 @@ struct SvgButton : widget::OpaqueWidget {
 	CircularShadow *shadow = &_shadow;
 	widget::SvgWidget *sw = &_sw;
 
-	// std::vector<std::shared_ptr<window::Svg>> frames;
-	// MM simplifies:
-	std::vector<std::string> frames;
+	std::vector<std::shared_ptr<window::Svg>> frames;
 
 	void addFrame(std::shared_ptr<window::Svg> svg);
 

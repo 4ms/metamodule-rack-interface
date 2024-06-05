@@ -20,6 +20,7 @@ Element make_element(rack::app::SliderKnob *widget, BaseElement b);
 Element make_element(rack::app::MultiLightWidget *widget, BaseElement el);
 Element make_element_lightslider(rack::app::SvgSlider *widget, BaseElement el);
 Element make_element(rack::widget::Widget *widget, BaseElement);
+Element make_element(rack::app::SvgButton *widget, BaseElement b);
 
 Element make_multi_led_element(std::string_view image, rack::app::MultiLightWidget *, BaseElement const &);
 Element make_button_light(rack::app::MultiLightWidget *, rack::app::SvgSwitch *, BaseElement const &);

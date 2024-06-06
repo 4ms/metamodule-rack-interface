@@ -1,9 +1,14 @@
 #pragma once
+#include <app/Knob.hpp>
 #include <app/ModuleLightWidget.hpp>
 #include <app/ParamWidget.hpp>
 #include <app/PortWidget.hpp>
+#include <app/SvgButton.hpp>
+#include <app/SvgKnob.hpp>
 #include <app/SvgPanel.hpp>
+#include <app/SvgSlider.hpp>
 #include <app/common.hpp>
+#include <componentlibrary.hpp>
 #include <engine/Module.hpp>
 #include <history.hpp>
 #include <plugin/Model.hpp>
@@ -51,16 +56,47 @@ struct ModuleWidget : widget::Widget {
 		return panel;
 	}
 
-	void place_at(std::vector<MetaModule::Element> &elements, int id, const MetaModule::Element &el);
 	void populate_elements(std::vector<MetaModule::Element> &elements, std::vector<ElementCount::Indices> &indices);
 
+	// Catch-all:
 	void addChild(Widget *w);
-	void addChild(app::ModuleLightWidget *lightWidget);
+
+	// Rendered as images:
+	// void addChild(widget::SvgWidget *w);
+	// void addChild(app::SvgButton *w);
+
+	// Panels:
 	void addChild(SvgPanel *child);
 	void addChildBottom(SvgPanel *child);
+
+	// Params:
 	void addParam(ParamWidget *param);
+	void addParam(Knob *param);
+	void addParam(app::SvgKnob *param);
+	// void addParam(app::SvgSlider *param);
+	// void addParam(app::SvgSwitch *param);
+	// void addParam(app::SliderKnob *param);
+	// void addParam(componentlibrary::Rogan *param);
+	// void addParam(componentlibrary::VCVBezel *param);
+
+	// template<typename TLightBase>
+	// void addParam(componentlibrary::VCVLightBezel<TLightBase> *widget) {
+	// 	addParam(widget);
+	// 	addChild(widget->light);
+	// }
+
+	// Lights:
+	void addChild(app::ModuleLightWidget *lightWidget);
+
+	// template<typename LightBaseT>
+	// void addChild(componentlibrary::TSvgLight<LightBaseT> *widget) {
+	// }
+
+	// Ports:
 	void addInput(PortWidget *input);
+	// void addInput(SvgPort *input);
 	void addOutput(PortWidget *output);
+	// void addOutput(SvgPort *output);
 
 	ParamWidget *getParam(int paramId);
 	PortWidget *getInput(int portId);
@@ -113,11 +149,12 @@ struct ModuleWidget : widget::Widget {
 	math::Rect getGridBox(){ return {}; }
 	// clang-format on
 
-private:
+	// private:
 	std::vector<MetaModule::Element> paramElements;
 	std::vector<MetaModule::Element> inputElements;
 	std::vector<MetaModule::Element> outputElements;
 	std::vector<MetaModule::Element> lightElements;
+	std::vector<MetaModule::Element> imageElements;
 
 	std::list<Widget *> owned_widgets;
 

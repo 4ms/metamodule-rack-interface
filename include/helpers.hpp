@@ -1,8 +1,8 @@
 #pragma once
-#include "CoreModules/elements/element_info.hh"
+// #include "CoreModules/elements/element_info.hh"
 #include "CoreModules/elements/element_strings.hh"
 #include "metamodule/create_model.hh"
-#include "metamodule/make_element.hh"
+// #include "metamodule/make_element.hh"
 #include "util/overloaded.hh"
 #include <app/SvgPanel.hpp>
 #include <engine/Module.hpp>
@@ -21,7 +21,7 @@ namespace rack
 template<typename T>
 T *createElementWidget(math::Vec pos, MetaModule::Coords coord_ref, std::string_view name) {
 	auto *widget = new T;
-	widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
+	// widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
 	return widget;
 }
 
@@ -32,7 +32,7 @@ T *createElementParamWidget(
 	auto *widget = new T;
 	widget->module = module;
 	widget->paramId = paramId;
-	widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
+	// widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
 	widget->box.pos = coord_ref == MetaModule::Coords::TopLeft ? pos : pos.minus(widget->box.size.div(2));
 	return widget;
 }
@@ -51,10 +51,10 @@ T *createElementParamWidget(
 	engine::ParamQuantity *pq = widget->getParamQuantity();
 
 	// Slide switch is SvgSlider type in VCV, so we need to disambiguiate
-	if (pq && pq->snapEnabled)
-		widget->element = MetaModule::make_element_slideswitch(widget, {pos.x, pos.y, coord_ref, name, name});
-	else
-		widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
+	// if (pq && pq->snapEnabled)
+	// 	widget->element = MetaModule::make_element_slideswitch(widget, {pos.x, pos.y, coord_ref, name, name});
+	// else
+	// 	widget->element = MetaModule::make_element(widget, {pos.x, pos.y, coord_ref, name, name});
 
 	if (coord_ref == MetaModule::Coords::TopLeft) {
 		widget->box.pos = pos + widget->background->box.pos;
@@ -137,24 +137,24 @@ inline void set_labels(std::span<std::string_view> pos_names, std::vector<std::s
 	}
 }
 
-inline void set_labels(engine::ParamQuantity *pq, MetaModule::Element &element) {
-	// Switches with strings for each position
-	if (pq->labels.size() > 0) {
-		using namespace MetaModule;
-		std::visit(overloaded{
-					   [](BaseElement &) {},
-					   [&pq](FlipSwitch &el) {
-						   el.num_pos = std::clamp<unsigned>(pq->maxValue - pq->minValue + 1, 2, 3);
-						   set_labels(el.pos_names, pq->labels);
-					   },
-					   [&pq](SlideSwitch &el) {
-						   el.num_pos = std::clamp<unsigned>(pq->maxValue - pq->minValue + 1, 2, 8);
-						   set_labels(el.pos_names, pq->labels);
-					   },
-				   },
-				   element);
-	}
-}
+// inline void set_labels(engine::ParamQuantity *pq, MetaModule::Element &element) {
+// 	// Switches with strings for each position
+// 	if (pq->labels.size() > 0) {
+// 		using namespace MetaModule;
+// 		std::visit(overloaded{
+// 					   [](BaseElement &) {},
+// 					   [&pq](FlipSwitch &el) {
+// 						   el.num_pos = std::clamp<unsigned>(pq->maxValue - pq->minValue + 1, 2, 3);
+// 						   set_labels(el.pos_names, pq->labels);
+// 					   },
+// 					   [&pq](SlideSwitch &el) {
+// 						   el.num_pos = std::clamp<unsigned>(pq->maxValue - pq->minValue + 1, 2, 8);
+// 						   set_labels(el.pos_names, pq->labels);
+// 					   },
+// 				   },
+// 				   element);
+// 	}
+// }
 
 template<class TParamWidget>
 requires(std::derived_from<TParamWidget, app::ParamWidget>)
@@ -164,10 +164,10 @@ TParamWidget *createParamImpl(MetaModule::Coords coords, math::Vec pos, engine::
 	auto name = getParamName(module, paramId);
 	auto widget = createElementParamWidget<TParamWidget>(pos, coords, name, module, paramId);
 
-	if (auto pq = widget->getParamQuantity()) {
-		pq->name = name;
-		set_labels(pq, widget->element);
-	}
+	// if (auto pq = widget->getParamQuantity()) {
+	// 	pq->name = name;
+	// 	set_labels(pq, widget->element);
+	// }
 	return widget;
 }
 
@@ -191,7 +191,7 @@ TPortWidget *createInput(math::Vec pos, engine::Module *module, int inputId) {
 	widget->portId = inputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
-	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
+	// widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	return widget;
 }
 
@@ -203,7 +203,7 @@ TPortWidget *createInputCentered(math::Vec pos, engine::Module *module, int inpu
 	widget->portId = inputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
-	widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
+	// widget->element = MetaModule::make_element_input(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	return widget;
 }
 
@@ -215,7 +215,7 @@ TPortWidget *createOutput(math::Vec pos, engine::Module *module, int outputId) {
 	widget->portId = outputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
-	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
+	// widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::TopLeft, name, name});
 	return widget;
 }
 
@@ -227,7 +227,7 @@ TPortWidget *createOutputCentered(math::Vec pos, engine::Module *module, int out
 	widget->portId = outputId;
 	if (widget->getPortInfo())
 		widget->getPortInfo()->name = name;
-	widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
+	// widget->element = MetaModule::make_element_output(widget, {pos.x, pos.y, MetaModule::Coords::Center, name, name});
 	return widget;
 }
 
@@ -260,7 +260,7 @@ createLightParamImpl(math::Vec pos, engine::Module *module, MetaModule::Coords c
 	auto name = getParamName(module, paramId);
 
 	auto *widget = new TParamWidget;
-	widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
+	// widget->element = MetaModule::make_element_lightslider(widget, {pos.x, pos.y, coord_ref, name, name});
 
 	if (coord_ref == MetaModule::Coords::TopLeft) {
 		widget->box.pos = pos + widget->background->box.pos;

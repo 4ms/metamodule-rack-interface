@@ -18,7 +18,7 @@ namespace rack
 /** Creates a Widget subclass with its top-left at a position. */
 template<class TWidget>
 TWidget *createWidget(math::Vec pos) {
-	TWidget *o = new TWidget;
+	auto *o = new TWidget;
 	o->box.pos = pos;
 	return o;
 }
@@ -34,7 +34,7 @@ TWidget *createWidgetCentered(math::Vec pos) {
 /** Creates an SvgPanel and loads the SVG from the given path. */
 template<class TPanel = app::SvgPanel>
 TPanel *createPanel(std::string svgPath) {
-	TPanel *panel = new TPanel;
+	auto *panel = new TPanel;
 	panel->setBackground(window::Svg::load(svgPath));
 	return panel;
 }
@@ -42,14 +42,14 @@ TPanel *createPanel(std::string svgPath) {
 /** Creates a ThemedSvgPanel and loads the light/dark SVGs from the given paths. */
 template<class TPanel = app::ThemedSvgPanel>
 TPanel *createPanel(std::string lightSvgPath, std::string darkSvgPath) {
-	TPanel *panel = new TPanel;
+	auto *panel = new TPanel;
 	panel->setBackground(window::Svg::load(lightSvgPath), window::Svg::load(darkSvgPath));
 	return panel;
 }
 
 template<class TParamWidget>
 TParamWidget *createParam(math::Vec pos, engine::Module *module, int paramId) {
-	TParamWidget *o = new TParamWidget;
+	auto *o = new TParamWidget;
 	o->box.pos = pos;
 	o->app::ParamWidget::module = module;
 	o->app::ParamWidget::paramId = paramId;
@@ -66,7 +66,7 @@ TParamWidget *createParamCentered(math::Vec pos, engine::Module *module, int par
 
 template<class TPortWidget>
 TPortWidget *createInput(math::Vec pos, engine::Module *module, int inputId) {
-	TPortWidget *o = new TPortWidget;
+	auto *o = new TPortWidget;
 	o->box.pos = pos;
 	o->app::PortWidget::module = module;
 	o->app::PortWidget::type = engine::Port::INPUT;
@@ -83,7 +83,7 @@ TPortWidget *createInputCentered(math::Vec pos, engine::Module *module, int inpu
 
 template<class TPortWidget>
 TPortWidget *createOutput(math::Vec pos, engine::Module *module, int outputId) {
-	TPortWidget *o = new TPortWidget;
+	auto *o = new TPortWidget;
 	o->box.pos = pos;
 	o->app::PortWidget::module = module;
 	o->app::PortWidget::type = engine::Port::OUTPUT;
@@ -100,7 +100,7 @@ TPortWidget *createOutputCentered(math::Vec pos, engine::Module *module, int out
 
 template<class TModuleLightWidget>
 TModuleLightWidget *createLight(math::Vec pos, engine::Module *module, int firstLightId) {
-	TModuleLightWidget *o = new TModuleLightWidget;
+	auto *o = new TModuleLightWidget;
 	o->box.pos = pos;
 	o->app::ModuleLightWidget::module = module;
 	o->app::ModuleLightWidget::firstLightId = firstLightId;

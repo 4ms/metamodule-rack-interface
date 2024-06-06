@@ -5,6 +5,8 @@ namespace rack::app
 {
 
 struct Knob : ParamWidget {
+	void initParamQuantity() override;
+
 	bool horizontal = false;
 	bool smooth = true;
 	bool snap = false;

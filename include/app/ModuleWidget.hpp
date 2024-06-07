@@ -71,14 +71,14 @@ struct ModuleWidget : widget::Widget {
 	void addParam(app::SvgSlider *param);
 	void addParam(app::SvgSwitch *param);
 	void addParam(app::SliderKnob *param);
-	// void addParam(componentlibrary::Rogan *param);
 	// void addParam(componentlibrary::VCVBezel *param);
 
-	// template<typename TLightBase>
-	// void addParam(componentlibrary::VCVLightBezel<TLightBase> *widget) {
-	// 	addParam(widget);
-	// 	addChild(widget->light);
-	// }
+	void addLightSwitch(app::SvgSwitch *widget, app::ModuleLightWidget *light);
+
+	template<typename TLightBase>
+	void addParam(componentlibrary::VCVLightBezel<TLightBase> *widget) {
+		addLightSwitch(widget, widget->getLight());
+	}
 
 	// Lights:
 	void addChild(app::ModuleLightWidget *lightWidget);

@@ -24,11 +24,8 @@ struct ModuleWidget : widget::Widget {
 	plugin::Model *model = nullptr;
 
 	engine::Module *module = nullptr;
-	//TODO:
-	// std::unique_ptr<engine::Module> module;
 
-	app::SvgPanel *panel = nullptr;
-	// std::unique_ptr<widget::Widget> panel;
+	std::unique_ptr<app::SvgPanel> panel;
 
 	std::string svg_filename;
 
@@ -52,9 +49,7 @@ struct ModuleWidget : widget::Widget {
 
 	void setPanel(std::shared_ptr<window::Svg> svg);
 
-	widget::Widget *getPanel() {
-		return panel;
-	}
+	widget::Widget *getPanel();
 
 	void populate_elements(std::vector<MetaModule::Element> &elements, std::vector<ElementCount::Indices> &indices);
 
@@ -73,9 +68,9 @@ struct ModuleWidget : widget::Widget {
 	void addParam(ParamWidget *param);
 	void addParam(Knob *param);
 	void addParam(app::SvgKnob *param);
-	// void addParam(app::SvgSlider *param);
-	// void addParam(app::SvgSwitch *param);
-	// void addParam(app::SliderKnob *param);
+	void addParam(app::SvgSlider *param);
+	void addParam(app::SvgSwitch *param);
+	void addParam(app::SliderKnob *param);
 	// void addParam(componentlibrary::Rogan *param);
 	// void addParam(componentlibrary::VCVBezel *param);
 
@@ -94,9 +89,9 @@ struct ModuleWidget : widget::Widget {
 
 	// Ports:
 	void addInput(PortWidget *input);
-	// void addInput(SvgPort *input);
+	void addInput(SvgPort *input);
 	void addOutput(PortWidget *output);
-	// void addOutput(SvgPort *output);
+	void addOutput(SvgPort *output);
 
 	ParamWidget *getParam(int paramId);
 	PortWidget *getInput(int portId);
@@ -155,8 +150,6 @@ struct ModuleWidget : widget::Widget {
 	std::vector<MetaModule::Element> outputElements;
 	std::vector<MetaModule::Element> lightElements;
 	std::vector<MetaModule::Element> imageElements;
-
-	std::list<Widget *> owned_widgets;
 };
 
 } // namespace rack::app

@@ -30,9 +30,9 @@ struct Module : VCVModuleWrapper {
 
 	int64_t id = -1;
 
-	std::vector<PortInfo*> inputInfos;
-	std::vector<PortInfo*> outputInfos;
-	std::vector<LightInfo*> lightInfos;
+	std::vector<PortInfo *> inputInfos;
+	std::vector<PortInfo *> outputInfos;
+	std::vector<LightInfo *> lightInfos;
 
 	struct Expander {
 		int64_t moduleId = -1;

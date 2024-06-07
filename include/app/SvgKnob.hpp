@@ -10,18 +10,13 @@ namespace rack::app
 
 /** A knob which rotates an SVG and caches it in a framebuffer */
 struct SvgKnob : Knob {
-	widget::FramebufferWidget *fb = &_fb;
-	CircularShadow *shadow = &_shadow;
-	widget::SvgWidget *sw = &_sw;
-	widget::TransformWidget *tw = &_tw;
+	widget::FramebufferWidget *fb;
+	CircularShadow *shadow;
+	widget::SvgWidget *sw;
+	widget::TransformWidget *tw;
 
+	SvgKnob();
 	void setSvg(std::shared_ptr<window::Svg> svg);
-
-private:
-	widget::FramebufferWidget _fb;
-	CircularShadow _shadow;
-	widget::SvgWidget _sw;
-	widget::TransformWidget _tw;
 };
 
 } // namespace rack::app

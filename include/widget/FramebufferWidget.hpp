@@ -37,7 +37,7 @@ struct FramebufferWidget : Widget {
 	virtual void drawFramebuffer() {
 	}
 
-	void addChildBelow(SvgWidget *child, Widget *sibling);
+	// void addChildBelow(SvgWidget *child, Widget *sibling);
 
 	~FramebufferWidget() override;
 };

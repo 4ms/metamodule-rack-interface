@@ -14,6 +14,8 @@ struct PanelBorder : widget::TransparentWidget {
 };
 
 struct SvgPanel : widget::Widget {
+	SvgPanel();
+
 	widget::FramebufferWidget *fb;
 	widget::SvgWidget *sw;
 	PanelBorder *panelBorder;

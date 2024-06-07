@@ -157,8 +157,6 @@ struct ModuleWidget : widget::Widget {
 	std::vector<MetaModule::Element> imageElements;
 
 	std::list<Widget *> owned_widgets;
-
-	static void update_coords(math::Rect const &box, MetaModule::Element &element);
 };
 
 } // namespace rack::app

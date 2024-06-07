@@ -11,9 +11,6 @@ namespace rack::widget
 When dirty, its children will be re-rendered on the next call to step().
 */
 struct FramebufferWidget : Widget {
-	//MM:
-	widget::SvgWidget *_bg = nullptr;
-
 	bool dirty = true;
 	bool bypassed = false;
 	float oversample = 1.0;

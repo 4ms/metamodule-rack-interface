@@ -15,17 +15,25 @@
 #include <ui/Menu.hpp>
 #include <widget/OpaqueWidget.hpp>
 
+namespace MetaModule
+{
+struct ModuleWidgetAdaptor;
+}
+
 namespace rack::app
 {
 
 struct ModuleWidget : widget::Widget {
+
+	std::unique_ptr<rack::app::SvgPanel> panel;
+	std::unique_ptr<MetaModule::ModuleWidgetAdaptor> adaptor;
+
+	ModuleWidget();
 	~ModuleWidget() override;
 
 	plugin::Model *model = nullptr;
 
 	engine::Module *module = nullptr;
-
-	std::unique_ptr<app::SvgPanel> panel;
 
 	std::string svg_filename;
 
@@ -50,8 +58,6 @@ struct ModuleWidget : widget::Widget {
 	void setPanel(std::shared_ptr<window::Svg> svg);
 
 	widget::Widget *getPanel();
-
-	void populate_elements(std::vector<MetaModule::Element> &elements, std::vector<ElementCount::Indices> &indices);
 
 	// Catch-all:
 	void addChild(Widget *w);
@@ -149,13 +155,6 @@ struct ModuleWidget : widget::Widget {
 	math::Vec getGridSize(){ return {}; }
 	math::Rect getGridBox(){ return {}; }
 	// clang-format on
-
-	// private:
-	std::vector<MetaModule::Element> paramElements;
-	std::vector<MetaModule::Element> inputElements;
-	std::vector<MetaModule::Element> outputElements;
-	std::vector<MetaModule::Element> lightElements;
-	std::vector<MetaModule::Element> imageElements;
 };
 
 } // namespace rack::app

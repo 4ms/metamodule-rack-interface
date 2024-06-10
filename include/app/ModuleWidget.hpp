@@ -74,6 +74,7 @@ struct ModuleWidget : widget::Widget {
 	// Params:
 	void addParam(ParamWidget *param);
 	void addParam(Knob *param);
+	void addParam(rack::componentlibrary::Rogan *widget);
 	void addParam(app::SvgKnob *param);
 	void addParam(app::SvgSlider *param);
 	void addParam(app::SvgSwitch *param);

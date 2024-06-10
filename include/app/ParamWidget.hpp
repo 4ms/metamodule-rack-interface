@@ -9,8 +9,7 @@
 namespace rack::app
 {
 
-//Rack: derives from OpaqueWidget, MM: derives from SvgWidget
-struct ParamWidget : widget::SvgWidget {
+struct ParamWidget : widget::OpaqueWidget {
 	engine::Module *module = nullptr;
 	int paramId = -1;
 

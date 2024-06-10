@@ -63,8 +63,9 @@ struct ModuleWidget : widget::Widget {
 	void addChild(Widget *w);
 
 	// Rendered as images:
-	// void addChild(widget::SvgWidget *w);
-	// void addChild(app::SvgButton *w);
+	void addChild(widget::SvgWidget *w);
+	void addChild(app::SvgButton *w);
+	void addChild(app::SvgScrew *widget);
 
 	// Panels:
 	void addChild(SvgPanel *child);

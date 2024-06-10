@@ -95,9 +95,14 @@ struct ModuleWidget : widget::Widget {
 	// Lights:
 	void addChild(app::ModuleLightWidget *lightWidget);
 
-	// template<typename LightBaseT>
-	// void addChild(componentlibrary::TSvgLight<LightBaseT> *widget) {
-	// }
+	template<typename LightBaseT>
+	void addChild(componentlibrary::TSvgLight<LightBaseT> *widget) {
+		if (widget->sw && widget->sw->svg)
+			addSvgLight(widget->sw->svg->filename, widget);
+		else
+			addChild(widget);
+	}
+	void addSvgLight(std::string_view image, app::ModuleLightWidget *widget);
 
 	// Ports:
 	void addInput(PortWidget *input);

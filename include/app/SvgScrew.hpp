@@ -9,15 +9,12 @@ namespace rack::app
 {
 
 struct SvgScrew : widget::Widget {
-	widget::FramebufferWidget *fb=&_fb;
-	widget::SvgWidget *sw=&_sw;
+	widget::FramebufferWidget *fb;
+	widget::SvgWidget *sw;
 
-	void setSvg(std::shared_ptr<window::Svg> svg) {
-	}
-
-	private:
-	widget::FramebufferWidget _fb;
-	widget::SvgWidget _sw;
+	SvgScrew();
+	~SvgScrew() override;
+	void setSvg(std::shared_ptr<window::Svg> svg);
 };
 
 struct ThemedSvgScrew : SvgScrew {

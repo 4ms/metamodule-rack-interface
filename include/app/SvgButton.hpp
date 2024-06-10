@@ -9,18 +9,15 @@ namespace rack::app
 {
 
 struct SvgButton : widget::OpaqueWidget {
-	widget::FramebufferWidget *fb = &_fb;
-	CircularShadow *shadow = &_shadow;
-	widget::SvgWidget *sw = &_sw;
+	widget::FramebufferWidget *fb;
+	CircularShadow *shadow;
+	widget::SvgWidget *sw;
 
 	std::vector<std::shared_ptr<window::Svg>> frames;
 
+	SvgButton();
+	~SvgButton() override;
 	void addFrame(std::shared_ptr<window::Svg> svg);
-
-private:
-	widget::FramebufferWidget _fb;
-	CircularShadow _shadow;
-	widget::SvgWidget _sw;
 };
 
 } // namespace rack::app

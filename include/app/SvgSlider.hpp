@@ -11,20 +11,17 @@ namespace rack::app
 Can be used for horizontal or vertical linear faders.
 */
 struct SvgSlider : app::SliderKnob {
-	widget::FramebufferWidget *fb = &_fb;
-	widget::SvgWidget *background = &_background;
-	widget::SvgWidget *handle = &_handle;
+	widget::FramebufferWidget *fb;
+	widget::SvgWidget *background;
+	widget::SvgWidget *handle;
 	math::Vec minHandlePos, maxHandlePos;
 
+	SvgSlider();
+	~SvgSlider() override;
 	void setBackgroundSvg(std::shared_ptr<window::Svg> svg);
 	void setHandleSvg(std::shared_ptr<window::Svg> svg);
 	void setHandlePos(math::Vec minHandlePos, math::Vec maxHandlePos);
 	void setHandlePosCentered(math::Vec minHandlePosCentered, math::Vec maxHandlePosCentered);
-
-private:
-	widget::FramebufferWidget _fb;
-	widget::SvgWidget _background;
-	widget::SvgWidget _handle;
 };
 
 } // namespace rack::app

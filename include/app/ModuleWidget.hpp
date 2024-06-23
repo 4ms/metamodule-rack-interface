@@ -49,6 +49,11 @@ struct ModuleWidget : widget::Widget {
 		return module;
 	}
 
+	template <class TModule>
+	TModule* getModule() {
+		return dynamic_cast<TModule*>(getModule());
+	}
+
 	plugin::Model *getModel() {
 		return model;
 	}

@@ -195,10 +195,10 @@ struct Module : VCVModuleWrapper {
 	}
 
 	// Not supported:
-	std::string_view createPatchStorageDirectory() {
+	std::string createPatchStorageDirectory() {
 		return "";
 	}
-	std::string_view getPatchStorageDirectory() {
+	std::string getPatchStorageDirectory() {
 		return "";
 	}
 

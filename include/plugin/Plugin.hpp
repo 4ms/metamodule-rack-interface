@@ -41,7 +41,7 @@ struct Plugin {
 	// void *handle = nullptr;
 	// std::string version;
 	// std::string license;
-	// std::string name;
+	std::string name;
 	// std::string brand;
 	// std::string description;
 	// std::string author;

@@ -35,23 +35,23 @@ struct VCVModuleWrapper : CoreProcessor {
 
 	void set_param(int id, float val) override;
 
-	void set_input(const int input_id, const float val) override;
+	void set_input(int input_id, float val) override;
 
-	float get_output(const int output_id) const override;
+	float get_output(int output_id) const override;
 
-	float get_led_brightness(const int led_id) const override;
+	float get_led_brightness(int led_id) const override;
 
 	void mark_all_inputs_unpatched() override;
 
-	void mark_input_unpatched(const int input_id) override;
+	void mark_input_unpatched(int input_id) override;
 
-	void mark_input_patched(const int input_id) override;
+	void mark_input_patched(int input_id) override;
 
 	void mark_all_outputs_unpatched() override;
 
-	void mark_output_unpatched(const int output_id) override;
+	void mark_output_unpatched(int output_id) override;
 
-	void mark_output_patched(const int output_id) override;
+	void mark_output_patched(int output_id) override;
 
 	std::vector<rack::engine::Param> params;
 	std::vector<rack::engine::Input> inputs;

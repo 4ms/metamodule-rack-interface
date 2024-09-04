@@ -1,13 +1,13 @@
 #pragma once
-#include <simd/Vector.hpp>
-#include <simd/sse_mathfun_extension.h>
 #include <common.hpp>
 #include <math.hpp>
+#include <simd/Vector.hpp>
+#include <simd/sse_mathfun_extension.h>
 
-
-namespace rack {
-namespace simd {
-
+namespace rack
+{
+namespace simd
+{
 
 // Functions based on instructions
 
@@ -44,7 +44,6 @@ inline float_4 rcp(float_4 x) {
 	return float_4(_mm_rcp_ps(x.v));
 }
 
-
 // Nonstandard convenience functions
 
 inline float ifelse(bool cond, float a, float b) {
@@ -58,21 +57,20 @@ inline float_4 ifelse(float_4 mask, float_4 a, float_4 b) {
 
 /** Returns a vector where element N is all 1's if the N'th bit of `a` is 1, or all 0's if the N'th bit of `a` is 0.
 */
-template <typename T>
+template<typename T>
 T movemaskInverse(int a);
 
-template <>
+template<>
 inline int32_4 movemaskInverse<int32_4>(int a) {
 	// Pick out N'th bit of `a` and check if it's 1.
 	int32_4 mask1234 = int32_4(1, 2, 4, 8);
 	return (mask1234 & int32_4(a)) == mask1234;
 }
 
-template <>
+template<>
 inline float_4 movemaskInverse<float_4>(int a) {
 	return float_4::cast(movemaskInverse<int32_4>(a));
 }
-
 
 // Standard math functions from std::
 
@@ -162,7 +160,7 @@ using std::trunc;
 
 // SIMDe defines _MM_FROUND_NO_EXC with a prefix
 #ifndef _MM_FROUND_NO_EXC
-	#define _MM_FROUND_NO_EXC SIMDE_MM_FROUND_NO_EXC
+#define _MM_FROUND_NO_EXC SIMDE_MM_FROUND_NO_EXC
 #endif
 
 inline float_4 trunc(float_4 a) {
@@ -172,7 +170,10 @@ inline float_4 trunc(float_4 a) {
 using std::floor;
 
 inline float_4 floor(float_4 a) {
-	return float_4(_mm_round_ps(a.v, _MM_FROUND_TO_NEG_INF | _MM_FROUND_NO_EXC));
+	int32x4_t argi = vcvtq_n_s32_f32(a.v, 1);
+	argi = vsraq_n_s32(argi, argi, 31);
+	argi = vrshrq_n_s32(argi, 1);
+	return vcvtq_f32_s32(argi);
 }
 
 using std::ceil;
@@ -233,7 +234,7 @@ inline float_4 pow(float a, float_4 b) {
 	return exp(b * std::log(a));
 }
 
-template <typename T>
+template<typename T>
 T pow(T a, int b) {
 	// Optimal with `-O3 -funsafe-math-optimizations` when b is known at compile-time
 	T p = 1;
@@ -272,7 +273,6 @@ inline float_4 sgn(float_4 x) {
 	float_4 nonzero = (x != 0.f);
 	return signbit | (nonzero & 1.f);
 }
-
 
 } // namespace simd
 } // namespace rack

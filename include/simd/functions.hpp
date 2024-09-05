@@ -170,10 +170,14 @@ inline float_4 trunc(float_4 a) {
 using std::floor;
 
 inline float_4 floor(float_4 a) {
+#if defined(__ARM_NEON__)
 	int32x4_t argi = vcvtq_n_s32_f32(a.v, 1);
 	argi = vsraq_n_s32(argi, argi, 31);
 	argi = vrshrq_n_s32(argi, 1);
 	return vcvtq_f32_s32(argi);
+#else
+	return float_4(_mm_round_ps(a.v, _MM_FROUND_TO_NEG_INF | _MM_FROUND_NO_EXC));
+#endif
 }
 
 using std::ceil;

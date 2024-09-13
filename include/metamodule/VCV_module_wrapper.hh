@@ -22,14 +22,10 @@ struct VCVModuleWrapper : CoreProcessor {
 
 	VCVModuleWrapper();
 
-	virtual void process(const ProcessArgs &) {
-		step();
-	}
-
-	virtual void step() {
-	}
-
 	void update() override;
+
+	virtual void update(const ProcessArgs &args, bool bypassed) {
+	}
 
 	void set_samplerate(float rate) override;
 

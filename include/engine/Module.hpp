@@ -264,8 +264,17 @@ struct Module : VCVModuleWrapper {
 
 	// Virtual methods
 
-	virtual void processBypass(const ProcessArgs &args) {
+	virtual void process(const ProcessArgs &) {
+		step();
 	}
+
+	virtual void step() {
+	}
+
+	virtual void processBypass(const ProcessArgs &args);
+
+	// Called by VCVModuleWrapper
+	void update(const ProcessArgs &args, bool bypassed) override;
 
 	virtual json_t *toJson() {
 		return nullptr;

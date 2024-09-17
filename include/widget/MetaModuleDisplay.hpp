@@ -7,8 +7,7 @@ namespace rack::widget
 
 struct MetaModuleDisplay : rack::app::ModuleLightWidget {
 
-	std::string text = "";
-	std::string font = "";
+	std::string_view font = "";
 	RGB565 color = Colors565::Grey;
 };
 

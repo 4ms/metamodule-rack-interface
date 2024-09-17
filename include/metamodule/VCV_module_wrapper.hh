@@ -33,6 +33,8 @@ struct VCVModuleWrapper : CoreProcessor {
 
 	void set_input(int input_id, float val) override;
 
+	float get_param(int id) override;
+
 	float get_output(int output_id) const override;
 
 	float get_led_brightness(int led_id) const override;

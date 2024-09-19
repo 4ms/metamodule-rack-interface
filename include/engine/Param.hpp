@@ -6,7 +6,7 @@ namespace rack::engine
 struct Param {
 	float value = 0.f;
 
-	float getValue() {
+	float getValue() const {
 		return value;
 	}
 

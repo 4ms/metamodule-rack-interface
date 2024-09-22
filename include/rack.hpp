@@ -43,7 +43,6 @@ Directly including Rack headers other than rack.hpp in your plugin is unsupporte
 #include <widget/Widget.hpp>
 #include <widget/ZoomWidget.hpp>
 #include <widget/event.hpp>
-#include <widget/MetaModuleDisplay.hpp>
 
 #include <ui/Button.hpp>
 #include <ui/ChoiceButton.hpp>
@@ -124,6 +123,8 @@ Directly including Rack headers other than rack.hpp in your plugin is unsupporte
 
 #include <simd/Vector.hpp>
 #include <simd/functions.hpp>
+
+#include <metamodule/VCVTextDisplay.hpp>
 
 namespace rack
 {

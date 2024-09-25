@@ -1,8 +1,8 @@
 #pragma once
 #include "util/colors_rgb565.hh"
-#include <widget/Widget.hpp>
+#include <app/LightWidget.hpp>
 
-namespace MetaModule 
+namespace MetaModule
 {
 
 struct VCVTextDisplay : rack::app::LightWidget {

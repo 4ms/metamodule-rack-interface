@@ -13,6 +13,7 @@
 #include <history.hpp>
 #include <plugin/Model.hpp>
 #include <ui/Menu.hpp>
+#include <metamodule/VCVTextDisplay.hpp>
 #include <widget/OpaqueWidget.hpp>
 
 namespace MetaModule
@@ -68,6 +69,7 @@ struct ModuleWidget : widget::Widget {
 	void addChild(Widget *w);
 
 	// Rendered as images:
+	void addChild(MetaModule::VCVTextDisplay *widget);
 	void addChild(widget::SvgWidget *w);
 	void addChild(app::SvgButton *w);
 	void addChild(app::SvgScrew *widget);

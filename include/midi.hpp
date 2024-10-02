@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <vector>
 #include <set>
 
@@ -15,7 +16,8 @@ namespace midi {
 
 struct Message {
 	/** Initialized to 3 empty bytes. */
-	std::vector<uint8_t> bytes;
+	// std::vector<uint8_t> bytes;
+	std::array<uint8_t, 3> bytes;
 	/** The Engine frame timestamp of the Message.
 	For output messages, the frame when the message was generated.
 	For input messages, the frame when it is intended to be processed.
@@ -23,13 +25,14 @@ struct Message {
 	*/
 	int64_t frame = -1;
 
-	Message() : bytes(3) {}
+	Message() {}
 
 	int getSize() const {
 		return bytes.size();
 	}
 	void setSize(int size) {
-		bytes.resize(size);
+		printf("Cannot resize rack::midi::Message::bytes\n");
+		// bytes.resize(size);
 	}
 
 	uint8_t getChannel() const {

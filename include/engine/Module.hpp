@@ -371,6 +371,8 @@ struct Module : VCVModuleWrapper {
 
 	void load_state(std::string_view state_data) override;
 	std::string save_state() override;
+
+	void set_samplerate(float sr) override;
 };
 
 } // namespace engine

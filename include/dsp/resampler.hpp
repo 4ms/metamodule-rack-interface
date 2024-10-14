@@ -9,15 +9,12 @@
 namespace rack::dsp
 {
 
-// Only supports direct copy (no resampling)
-// TODO: Implement
-
 /** Resamples by a fixed rational factor. */
 template<int MAX_CHANNELS>
 struct SampleRateConverter {
-	// SpeexResamplerState *st = NULL;
+	SpeexResamplerState *st = nullptr;
 	int channels = MAX_CHANNELS;
-	int quality; // = SPEEX_RESAMPLER_QUALITY_DEFAULT;
+	int quality = SPEEX_RESAMPLER_QUALITY_DEFAULT;
 	int inRate = 44100;
 	int outRate = 44100;
 
@@ -25,9 +22,9 @@ struct SampleRateConverter {
 		refreshState();
 	}
 	~SampleRateConverter() {
-		// if (st) {
-		// 	speex_resampler_destroy(st);
-		// }
+		if (st) {
+			speex_resampler_destroy(st);
+		}
 	}
 
 	/** Sets the number of channels to actually process. This can be at most MAX_CHANNELS. */
@@ -56,16 +53,16 @@ struct SampleRateConverter {
 	}
 
 	void refreshState() {
-		// if (st) {
-		// 	speex_resampler_destroy(st);
-		// 	st = NULL;
-		// }
+		if (st) {
+			speex_resampler_destroy(st);
+			st = nullptr;
+		}
 
-		// if (channels > 0 && inRate != outRate) {
-		// 	int err;
-		// 	st = speex_resampler_init(channels, inRate, outRate, quality, &err);
-		// 	(void)err;
-		// }
+		if (channels > 0 && inRate != outRate) {
+			int err = 0;
+			st = speex_resampler_init(channels, inRate, outRate, quality, &err);
+			(void)err;
+		}
 	}
 
 	void process(const float *in, int inStride, int *inFrames, float *out, int outStride, int *outFrames) {
@@ -74,31 +71,35 @@ struct SampleRateConverter {
 		// assert(out);
 		// assert(outFrames);
 
-		// if (st) {
-		// 	speex_resampler_set_input_stride(st, inStride);
-		// 	speex_resampler_set_output_stride(st, outStride);
-		// 	// Resample each channel at a time
-		// 	spx_uint32_t inLen = 0;
-		// 	spx_uint32_t outLen = 0;
-		// 	for (int c = 0; c < channels; c++) {
-		// 		inLen = *inFrames;
-		// 		outLen = *outFrames;
-		// 		int err = speex_resampler_process_float(st, c, &in[c], &inLen, &out[c], &outLen);
-		// 		(void)err;
-		// 	}
-		// 	*inFrames = inLen;
-		// 	*outFrames = outLen;
-		// } else {
-		// Simply copy the buffer without conversion
-		int frames = std::min(*inFrames, *outFrames);
-		for (int i = 0; i < frames; i++) {
+		if (inRate != outRate && st) {
+			speex_resampler_set_input_stride(st, inStride);
+			speex_resampler_set_output_stride(st, outStride);
+			// Resample each channel at a time
+			spx_uint32_t inLen = 0;
+			spx_uint32_t outLen = 0;
 			for (int c = 0; c < channels; c++) {
-				out[outStride * i + c] = in[inStride * i + c];
+				inLen = *inFrames;
+				outLen = *outFrames;
+				int err = speex_resampler_process_float(st, c, &in[c], &inLen, &out[c], &outLen);
+				(void)err;
 			}
+			*inFrames = inLen;
+			*outFrames = outLen;
+		} else {
+			// Simply copy the buffer without conversion
+			int frames = std::min(*inFrames, *outFrames);
+			// if (channels == MAX_CHANNELS) {
+			// 	std::memcpy(out, in, frames * channels * sizeof(float));
+			// } else {
+			for (int i = 0; i < frames; i++) {
+				for (int c = 0; c < channels; c++) {
+					out[outStride * i + c] = in[inStride * i + c];
+				}
+			}
+			// }
+			*inFrames = frames;
+			*outFrames = frames;
 		}
-		*inFrames = frames;
-		*outFrames = frames;
-		// }
 	}
 
 	void process(const Frame<MAX_CHANNELS> *in, int *inFrames, Frame<MAX_CHANNELS> *out, int *outFrames) {

@@ -20,8 +20,6 @@ The bounding box of a Widget is a rectangle specified by `box` relative to their
 The appearance is defined by overriding `draw()`, and the behavior is defined by overriding `step()` and `on*()` event handlers.
 */
 struct Widget {
-	MetaModule::Element element;
-
 	/** Position relative to parent and size of widget. */
 	math::Rect box = math::Rect(math::Vec(), math::Vec(INFINITY, INFINITY));
 	/** Automatically set when Widget is added as a child to another Widget */

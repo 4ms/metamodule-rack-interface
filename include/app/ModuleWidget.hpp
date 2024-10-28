@@ -9,17 +9,21 @@
 #include <app/SvgSlider.hpp>
 #include <app/common.hpp>
 #include <componentlibrary.hpp>
-#include <engine/Module.hpp>
 #include <history.hpp>
+#include <metamodule/VCVTextDisplay.hpp>
 #include <plugin/Model.hpp>
 #include <ui/Menu.hpp>
-#include <metamodule/VCVTextDisplay.hpp>
 #include <widget/OpaqueWidget.hpp>
 
 namespace MetaModule
 {
 struct ModuleWidgetAdaptor;
 }
+
+namespace rack::engine
+{
+struct Module;
+};
 
 namespace rack::app
 {
@@ -50,9 +54,9 @@ struct ModuleWidget : widget::Widget {
 		return module;
 	}
 
-	template <class TModule>
-	TModule* getModule() {
-		return dynamic_cast<TModule*>(getModule());
+	template<class TModule>
+	TModule *getModule() {
+		return dynamic_cast<TModule *>(getModule());
 	}
 
 	plugin::Model *getModel() {

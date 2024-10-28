@@ -27,6 +27,7 @@ namespace engine
 
 struct Module : VCVModuleWrapper {
 	plugin::Model *model = nullptr;
+	std::unique_ptr<app::ModuleWidget> module_widget{};
 
 	int64_t id = -1;
 

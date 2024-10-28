@@ -8,9 +8,11 @@
 namespace rack
 {
 
-template<typename ModuleT>
+template<typename ModuleT, typename ModuleWidgetT>
 std::unique_ptr<CoreProcessor> create_vcv_module() {
-	return std::make_unique<ModuleT>();
+	auto module = std::make_unique<ModuleT>();
+	module->module_widget = std::make_unique<ModuleWidgetT>(module.get());
+	return module;
 }
 
 // Allocates and constructs a Model that can
@@ -39,7 +41,7 @@ plugin::Model *createModel(std::string_view slug) {
 
 	plugin::Model *model = new ModelT;
 	model->slug = slug;
-	model->creation_func = create_vcv_module<ModuleT>;
+	model->creation_func = create_vcv_module<ModuleT, ModuleWidgetT>;
 	return model;
 }
 

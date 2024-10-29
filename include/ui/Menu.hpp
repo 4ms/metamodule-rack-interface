@@ -12,8 +12,12 @@ struct Menu : widget::OpaqueWidget {
 	MenuEntry *activeEntry = nullptr;
 	BNDcornerFlags cornerFlags = BND_CORNER_NONE;
 
-	void setChildMenu(Menu *menu) {
-	}
+	Menu();
+	~Menu() override;
+	void setChildMenu(Menu *menu);
+	void step() override;
+	void draw(const DrawArgs &args) override;
+	void onHoverScroll(const HoverScrollEvent &e) override;
 };
 
 } // namespace rack::ui

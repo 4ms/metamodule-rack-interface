@@ -337,6 +337,59 @@ TMenuItem *createSubmenuItem(std::string text,
 	return item;
 }
 
+/** METAMODULE added:
+Same as createSubmenuItem() but instead of having a static rightText,
+you provide a function for updating the rightText.
+Consider using createIndexSubmenuItem if the possible parameter values are 
+a sequence of integers. 
+Example:
+	
+	menu->addChild(createSubmenuItem("Pitch Range:",
+		[=]{ return range_name(module->range); },
+		[=](Menu* menu) {
+			menu->addChild(createCheckMenuItem(range_name(0.5f), "", 
+				[=]{ return module->range == 0.5f; }, 
+				[=]{ module->range = 0.5f; }));
+
+			menu->addChild(createCheckMenuItem(range_name(2.0f), "", 
+				[=]{ return module->range == 2.0f; }, 
+				[=]{ module->range = 2.0f; }));
+
+			menu->addChild(createCheckMenuItem(range_name(120.f), "", 
+				[=]{ return module->range == 120.f; }, 
+				[=]{ module->range = 120.f; }));
+		}
+	));
+*/
+template<class TMenuItem = ui::MenuItem>
+TMenuItem *createSubmenuItem(std::string text,
+							 std::function<std::string()> rightTextFunc,
+							 std::function<void(ui::Menu *menu)> createMenu,
+							 bool disabled = false) {
+	struct Item : TMenuItem {
+		std::function<void(ui::Menu *menu)> createMenu;
+		std::function<std::string()> rightTextFunc;
+
+		ui::Menu *createChildMenu() override {
+			auto *menu = new ui::Menu;
+			createMenu(menu);
+			return menu;
+		}
+
+		void step() override {
+			this->rightText = rightTextFunc();
+			TMenuItem::step();
+		}
+	};
+
+	auto rightText = rightTextFunc();
+	Item *item = createMenuItem<Item>(text, rightText + (rightText.empty() ? "" : "  ") + RIGHT_ARROW);
+	item->createMenu = createMenu;
+	item->disabled = disabled;
+	item->rightTextFunc = rightTextFunc;
+	return item;
+}
+
 /** Creates a MenuItem that when hovered, opens a submenu with several MenuItems indexed by an integer.
 Example:
 

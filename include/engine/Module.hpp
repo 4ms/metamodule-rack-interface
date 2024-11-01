@@ -83,8 +83,6 @@ struct Module : VCVModuleWrapper {
 			delete paramQuantities[paramId];
 
 		paramQuantities[paramId] = new TParamQuantity;
-
-		// TODO: is any of this necessary? In case a VCV module reads its own PQs?
 		paramQuantities[paramId]->ParamQuantity::module = this;
 		paramQuantities[paramId]->ParamQuantity::paramId = paramId;
 		paramQuantities[paramId]->ParamQuantity::minValue = minValue;
@@ -132,8 +130,6 @@ struct Module : VCVModuleWrapper {
 			delete inputInfos[portId];
 
 		inputInfos[portId] = new TPortInfo;
-
-		// TODO: is any of this necessary? In case a VCV module reads its own inputInfos?
 		inputInfos[portId]->PortInfo::module = this;
 		inputInfos[portId]->PortInfo::type = Port::INPUT;
 		inputInfos[portId]->PortInfo::portId = portId;

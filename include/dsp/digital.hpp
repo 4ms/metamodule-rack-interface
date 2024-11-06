@@ -59,14 +59,14 @@ struct BooleanTrigger {
 */
 template <typename T = float>
 struct TSchmittTrigger {
-	T state;
+	T state{};
 	TSchmittTrigger() {
 		reset();
 	}
 	void reset() {
-		state = T::mask();
+		state = T{}; //T::mask();
 	}
-	T process(T in, T lowThreshold = 0.f, T highThreshold = 1.f) {
+	T process(T in, T lowThreshold = 0.4f, T highThreshold = 0.6f) {
 		T on = (in >= highThreshold);
 		T off = (in <= lowThreshold);
 		T triggered = ~state & on;

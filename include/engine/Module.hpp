@@ -279,11 +279,9 @@ struct Module : VCVModuleWrapper {
 	virtual void fromJson(json_t *rootJ) {
 	}
 
-	virtual json_t *paramsToJson() {
-		return nullptr;
-	}
-	virtual void paramsFromJson(json_t *rootJ) {
-	}
+	virtual json_t *paramsToJson();
+
+	virtual void paramsFromJson(json_t *rootJ);
 
 	virtual json_t *dataToJson() {
 		return nullptr;

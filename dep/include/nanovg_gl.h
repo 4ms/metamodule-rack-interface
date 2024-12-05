@@ -98,6 +98,10 @@ GLuint nvglImageHandleGLES3(NVGcontext* ctx, int image);
 
 #endif
 
+#ifdef NANOVG_PIXELBUFFER_IMPLEMENTATION
+NVGcontext* nvgCreatePixelBufferContext(int flags);
+#endif
+
 // These are additional flags on top of NVGimageFlags.
 enum NVGimageFlagsGL {
 	NVG_IMAGE_NODELETE			= 1<<16,	// Do not delete GL texture handle.

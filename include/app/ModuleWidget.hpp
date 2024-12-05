@@ -32,6 +32,7 @@ struct ModuleWidget : widget::Widget {
 
 	std::unique_ptr<rack::app::SvgPanel> panel;
 	std::unique_ptr<MetaModule::ModuleWidgetAdaptor> adaptor;
+	std::vector<rack::widget::Widget *> drawable_widgets;
 
 	ModuleWidget();
 	~ModuleWidget() override;

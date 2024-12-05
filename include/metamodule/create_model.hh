@@ -11,7 +11,7 @@ namespace rack
 template<typename ModuleT, typename ModuleWidgetT>
 std::unique_ptr<CoreProcessor> create_vcv_module() {
 	auto module = std::make_unique<ModuleT>();
-	module->module_widget = std::make_unique<ModuleWidgetT>(module.get());
+	module->module_widget = std::make_shared<ModuleWidgetT>(module.get());
 	return module;
 }
 

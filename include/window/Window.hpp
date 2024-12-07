@@ -12,9 +12,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <nanovg.h>
-#define NANOVG_GL2
 #include <nanovg_gl.h>
-// #include <nanovg_gl_utils.h>
+#include <nanovg_gl_utils.h>
 
 namespace rack::window
 {

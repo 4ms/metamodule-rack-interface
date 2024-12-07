@@ -152,8 +152,7 @@ struct Widget {
 		NVGLUframebuffer *fb = nullptr;
 	};
 
-	virtual void draw(const DrawArgs &args) {
-	}
+	virtual void draw(const DrawArgs &args);
 
 	/** Draw additional layers.
 
@@ -162,11 +161,9 @@ struct Widget {
 	When overriding, always wrap draw commands in `if (layer == ...) {}` to avoid drawing on all layers.
 	When overriding, call the superclass's `drawLayer(args, layer)` to recurse to children.
 	*/
-	virtual void drawLayer(const DrawArgs &args, int layer) {
-	}
+	virtual void drawLayer(const DrawArgs &args, int layer);
 
-	void drawChild(Widget *child, const DrawArgs &args, int layer = 0) {
-	}
+	void drawChild(Widget *child, const DrawArgs &args, int layer = 0);
 
 	// Events
 

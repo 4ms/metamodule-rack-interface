@@ -6,10 +6,15 @@
 
 namespace rack::app
 {
+struct LedDisplay : widget::Widget {
+	void draw(const DrawArgs &args) override;
+	void drawLayer(const DrawArgs &args, int layer) override;
+};
 
-struct LedDisplay : widget::Widget {};
-
-struct LedDisplaySeparator : widget::Widget {};
+struct LedDisplaySeparator : widget::Widget {
+	LedDisplaySeparator();
+	void draw(const DrawArgs &args) override;
+};
 
 struct LedDisplayChoice : widget::OpaqueWidget {
 	std::string text;
@@ -17,6 +22,10 @@ struct LedDisplayChoice : widget::OpaqueWidget {
 	math::Vec textOffset;
 	NVGcolor color;
 	NVGcolor bgColor;
+	LedDisplayChoice();
+	void draw(const DrawArgs &args) override;
+	void drawLayer(const DrawArgs &args, int layer) override;
+	void onButton(const ButtonEvent &e) override;
 };
 
 struct LedDisplayTextField : ui::TextField {
@@ -24,6 +33,10 @@ struct LedDisplayTextField : ui::TextField {
 	math::Vec textOffset;
 	NVGcolor color;
 	NVGcolor bgColor;
+	LedDisplayTextField();
+	void draw(const DrawArgs &args) override;
+	void drawLayer(const DrawArgs &args, int layer) override;
+	int getTextPosition(math::Vec mousePos) override;
 };
 
 } // namespace rack::app

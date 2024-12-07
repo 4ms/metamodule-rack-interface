@@ -20,9 +20,9 @@
 
 struct NVGLUframebuffer {
 	NVGcontext* ctx;
-	GLuint fbo;
-	GLuint rbo;
-	GLuint texture;
+	unsigned int fbo;
+	unsigned int rbo;
+	unsigned int texture;
 	int image;
 };
 typedef struct NVGLUframebuffer NVGLUframebuffer;

@@ -24,25 +24,29 @@ struct Font {
 	NVGcontext *vg{};
 	int handle = -1;
 
-	std::string filename;
+	~Font();
 
-	void loadFile(const std::string &filename, NVGcontext *vg) {
-		this->filename = filename;
-	}
+	void loadFile(const std::string &filename, NVGcontext *vg);
+	[[deprecated]] static std::shared_ptr<Font> load(const std::string &filename);
 };
 
 struct Image {
 	NVGcontext *vg{};
 	int handle = -1;
 
-	std::string filename;
+	~Image();
 
-	void loadFile(const std::string &filename, NVGcontext *vg) {
-		this->filename = filename;
-	}
+	void loadFile(const std::string &filename, NVGcontext *vg);
+	[[deprecated]] static std::shared_ptr<Image> load(const std::string &filename);
 };
 
 struct Window {
+	struct Internal;
+	std::unique_ptr<Internal> internal;
+
+	Window();
+	~Window();
+
 	GLFWwindow *win = nullptr;
 	NVGcontext *vg = nullptr;
 	NVGcontext *fbVg = nullptr;
@@ -65,8 +69,8 @@ struct Window {
 	double getLastFrameDuration(){ return {}; }
 	double getFrameDurationRemaining(){ return {}; }
 
-	std::shared_ptr<Font> loadFont(const std::string &filename){ return {}; }
-	std::shared_ptr<Image> loadImage(const std::string &filename){ return {}; }
+	std::shared_ptr<Font> loadFont(const std::string &filename);
+	std::shared_ptr<Image> loadImage(const std::string &filename);
 	std::shared_ptr<Svg> loadSvg(const std::string &filename) { return Svg::load(filename); }
 	// clang-format on
 };

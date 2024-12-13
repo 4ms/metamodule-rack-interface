@@ -673,6 +673,15 @@ struct NVGpath {
 };
 typedef struct NVGpath NVGpath;
 
+struct NVGFontState {
+	float fontSize;
+	float letterSpacing;
+	float lineHeight;
+	float fontBlur;
+	int textAlign;
+	int fontId;
+};
+
 struct NVGparams {
 	void *userPtr;
 	int edgeAntiAlias;
@@ -708,6 +717,8 @@ struct NVGparams {
 							int nverts,
 							float fringe);
 	void (*renderDelete)(void *uptr);
+	float (*renderText)(
+		void *uptr, float x, float y, float max_width, const char *text, const char *textend, struct NVGFontState *);
 };
 typedef struct NVGparams NVGparams;
 

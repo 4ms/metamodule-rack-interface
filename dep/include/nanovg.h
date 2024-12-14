@@ -679,7 +679,8 @@ struct NVGFontState {
 	float lineHeight;
 	float fontBlur;
 	int textAlign;
-	int fontId;
+	NVGpaint *paint;
+	const void *fontPtr;
 };
 
 struct NVGparams {

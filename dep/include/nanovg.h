@@ -680,6 +680,7 @@ struct NVGFontState {
 	float fontBlur;
 	int textAlign;
 	NVGpaint *paint;
+	float *xform;
 	const void *fontPtr;
 };
 

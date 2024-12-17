@@ -104,15 +104,26 @@ struct Widget {
 	*/
 	virtual math::Rect getViewport(math::Rect r = math::Rect::inf());
 
-	template<class T>
-	T *getAncestorOfType() {
-		//Not supported
-		return nullptr;
+	template <class T>
+	T* getAncestorOfType() {
+		if (!parent)
+			return nullptr;
+		T* p = dynamic_cast<T*>(parent);
+		if (p)
+			return p;
+		return parent->getAncestorOfType<T>();
 	}
 
-	template<class T>
-	T *getFirstDescendantOfType() {
-		//Not supported
+	template <class T>
+	T* getFirstDescendantOfType() {
+		for (Widget* child : children) {
+			T* c = dynamic_cast<T*>(child);
+			if (c)
+				return c;
+			c = child->getFirstDescendantOfType<T>();
+			if (c)
+				return c;
+		}
 		return nullptr;
 	}
 

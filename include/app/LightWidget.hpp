@@ -16,6 +16,8 @@ struct LightWidget : widget::TransparentWidget {
 	}
 	virtual void drawHalo(const DrawArgs &args) {
 	}
+
+	void drawLayer(const DrawArgs &args, int layer) override;
 };
 
 } // namespace rack::app

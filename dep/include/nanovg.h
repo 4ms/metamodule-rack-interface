@@ -681,7 +681,7 @@ struct NVGFontState {
 	int textAlign;
 	NVGpaint *paint;
 	float *xform;
-	const void *fontPtr;
+	const char* fontName;
 };
 
 struct NVGparams {

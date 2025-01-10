@@ -9,21 +9,19 @@ namespace rack::app
 {
 
 struct PanelBorder : widget::TransparentWidget {
-	void draw(const DrawArgs &args) override {
-	}
+	void draw(const DrawArgs &args) override;
 };
 
 struct SvgPanel : widget::Widget {
-	SvgPanel();
 
 	widget::FramebufferWidget *fb;
 	widget::SvgWidget *sw;
 	PanelBorder *panelBorder;
 	std::shared_ptr<window::Svg> svg;
 
-	void setBackground(std::shared_ptr<window::Svg> svg) {
-		this->svg = svg;
-	}
+	SvgPanel();
+	void step() override;
+	void setBackground(std::shared_ptr<window::Svg> svg);
 };
 
 DEPRECATED typedef SvgPanel SVGPanel;

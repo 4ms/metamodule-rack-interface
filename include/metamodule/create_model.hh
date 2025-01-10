@@ -33,7 +33,6 @@ plugin::Model *createModel(std::string_view slug) {
 		app::ModuleWidget *createModuleWidget(engine::Module *m) override {
 			auto tm = static_cast<ModuleT *>(m);
 			app::ModuleWidget *mw = new ModuleWidgetT(tm);
-			mw->setModule(m);
 			mw->setModel(this);
 			return mw;
 		}

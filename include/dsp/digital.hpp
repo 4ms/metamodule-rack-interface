@@ -104,7 +104,7 @@ struct TSchmittTrigger<float> {
 
 	for example.
 	*/
-	bool process(float in, float lowThreshold = 0.45f, float highThreshold = 0.55f) {
+	bool process(float in, float lowThreshold = 0.f, float highThreshold = 1.f) {
 		if (s == LOW && in >= highThreshold) {
 			// LOW to HIGH
 			s = HIGH;

@@ -1,23 +1,28 @@
 #pragma once
-#include <ui/MenuEntry.hpp>
-#include <ui/common.hpp>
 #include <widget/OpaqueWidget.hpp>
+#include <ui/common.hpp>
+#include <ui/MenuEntry.hpp>
 
-namespace rack::ui
-{
+
+namespace rack {
+namespace ui {
+
 
 struct Menu : widget::OpaqueWidget {
-	Menu *parentMenu = nullptr;
-	Menu *childMenu = nullptr;
-	MenuEntry *activeEntry = nullptr;
+	Menu* parentMenu = NULL;
+	Menu* childMenu = NULL;
+	/** The entry which created the child menu */
+	MenuEntry* activeEntry = NULL;
 	BNDcornerFlags cornerFlags = BND_CORNER_NONE;
 
 	Menu();
-	~Menu() override;
-	void setChildMenu(Menu *menu);
+	~Menu();
+	void setChildMenu(Menu* menu);
 	void step() override;
-	void draw(const DrawArgs &args) override;
-	void onHoverScroll(const HoverScrollEvent &e) override;
+	void draw(const DrawArgs& args) override;
+	void onHoverScroll(const HoverScrollEvent& e) override;
 };
 
-} // namespace rack::ui
+
+} // namespace ui
+} // namespace rack

@@ -1,19 +1,22 @@
 #pragma once
 #include <app/common.hpp>
-#include <ui/TextField.hpp>
-#include <widget/OpaqueWidget.hpp>
 #include <widget/Widget.hpp>
+#include <widget/OpaqueWidget.hpp>
+#include <ui/TextField.hpp>
 
-namespace rack::app
-{
+
+namespace rack {
+namespace app {
+
+
 struct LedDisplay : widget::Widget {
-	void draw(const DrawArgs &args) override;
-	void drawLayer(const DrawArgs &args, int layer) override;
+	void draw(const DrawArgs& args) override;
+	void drawLayer(const DrawArgs& args, int layer) override;
 };
 
 struct LedDisplaySeparator : widget::Widget {
 	LedDisplaySeparator();
-	void draw(const DrawArgs &args) override;
+	void draw(const DrawArgs& args) override;
 };
 
 struct LedDisplayChoice : widget::OpaqueWidget {
@@ -23,9 +26,9 @@ struct LedDisplayChoice : widget::OpaqueWidget {
 	NVGcolor color;
 	NVGcolor bgColor;
 	LedDisplayChoice();
-	void draw(const DrawArgs &args) override;
-	void drawLayer(const DrawArgs &args, int layer) override;
-	void onButton(const ButtonEvent &e) override;
+	void draw(const DrawArgs& args) override;
+	void drawLayer(const DrawArgs& args, int layer) override;
+	void onButton(const ButtonEvent& e) override;
 };
 
 struct LedDisplayTextField : ui::TextField {
@@ -34,9 +37,11 @@ struct LedDisplayTextField : ui::TextField {
 	NVGcolor color;
 	NVGcolor bgColor;
 	LedDisplayTextField();
-	void draw(const DrawArgs &args) override;
-	void drawLayer(const DrawArgs &args, int layer) override;
+	void draw(const DrawArgs& args) override;
+	void drawLayer(const DrawArgs& args, int layer) override;
 	int getTextPosition(math::Vec mousePos) override;
 };
 
-} // namespace rack::app
+
+} // namespace app
+} // namespace rack

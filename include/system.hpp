@@ -195,6 +195,15 @@ The launched process will continue running if the current process is closed.
 */
 void runProcessDetached(const std::string& path);
 
+/** Returns the CPU's floating point unit control flags.
+MXCSR register on x64, and the FPCR register on ARM64.
+*/
+uint32_t getFpuFlags();
+void setFpuFlags(uint32_t flags);
+/** Sets Rack-recommended FPU flags for the current thread.
+*/
+void resetFpuFlags();
+
 PRIVATE void init();
 
 

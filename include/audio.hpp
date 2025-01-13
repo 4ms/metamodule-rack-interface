@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <set>
-// #include <mutex>
+#include <mutex>
 
 #include <jansson.h>
 
@@ -74,7 +74,7 @@ Methods throw `rack::Exception` if the driver API has an exception.
 struct Device {
 	std::set<Port*> subscribed;
 	/** Ensures that ports do not subscribe/unsubscribe while processBuffer() is called. */
-	// std::mutex processMutex;
+	std::mutex processMutex;
 
 	virtual ~Device() {}
 

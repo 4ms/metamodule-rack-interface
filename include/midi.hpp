@@ -1,39 +1,35 @@
 #pragma once
-#include <array>
-#include <set>
 #include <vector>
+#include <set>
 
 #include <jansson.h>
 
 #include <common.hpp>
 #include <context.hpp>
 
-namespace rack
-{
+
+namespace rack {
 /** Abstraction for all MIDI drivers in Rack */
-namespace midi
-{
+namespace midi {
+
 
 struct Message {
 	/** Initialized to 3 empty bytes. */
-	// std::vector<uint8_t> bytes;
-	std::array<uint8_t, 3> bytes;
+	std::vector<uint8_t> bytes;
 	/** The Engine frame timestamp of the Message.
 	For output messages, the frame when the message was generated.
 	For input messages, the frame when it is intended to be processed.
 	-1 for undefined, to be sent or processed immediately.
 	*/
-	int8_t frame = -1;
+	int64_t frame = -1;
 
-	Message() {
-	}
+	Message() : bytes(3) {}
 
 	int getSize() const {
 		return bytes.size();
 	}
 	void setSize(int size) {
-		printf("Cannot resize rack::midi::Message::bytes\n");
-		// bytes.resize(size);
+		bytes.resize(size);
 	}
 
 	uint8_t getChannel() const {
@@ -103,8 +99,7 @@ struct Output;
 /** Wraps a MIDI driver API containing any number of MIDI devices.
 */
 struct Driver {
-	virtual ~Driver() {
-	}
+	virtual ~Driver() {}
 	/** Returns the name of the driver. E.g. "ALSA". */
 	virtual std::string getName() {
 		return "";
@@ -124,14 +119,13 @@ struct Driver {
 	/** Adds the given port as a reference holder of a device and returns the it.
 	Creates the Device if no ports are subscribed before calling.
 	*/
-	virtual InputDevice *subscribeInput(int deviceId, Input *input) {
+	virtual InputDevice* subscribeInput(int deviceId, Input* input) {
 		return NULL;
 	}
 	/** Removes the give port as a reference holder of a device.
 	Deletes the Device if no ports are subscribed after calling.
 	*/
-	virtual void unsubscribeInput(int deviceId, Input *input) {
-	}
+	virtual void unsubscribeInput(int deviceId, Input* input) {}
 
 	// The following behave identically as the above methods except for outputs.
 
@@ -144,11 +138,10 @@ struct Driver {
 	virtual std::string getOutputDeviceName(int deviceId) {
 		return "";
 	}
-	virtual OutputDevice *subscribeOutput(int deviceId, Output *output) {
+	virtual OutputDevice* subscribeOutput(int deviceId, Output* output) {
 		return NULL;
 	}
-	virtual void unsubscribeOutput(int deviceId, Output *output) {
-	}
+	virtual void unsubscribeOutput(int deviceId, Output* output) {}
 };
 
 ////////////////////
@@ -162,32 +155,30 @@ Modules and the UI should not interact with this API directly. Use Port instead.
 Methods throw `rack::Exception` if the driver API has an exception.
 */
 struct Device {
-	virtual ~Device() {
-	}
+	virtual ~Device() {}
 	virtual std::string getName() {
 		return "";
 	}
 };
 
 struct InputDevice : Device {
-	std::set<Input *> subscribed;
+	std::set<Input*> subscribed;
 	/** Not public. Use Driver::subscribeInput(). */
-	void subscribe(Input *input);
+	void subscribe(Input* input);
 	/** Not public. Use Driver::unsubscribeInput(). */
-	void unsubscribe(Input *input);
+	void unsubscribe(Input* input);
 	/** Called when a MIDI message is received from the device. */
-	void onMessage(const Message &message);
+	void onMessage(const Message& message);
 };
 
 struct OutputDevice : Device {
-	std::set<Output *> subscribed;
+	std::set<Output*> subscribed;
 	/** Not public. Use Driver::subscribeOutput(). */
-	void subscribe(Output *output);
+	void subscribe(Output* output);
 	/** Not public. Use Driver::unsubscribeOutput(). */
-	void unsubscribe(Output *output);
+	void unsubscribe(Output* output);
 	/** Sends a MIDI message to the device. */
-	virtual void sendMessage(const Message &message) {
-	}
+	virtual void sendMessage(const Message& message) {}
 };
 
 ////////////////////
@@ -214,18 +205,18 @@ struct Port {
 	int driverId = -1;
 	int deviceId = -1;
 	/** Not owned */
-	Driver *driver = NULL;
-	Device *device = NULL;
-	Context *context;
+	Driver* driver = NULL;
+	Device* device = NULL;
+	Context* context;
 
 	Port();
 	virtual ~Port();
 
-	Driver *getDriver();
+	Driver* getDriver();
 	int getDriverId();
 	void setDriverId(int driverId);
 
-	Device *getDevice();
+	Device* getDevice();
 	virtual std::vector<int> getDeviceIds() = 0;
 	virtual int getDefaultDeviceId() = 0;
 	int getDeviceId();
@@ -237,13 +228,14 @@ struct Port {
 	void setChannel(int channel);
 	std::string getChannelName(int channel);
 
-	json_t *toJson();
-	void fromJson(json_t *rootJ);
+	json_t* toJson();
+	void fromJson(json_t* rootJ);
 };
+
 
 struct Input : Port {
 	/** Not owned */
-	InputDevice *inputDevice = NULL;
+	InputDevice* inputDevice = NULL;
 
 	Input();
 	~Input();
@@ -256,29 +248,30 @@ struct Input : Port {
 
 	std::vector<int> getChannels() override;
 
-	virtual void onMessage(const Message &message) {
-	}
+	virtual void onMessage(const Message& message) {}
 };
+
 
 /** An Input port that stores incoming MIDI messages and releases them when ready according to their frame timestamp.
 */
 struct InputQueue : Input {
 	struct Internal;
-	Internal *internal;
+	Internal* internal;
 
 	InputQueue();
 	~InputQueue();
-	void onMessage(const Message &message) override;
+	void onMessage(const Message& message) override;
 	/** Pops and returns the next message (by setting `messageOut`) if its frame timestamp is `maxFrame` or earlier.
 	Returns whether a message was returned.
 	*/
-	bool tryPop(Message *messageOut, int64_t maxFrame);
+	bool tryPop(Message* messageOut, int64_t maxFrame);
 	size_t size();
 };
 
+
 struct Output : Port {
 	/** Not owned */
-	OutputDevice *outputDevice = NULL;
+	OutputDevice* outputDevice = NULL;
 
 	Output();
 	~Output();
@@ -291,15 +284,17 @@ struct Output : Port {
 
 	std::vector<int> getChannels() override;
 
-	void sendMessage(const Message &message);
+	void sendMessage(const Message& message);
 };
+
 
 PRIVATE void init();
 PRIVATE void destroy();
 /** Registers a new MIDI driver. Takes pointer ownership. */
-void addDriver(int driverId, Driver *driver);
+void addDriver(int driverId, Driver* driver);
 std::vector<int> getDriverIds();
-Driver *getDriver(int driverId);
+Driver* getDriver(int driverId);
+
 
 } // namespace midi
 } // namespace rack

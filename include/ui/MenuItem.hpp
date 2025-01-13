@@ -1,36 +1,43 @@
 #pragma once
-#include <context.hpp>
+#include <ui/common.hpp>
 #include <ui/Menu.hpp>
 #include <ui/MenuEntry.hpp>
-#include <ui/common.hpp>
+#include <context.hpp>
 
-namespace rack::ui
-{
+
+namespace rack {
+namespace ui {
+
 
 struct MenuItem : MenuEntry {
 	std::string text;
 	std::string rightText;
 	bool disabled = false;
 
-	void draw(const DrawArgs &args) override;
-	void drawOffset(NVGcontext *vg, float offset = 0);
+	void draw(const DrawArgs& args) override;
+	PRIVATE void drawOffset(NVGcontext* vg, float offset = 0);
 	void step() override;
-	void onEnter(const EnterEvent &e) override;
-	void onDragDrop(const DragDropEvent &e) override;
+	void onEnter(const EnterEvent& e) override;
+	void onDragDrop(const DragDropEvent& e) override;
 	void doAction(bool consume = true);
-
-	virtual Menu *createChildMenu() {
-		return nullptr;
+	virtual Menu* createChildMenu() {
+		return NULL;
 	}
-
-	void onAction(const ActionEvent &e) override;
+	/** Override to handle behavior when user clicks the menu item.
+	Event is consumed by default. Unconsume to prevent the menu from being closed.
+	If Ctrl (Cmd on Mac) is held, the event is *not* pre-consumed, so if your menu must be closed, always consume the event.
+	*/
+	void onAction(const ActionEvent& e) override;
 };
+
 
 struct ColorDotMenuItem : MenuItem {
 	NVGcolor color = color::BLACK_TRANSPARENT;
 
-	void draw(const DrawArgs &args) override;
+	void draw(const DrawArgs& args) override;
 	void step() override;
 };
 
-} // namespace rack::ui
+
+} // namespace ui
+} // namespace rack

@@ -1,157 +1,209 @@
 #pragma once
-#include <algorithm>
-#include <array>
 #include <common.hpp>
 #include <engine/Light.hpp>
-#include <numeric>
 
-namespace rack::engine
-{
 
-static const int PORT_MAX_CHANNELS = 4;
+namespace rack {
+namespace engine {
+
+
+/** This is inspired by the number of MIDI channels. */
+static const int PORT_MAX_CHANNELS = 16;
+
 
 struct Port {
-	std::array<float, PORT_MAX_CHANNELS> voltages = {};
-	uint8_t channels = 0;
+	/** Voltage of the port. */
+	union {
+		/** Unstable API. Use getVoltage() and setVoltage() instead. */
+		float voltages[PORT_MAX_CHANNELS] = {};
+		/** DEPRECATED. Unstable API. Use getVoltage() and setVoltage() instead. */
+		float value;
+	};
+	union {
+		/** Number of polyphonic channels.
+		DEPRECATED. Unstable API. Use set/getChannels() instead.
+		May be 0 to PORT_MAX_CHANNELS.
+		0 channels means disconnected.
+		*/
+		uint8_t channels = 0;
+		/** DEPRECATED. Unstable API. Use isConnected() instead. */
+		uint8_t active;
+	};
+	/** For rendering plug lights on cables.
+	Green for positive, red for negative, and blue for polyphonic.
+	*/
+	Light plugLights[3];
 
 	enum Type {
 		INPUT,
 		OUTPUT,
 	};
 
-	void setVoltage(float v, uint8_t channel = 0) {
-		if (channel < PORT_MAX_CHANNELS)
-			voltages[channel] = v;
+	/** Sets the voltage of the given channel. */
+	void setVoltage(float voltage, uint8_t channel = 0) {
+		voltages[channel] = voltage;
 	}
 
-	float getVoltage(uint8_t chan = 0) const {
-		return (chan < PORT_MAX_CHANNELS) ? voltages[chan] : 0.f;
+	/** Returns the voltage of the given channel.
+	Because of proper bookkeeping, all channels higher than the input port's number of channels should be 0V.
+	*/
+	float getVoltage(uint8_t channel = 0) {
+		return voltages[channel];
 	}
 
-	float getPolyVoltage(uint8_t channel) const {
+	/** Returns the given channel's voltage if the port is polyphonic, otherwise returns the first voltage (channel 0). */
+	float getPolyVoltage(uint8_t channel) {
 		return isMonophonic() ? getVoltage(0) : getVoltage(channel);
 	}
 
-	float getNormalVoltage(float normalVoltage, uint8_t channel = 0) const {
+	/** Returns the voltage if a cable is connected, otherwise returns the given normal voltage. */
+	float getNormalVoltage(float normalVoltage, uint8_t channel = 0) {
 		return isConnected() ? getVoltage(channel) : normalVoltage;
 	}
 
-	float getNormalPolyVoltage(float normalVoltage, uint8_t channel) const {
+	float getNormalPolyVoltage(float normalVoltage, uint8_t channel) {
 		return isConnected() ? getPolyVoltage(channel) : normalVoltage;
 	}
 
-	float *getVoltages(uint8_t firstChannel = 0) {
-		if (firstChannel < PORT_MAX_CHANNELS)
-			return &voltages[firstChannel];
-		else
-			return &voltages[0]; // TODO: this could be a problem if caller requests a channel out of range
+	/** Returns a pointer to the array of voltages beginning with firstChannel.
+	The pointer can be used for reading and writing.
+	*/
+	float* getVoltages(uint8_t firstChannel = 0) {
+		return &voltages[firstChannel];
 	}
 
-	//UNSAFE: caller must guarentee v[] has at least channel elements
-	void readVoltages(float *v) const {
+	/** Copies the port's voltages to an array of size at least `channels`. */
+	void readVoltages(float* v) {
 		for (uint8_t c = 0; c < channels; c++) {
 			v[c] = voltages[c];
 		}
 	}
 
-	//UNSAFE: caller must guarentee v[] has at least channel elements
-	void writeVoltages(const float *v) {
+	/** Copies an array of size at least `channels` to the port's voltages.
+	Remember to set the number of channels *before* calling this method.
+	*/
+	void writeVoltages(const float* v) {
 		for (uint8_t c = 0; c < channels; c++) {
 			voltages[c] = v[c];
 		}
 	}
 
+	/** Sets all voltages to 0. */
 	void clearVoltages() {
 		for (uint8_t c = 0; c < channels; c++) {
 			voltages[c] = 0.f;
 		}
 	}
 
-	float getVoltageSum() const {
-		return std::accumulate(voltages.begin(), voltages.begin() + channels, 0.f);
+	/** Returns the sum of all voltages. */
+	float getVoltageSum() {
+		float sum = 0.f;
+		for (uint8_t c = 0; c < channels; c++) {
+			sum += voltages[c];
+		}
+		return sum;
 	}
 
-	float getVoltageRMS() const {
+	/** Returns the root-mean-square of all voltages.
+	Uses sqrt() which is slow, so use a custom approximation if calling frequently.
+	*/
+	float getVoltageRMS() {
 		if (channels == 0) {
 			return 0.f;
-
-		} else if (channels == 1) {
+		}
+		else if (channels == 1) {
 			return std::fabs(voltages[0]);
-
-		} else {
-			auto sum_squares = [](float sum, float v) {
-				return sum + v * v;
-			};
-			return std::sqrt(std::accumulate(voltages.begin(), voltages.begin() + channels, 0.f, sum_squares));
+		}
+		else {
+			float sum = 0.f;
+			for (uint8_t c = 0; c < channels; c++) {
+				sum += std::pow(voltages[c], 2);
+			}
+			return std::sqrt(sum);
 		}
 	}
 
-	template<typename T>
-	T getVoltageSimd(int firstChannel) const {
-		if (firstChannel < PORT_MAX_CHANNELS)
-			return T::load(&voltages[firstChannel]);
-		else
-			return T{0.f}; //try to handle error gracefully
+	template <typename T>
+	T getVoltageSimd(uint8_t firstChannel) {
+		return T::load(&voltages[firstChannel]);
 	}
 
-	template<typename T>
-	T getPolyVoltageSimd(int firstChannel) const {
+	template <typename T>
+	T getPolyVoltageSimd(uint8_t firstChannel) {
 		return isMonophonic() ? getVoltage(0) : getVoltageSimd<T>(firstChannel);
 	}
 
-	template<typename T>
-	T getNormalVoltageSimd(T normalVoltage, int firstChannel) const {
+	template <typename T>
+	T getNormalVoltageSimd(T normalVoltage, uint8_t firstChannel) {
 		return isConnected() ? getVoltageSimd<T>(firstChannel) : normalVoltage;
 	}
 
-	template<typename T>
-	T getNormalPolyVoltageSimd(T normalVoltage, int firstChannel) const {
+	template <typename T>
+	T getNormalPolyVoltageSimd(T normalVoltage, uint8_t firstChannel) {
 		return isConnected() ? getPolyVoltageSimd<T>(firstChannel) : normalVoltage;
 	}
 
-	template<typename T>
-	void setVoltageSimd(T v, int firstChannel) {
-		if (firstChannel < PORT_MAX_CHANNELS)
-			v.store(&voltages[firstChannel]);
+	template <typename T>
+	void setVoltageSimd(T voltage, uint8_t firstChannel) {
+		voltage.store(&voltages[firstChannel]);
 	}
 
-	void setChannels(int channels) {
+	/** Sets the number of polyphony channels.
+	Also clears voltages of higher channels.
+	If disconnected, this does nothing (`channels` remains 0).
+	If 0 is given, `channels` is set to 1 but all voltages are cleared.
+	*/
+	void setChannels(uint8_t channels) {
 		// If disconnected, keep the number of channels at 0.
 		if (this->channels == 0) {
 			return;
 		}
-
+		// Set higher channel voltages to 0
+		for (uint8_t c = channels; c < this->channels; c++) {
+			voltages[c] = 0.f;
+		}
 		// Don't allow caller to set port as disconnected
-		// or out of range
-		this->channels = std::clamp(channels, 1, PORT_MAX_CHANNELS);
-
-		// VCV comment: "Set higher channel voltages to 0"
-		// TODO: do this when we enable polyphony
+		if (channels == 0) {
+			channels = 1;
+		}
+		this->channels = channels;
 	}
 
-	int getChannels() const {
+	/** Returns the number of channels.
+	If the port is disconnected, it has 0 channels.
+	*/
+	int getChannels() {
 		return channels;
 	}
 
-	bool isConnected() const {
+	/** Returns whether a cable is connected to the Port.
+	You can use this for skipping code that generates output voltages.
+	*/
+	bool isConnected() {
 		return channels > 0;
 	}
 
-	bool isMonophonic() const {
+	/** Returns whether the cable exists and has 1 channel. */
+	bool isMonophonic() {
 		return channels == 1;
 	}
 
-	bool isPolyphonic() const {
+	/** Returns whether the cable exists and has more than 1 channel. */
+	bool isPolyphonic() {
 		return channels > 1;
 	}
 
-	DEPRECATED float normalize(float normalVoltage) const {
+	/** Use getNormalVoltage() instead. */
+	DEPRECATED float normalize(float normalVoltage) {
 		return getNormalVoltage(normalVoltage);
 	}
 };
+
 
 struct Output : Port {};
 
 struct Input : Port {};
 
-} // namespace rack::engine
+
+} // namespace engine
+} // namespace rack

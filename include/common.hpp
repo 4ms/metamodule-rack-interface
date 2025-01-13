@@ -15,6 +15,8 @@
 #include <string>
 #include <stdexcept>
 
+#include <arch.hpp>
+
 
 /** Attribute for deprecated functions and symbols.
 E.g.

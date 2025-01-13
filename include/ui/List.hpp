@@ -1,9 +1,16 @@
 #pragma once
 #include <widget/OpaqueWidget.hpp>
+#include <ui/common.hpp>
 
-namespace rack::ui
-{
 
-struct List : widget::OpaqueWidget {};
+namespace rack {
+namespace ui {
 
-} // namespace rack::ui
+
+struct List : widget::OpaqueWidget {
+	void step() override;
+};
+
+
+} // namespace ui
+} // namespace rack

@@ -1,10 +1,15 @@
 #pragma once
-#include <ui/common.hpp>
 #include <widget/TransparentWidget.hpp>
+#include <ui/common.hpp>
 
-namespace rack::ui
-{
 
-struct TooltipOverlay : widget::TransparentWidget {};
+namespace rack {
+namespace ui {
 
-} // namespace rack::ui
+
+struct TooltipOverlay : widget::TransparentWidget {
+};
+
+
+} // namespace ui
+} // namespace rack

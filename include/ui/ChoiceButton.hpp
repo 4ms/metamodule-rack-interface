@@ -1,10 +1,18 @@
 #pragma once
-#include <ui/Button.hpp>
 #include <ui/common.hpp>
+#include <ui/Button.hpp>
 
-namespace rack::ui
-{
 
-struct ChoiceButton : Button {};
+namespace rack {
+namespace ui {
 
-} // namespace rack::ui
+
+/** Button with a dropdown icon on its right.
+*/
+struct ChoiceButton : Button {
+	void draw(const DrawArgs& args) override;
+};
+
+
+} // namespace ui
+} // namespace rack

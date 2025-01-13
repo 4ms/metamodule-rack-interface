@@ -1,8 +1,10 @@
 #pragma once
 #include <widget/Widget.hpp>
 
-namespace rack::widget
-{
+
+namespace rack {
+namespace widget {
+
 
 /** Transforms appearance only, not positions of events */
 struct TransformWidget : Widget {
@@ -41,17 +43,19 @@ struct TransformWidget : Widget {
 		nvgTransformPremultiply(transform, t);
 	}
 
-	void draw(const DrawArgs &args) override {
+	void draw(const DrawArgs& args) override {
 		// No need to save the state because that is done in the parent
 		nvgTransform(args.vg, transform[0], transform[1], transform[2], transform[3], transform[4], transform[5]);
 		Widget::draw(args);
 	}
 
-	void drawLayer(const DrawArgs &args, int layer) override {
+	void drawLayer(const DrawArgs& args, int layer) override {
 		// No need to save the state because that is done in the parent
 		nvgTransform(args.vg, transform[0], transform[1], transform[2], transform[3], transform[4], transform[5]);
 		Widget::drawLayer(args, layer);
 	}
 };
 
-} // namespace rack::widget
+
+} // namespace widget
+} // namespace rack

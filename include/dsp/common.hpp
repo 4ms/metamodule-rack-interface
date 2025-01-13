@@ -47,7 +47,7 @@ T amplitudeToDb(T amp) {
 
 template <typename T>
 T dbToAmplitude(T db) {
-	return std::pow(10, db / 20);
+	return simd::pow(10, db / 20);
 }
 
 // Functions for parameter scaling

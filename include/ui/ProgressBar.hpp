@@ -1,13 +1,21 @@
 #pragma once
-#include <Quantity.hpp>
 #include <ui/common.hpp>
 #include <widget/Widget.hpp>
+#include <Quantity.hpp>
 
-namespace rack::ui
-{
+
+namespace rack {
+namespace ui {
+
 
 struct ProgressBar : widget::Widget {
-	Quantity *quantity = nullptr;
+	/** Not owned. Stores the progress value and label. */
+	Quantity* quantity = NULL;
+
+	ProgressBar();
+	void draw(const DrawArgs& args) override;
 };
 
-} // namespace rack::ui
+
+} // namespace ui
+} // namespace rack

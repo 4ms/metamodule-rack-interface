@@ -2,17 +2,19 @@
 #include <speex/speex_resampler.h>
 
 #include <dsp/common.hpp>
-#include <dsp/fir.hpp>
 #include <dsp/ringbuffer.hpp>
+#include <dsp/fir.hpp>
 #include <dsp/window.hpp>
 
-namespace rack::dsp
-{
+
+namespace rack {
+namespace dsp {
+
 
 /** Resamples by a fixed rational factor. */
-template<int MAX_CHANNELS>
+template <int MAX_CHANNELS>
 struct SampleRateConverter {
-	SpeexResamplerState *st = nullptr;
+	SpeexResamplerState* st = NULL;
 	int channels = MAX_CHANNELS;
 	int quality = SPEEX_RESAMPLER_QUALITY_DEFAULT;
 	int inRate = 44100;
@@ -29,7 +31,7 @@ struct SampleRateConverter {
 
 	/** Sets the number of channels to actually process. This can be at most MAX_CHANNELS. */
 	void setChannels(int channels) {
-		// assert(channels <= MAX_CHANNELS);
+		assert(channels <= MAX_CHANNELS);
 		if (channels == this->channels)
 			return;
 		this->channels = channels;
@@ -55,23 +57,23 @@ struct SampleRateConverter {
 	void refreshState() {
 		if (st) {
 			speex_resampler_destroy(st);
-			st = nullptr;
+			st = NULL;
 		}
 
 		if (channels > 0 && inRate != outRate) {
-			int err = 0;
+			int err;
 			st = speex_resampler_init(channels, inRate, outRate, quality, &err);
-			(void)err;
+			(void) err;
 		}
 	}
 
-	void process(const float *in, int inStride, int *inFrames, float *out, int outStride, int *outFrames) {
-		// assert(in);
-		// assert(inFrames);
-		// assert(out);
-		// assert(outFrames);
+	void process(const float* in, int inStride, int* inFrames, float* out, int outStride, int* outFrames) {
+		assert(in);
+		assert(inFrames);
+		assert(out);
+		assert(outFrames);
 
-		if (inRate != outRate && st) {
+		if (st) {
 			speex_resampler_set_input_stride(st, inStride);
 			speex_resampler_set_output_stride(st, outStride);
 			// Resample each channel at a time
@@ -81,34 +83,32 @@ struct SampleRateConverter {
 				inLen = *inFrames;
 				outLen = *outFrames;
 				int err = speex_resampler_process_float(st, c, &in[c], &inLen, &out[c], &outLen);
-				(void)err;
+				(void) err;
 			}
 			*inFrames = inLen;
 			*outFrames = outLen;
-		} else {
+		}
+		else {
 			// Simply copy the buffer without conversion
 			int frames = std::min(*inFrames, *outFrames);
-			// if (channels == MAX_CHANNELS) {
-			// 	std::memcpy(out, in, frames * channels * sizeof(float));
-			// } else {
 			for (int i = 0; i < frames; i++) {
 				for (int c = 0; c < channels; c++) {
 					out[outStride * i + c] = in[inStride * i + c];
 				}
 			}
-			// }
 			*inFrames = frames;
 			*outFrames = frames;
 		}
 	}
 
-	void process(const Frame<MAX_CHANNELS> *in, int *inFrames, Frame<MAX_CHANNELS> *out, int *outFrames) {
-		process((const float *)in, MAX_CHANNELS, inFrames, (float *)out, MAX_CHANNELS, outFrames);
+	void process(const Frame<MAX_CHANNELS>* in, int* inFrames, Frame<MAX_CHANNELS>* out, int* outFrames) {
+		process((const float*) in, MAX_CHANNELS, inFrames, (float*) out, MAX_CHANNELS, outFrames);
 	}
 };
 
+
 /** Downsamples by an integer factor. */
-template<int OVERSAMPLE, int QUALITY, typename T = float>
+template <int OVERSAMPLE, int QUALITY, typename T = float>
 struct Decimator {
 	T inBuffer[OVERSAMPLE * QUALITY];
 	float kernel[OVERSAMPLE * QUALITY];
@@ -124,7 +124,7 @@ struct Decimator {
 		std::memset(inBuffer, 0, sizeof(inBuffer));
 	}
 	/** `in` must be length OVERSAMPLE */
-	T process(T *in) {
+	T process(T* in) {
 		// Copy input to buffer
 		std::memcpy(&inBuffer[inIndex], in, OVERSAMPLE * sizeof(T));
 		// Advance index
@@ -141,8 +141,9 @@ struct Decimator {
 	}
 };
 
+
 /** Upsamples by an integer factor. */
-template<int OVERSAMPLE, int QUALITY>
+template <int OVERSAMPLE, int QUALITY>
 struct Upsampler {
 	float inBuffer[QUALITY];
 	float kernel[OVERSAMPLE * QUALITY];
@@ -158,7 +159,7 @@ struct Upsampler {
 		std::memset(inBuffer, 0, sizeof(inBuffer));
 	}
 	/** `out` must be length OVERSAMPLE */
-	void process(float in, float *out) {
+	void process(float in, float* out) {
 		// Zero-stuff input buffer
 		inBuffer[inIndex] = OVERSAMPLE * in;
 		// Advance index
@@ -179,4 +180,6 @@ struct Upsampler {
 	}
 };
 
-} // namespace rack::dsp
+
+} // namespace dsp
+} // namespace rack

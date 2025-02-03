@@ -5,6 +5,8 @@
 namespace rack::ui
 {
 
-struct MenuEntry : widget::OpaqueWidget {};
+struct MenuEntry : widget::OpaqueWidget {
+	MenuEntry();
+};
 
 } // namespace rack::ui

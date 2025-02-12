@@ -1,17 +1,13 @@
 #pragma once
-#include <common.hpp>
-#include <math.hpp>
 
-
-namespace rack {
-namespace engine {
-
+namespace rack::engine
+{
 
 struct Param {
-	/** Unstable API. Use setValue() and getValue() instead. */
 	float value = 0.f;
 
-	float getValue() {
+	// MetaModule: must be const
+	float getValue() const {
 		return value;
 	}
 
@@ -20,6 +16,5 @@ struct Param {
 	}
 };
 
+} // namespace rack::engine
 
-} // namespace engine
-} // namespace rack

@@ -131,8 +131,9 @@ struct TSchmittTrigger<float> {
 		UNTRIGGERED = -1
 	};
 	/** Returns TRIGGERED if the input reached highThreshold, and UNTRIGGERED if the input reached lowThreshold.
+	  * MetaModule uses thresholds closer to 0.5 to make it easier to map a knob to a button
 	*/
-	Event processEvent(float in, float lowThreshold = 0.f, float highThreshold = 1.f) {
+	Event processEvent(float in, float lowThreshold = 0.45f, float highThreshold = 0.55f) {
 		Event event = NONE;
 		if (s == LOW && in >= highThreshold) {
 			// LOW to HIGH

@@ -1,10 +1,8 @@
 #pragma once
 #include <widget/Widget.hpp>
 
-
-namespace rack {
-namespace widget {
-
+namespace rack::widget
+{
 
 /** Owns and draws a window::Svg */
 struct SvgWidget : Widget {
@@ -12,21 +10,19 @@ struct SvgWidget : Widget {
 
 	SvgWidget();
 
-	/** Sets the box size to the SVG image size */
 	void wrap();
 
-	/** Sets and wraps the SVG */
+	// FIXME: set box size from svg
 	void setSvg(std::shared_ptr<window::Svg> svg);
-	DEPRECATED void setSVG(std::shared_ptr<window::Svg> svg) {
+
+	[[deprecated]] void setSVG(std::shared_ptr<window::Svg> svg) {
 		setSvg(svg);
 	}
 
-	void draw(const DrawArgs& args) override;
+	void draw(const DrawArgs &args) override;
 };
 
+[[deprecated]] typedef SvgWidget SVGWidget;
 
-DEPRECATED typedef SvgWidget SVGWidget;
+} // namespace rack::widget
 
-
-} // namespace widget
-} // namespace rack

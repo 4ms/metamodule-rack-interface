@@ -12,7 +12,6 @@ struct SvgWidget : Widget {
 
 	void wrap();
 
-	// FIXME: set box size from svg
 	void setSvg(std::shared_ptr<window::Svg> svg);
 
 	[[deprecated]] void setSVG(std::shared_ptr<window::Svg> svg) {
@@ -25,4 +24,3 @@ struct SvgWidget : Widget {
 [[deprecated]] typedef SvgWidget SVGWidget;
 
 } // namespace rack::widget
-

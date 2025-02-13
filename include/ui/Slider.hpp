@@ -1,26 +1,19 @@
 #pragma once
-#include <widget/OpaqueWidget.hpp>
 #include <Quantity.hpp>
-#include <ui/common.hpp>
-#include <context.hpp>
+#include <widget/OpaqueWidget.hpp>
 
-
-namespace rack {
-namespace ui {
-
+namespace rack::ui
+{
 
 struct Slider : widget::OpaqueWidget {
-	/** Not owned. */
-	Quantity* quantity = NULL;
+	Quantity *quantity = nullptr;
 
 	Slider();
-	void draw(const DrawArgs& args) override;
-	void onDragStart(const DragStartEvent& e) override;
-	void onDragMove(const DragMoveEvent& e) override;
-	void onDragEnd(const DragEndEvent& e) override;
-	void onDoubleClick(const DoubleClickEvent& e) override;
+	void draw(const DrawArgs &args) override;
+	void onDragStart(const DragStartEvent &e) override;
+	void onDragMove(const DragMoveEvent &e) override;
+	void onDragEnd(const DragEndEvent &e) override;
+	void onDoubleClick(const DoubleClickEvent &e) override;
 };
 
-
-} // namespace ui
-} // namespace rack
+} // namespace rack::ui

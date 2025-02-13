@@ -1,11 +1,9 @@
 #pragma once
-#include <app/common.hpp>
 #include <app/ParamWidget.hpp>
+#include <app/common.hpp>
 
-
-namespace rack {
-namespace app {
-
+namespace rack::app
+{
 
 /** A ParamWidget that represents an integer.
 Increases by 1 each time it is clicked.
@@ -14,7 +12,7 @@ In momentary mode, the value is instead set to maxValue when the mouse is held a
 */
 struct Switch : ParamWidget {
 	struct Internal;
-	Internal* internal;
+	Internal *internal;
 
 	/** Instead of incrementing values on each click, sets maxValue on press and minValue on release.
 	*/
@@ -24,11 +22,9 @@ struct Switch : ParamWidget {
 	~Switch();
 	void initParamQuantity() override;
 	void step() override;
-	void onDoubleClick(const DoubleClickEvent& e) override;
-	void onDragStart(const DragStartEvent& e) override;
-	void onDragEnd(const DragEndEvent& e) override;
+	void onDoubleClick(const DoubleClickEvent &e) override;
+	void onDragStart(const DragStartEvent &e) override;
+	void onDragEnd(const DragEndEvent &e) override;
 };
 
-
-} // namespace app
-} // namespace rack
+} // namespace rack::app

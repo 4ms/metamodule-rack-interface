@@ -1,27 +1,23 @@
 #pragma once
 #include <common.hpp>
-#include <widget/Widget.hpp>
+#include <settings.hpp>
 #include <widget/FramebufferWidget.hpp>
 #include <widget/SvgWidget.hpp>
-#include <settings.hpp>
+#include <widget/Widget.hpp>
 
+namespace rack::app
+{
 
-namespace rack {
-namespace app {
-
-
-/** If you don't add these to your ModuleWidget, they will fall out of the rack... */
 struct SvgScrew : widget::Widget {
-	widget::FramebufferWidget* fb;
-	widget::SvgWidget* sw;
+	widget::FramebufferWidget *fb;
+	widget::SvgWidget *sw;
 
 	SvgScrew();
+	~SvgScrew() override;
 	void setSvg(std::shared_ptr<window::Svg> svg);
 };
 
-
-DEPRECATED typedef SvgScrew SVGScrew;
-
+using SVGScrew = SvgScrew;
 
 struct ThemedSvgScrew : SvgScrew {
 	std::shared_ptr<window::Svg> lightSvg;
@@ -39,7 +35,4 @@ struct ThemedSvgScrew : SvgScrew {
 	}
 };
 
-
-
-} // namespace app
-} // namespace rack
+} // namespace rack::app

@@ -1,11 +1,8 @@
 #pragma once
 #include <widget/Widget.hpp>
-#include <ui/common.hpp>
 
-
-namespace rack {
-namespace ui {
-
+namespace rack::ui
+{
 
 struct Label : widget::Widget {
 	enum Alignment {
@@ -21,9 +18,7 @@ struct Label : widget::Widget {
 	Alignment alignment = LEFT_ALIGNMENT;
 
 	Label();
-	void draw(const DrawArgs& args) override;
+	void draw(const DrawArgs &args) override;
 };
 
-
-} // namespace ui
-} // namespace rack
+} // namespace rack::ui

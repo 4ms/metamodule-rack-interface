@@ -1,12 +1,10 @@
 #pragma once
-#include <widget/OpaqueWidget.hpp>
-#include <ui/common.hpp>
 #include <Quantity.hpp>
+#include <ui/common.hpp>
+#include <widget/OpaqueWidget.hpp>
 
-
-namespace rack {
-namespace ui {
-
+namespace rack::ui
+{
 
 /** A clickable button with text.
 Dispatches Action event when clicked.
@@ -18,15 +16,13 @@ If text is not set, the quantity label is used.
 struct Button : widget::OpaqueWidget {
 	std::string text;
 	/** Not owned. Tracks the pressed state of the button.*/
-	Quantity* quantity = NULL;
+	Quantity *quantity = NULL;
 
 	Button();
-	void draw(const DrawArgs& args) override;
-	void onDragStart(const DragStartEvent& e) override;
-	void onDragEnd(const DragEndEvent& e) override;
-	void onDragDrop(const DragDropEvent& e) override;
+	void draw(const DrawArgs &args) override;
+	void onDragStart(const DragStartEvent &e) override;
+	void onDragEnd(const DragEndEvent &e) override;
+	void onDragDrop(const DragDropEvent &e) override;
 };
 
-
-} // namespace ui
-} // namespace rack
+} // namespace rack::ui

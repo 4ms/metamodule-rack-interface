@@ -1,17 +1,18 @@
 #pragma once
-#include <vector>
 #include <set>
-#include <mutex>
+#include <vector>
+// #include <mutex>
 
 #include <jansson.h>
 
 #include <common.hpp>
 #include <context.hpp>
 
-namespace rack {
+namespace rack
+{
 /** Abstraction for all audio drivers in Rack */
-namespace audio {
-
+namespace audio
+{
 
 ////////////////////
 // Driver
@@ -23,7 +24,8 @@ struct Port;
 /** Wraps an audio driver API containing any number of audio devices.
 */
 struct Driver {
-	virtual ~Driver() {}
+	virtual ~Driver() {
+	}
 	/** Returns the name of the driver. E.g. "ALSA". */
 	virtual std::string getName() {
 		return "";
@@ -52,13 +54,14 @@ struct Driver {
 	/** Adds the given port as a reference holder of a device and returns the it.
 	Creates the Device if no ports are subscribed before calling.
 	*/
-	virtual Device* subscribe(int deviceId, Port* port) {
+	virtual Device *subscribe(int deviceId, Port *port) {
 		return NULL;
 	}
 	/** Removes the give port as a reference holder of a device.
 	Deletes the Device if no ports are subscribed after calling.
 	*/
-	virtual void unsubscribe(int deviceId, Port* port) {}
+	virtual void unsubscribe(int deviceId, Port *port) {
+	}
 };
 
 ////////////////////
@@ -72,11 +75,12 @@ Modules and the UI should not interact with this API directly. Use Port instead.
 Methods throw `rack::Exception` if the driver API has an exception.
 */
 struct Device {
-	std::set<Port*> subscribed;
+	std::set<Port *> subscribed;
 	/** Ensures that ports do not subscribe/unsubscribe while processBuffer() is called. */
-	std::mutex processMutex;
+	// std::mutex processMutex;
 
-	virtual ~Device() {}
+	virtual ~Device() {
+	}
 
 	virtual std::string getName() {
 		return "";
@@ -99,7 +103,8 @@ struct Device {
 		return 0;
 	}
 	/** Sets the sample rate of the device, re-opening it if needed. */
-	virtual void setSampleRate(float sampleRate) {}
+	virtual void setSampleRate(float sampleRate) {
+	}
 
 	/** Returns a list of all valid (user-selectable) block sizes.
 	The device may accept block sizes not in this list, but it *must* accept block sizes in the list.
@@ -112,23 +117,24 @@ struct Device {
 		return 0;
 	}
 	/** Sets the block size of the device, re-opening it if needed. */
-	virtual void setBlockSize(int blockSize) {}
+	virtual void setBlockSize(int blockSize) {
+	}
 
 	/** Adds Port to set of subscribed Ports.
 	Called by Driver::subscribe().
 	*/
-	virtual void subscribe(Port* port);
+	virtual void subscribe(Port *port);
 	/** Removes Port from set of subscribed Ports.
 	Called by Driver::unsubscribe().
 	*/
-	virtual void unsubscribe(Port* port);
+	virtual void unsubscribe(Port *port);
 
 	/** Processes audio for each subscribed Port.
 	Called by driver code.
 	`input` and `output` must be non-overlapping.
 	Overwrites all `output`, so it is unnecessary to initialize.
 	*/
-	void processBuffer(const float* input, int inputStride, float* output, int outputStride, int frames);
+	void processBuffer(const float *input, int inputStride, float *output, int outputStride, int frames);
 	/** Called by driver code when stream starts. */
 	void onStartStream();
 	/** Called by driver code when stream stops. */
@@ -156,20 +162,20 @@ struct Port {
 	int driverId = -1;
 	int deviceId = -1;
 	/** Not owned */
-	Driver* driver = NULL;
-	Device* device = NULL;
-	Context* context;
+	Driver *driver = NULL;
+	Device *device = NULL;
+	Context *context;
 
 	Port();
 	virtual ~Port();
 	void reset();
 
-	Driver* getDriver();
+	Driver *getDriver();
 	int getDriverId();
 	void setDriverId(int driverId);
 	std::string getDriverName();
 
-	Device* getDevice();
+	Device *getDevice();
 	std::vector<int> getDeviceIds();
 	int getDeviceId();
 	void setDeviceId(int deviceId);
@@ -190,35 +196,38 @@ struct Port {
 	int getNumInputs();
 	int getNumOutputs();
 
-	json_t* toJson();
-	void fromJson(json_t* rootJ);
+	json_t *toJson();
+	void fromJson(json_t *rootJ);
 
 	/** Callback for processing the audio stream.
 	`inputStride` and `outputStride` are the number of array elements between frames in the buffers.
 	*/
-	virtual void processBuffer(const float* input, int inputStride, float* output, int outputStride, int frames) {}
+	virtual void processBuffer(const float *input, int inputStride, float *output, int outputStride, int frames) {
+	}
 	/** Called before processBuffer() is called for all Ports of the same device.
 	Splitting the processBuffer() into these calls is useful for synchronizing Ports of the same device.
 	Called even if there are no inputs.
 	*/
-	virtual void processInput(const float* input, int inputStride, int frames) {}
+	virtual void processInput(const float *input, int inputStride, int frames) {
+	}
 	/** Called after processBuffer() is called for all Ports of the same device.
 	*/
-	virtual void processOutput(float* output, int outputStride, int frames) {}
-	virtual void onStartStream() {}
-	virtual void onStopStream() {}
+	virtual void processOutput(float *output, int outputStride, int frames) {
+	}
+	virtual void onStartStream() {
+	}
+	virtual void onStopStream() {
+	}
 };
-
 
 PRIVATE void init();
 PRIVATE void destroy();
 /** Registers a new audio driver. Takes pointer ownership.
 Driver ID is stored in patches and must be unique. -1 is reserved.
 */
-void addDriver(int driverId, Driver* driver);
+void addDriver(int driverId, Driver *driver);
 std::vector<int> getDriverIds();
-Driver* getDriver(int driverId);
-
+Driver *getDriver(int driverId);
 
 } // namespace audio
 } // namespace rack

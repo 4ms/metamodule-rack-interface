@@ -8,28 +8,16 @@
 #include <widget/event.hpp>
 #include <window/Window.hpp>
 
-namespace rack
-{
-namespace widget
+namespace rack::widget
 {
 
-/** A node in the 2D [scene graph](https://en.wikipedia.org/wiki/Scene_graph).
-The bounding box of a Widget is a rectangle specified by `box` relative to their parent.
-The appearance is defined by overriding `draw()`, and the behavior is defined by overriding `step()` and `on*()` event handlers.
-*/
 struct Widget {
 	/** Position relative to parent and size of widget. */
 	math::Rect box = math::Rect(math::Vec(), math::Vec(INFINITY, INFINITY));
 	/** Automatically set when Widget is added as a child to another Widget */
 	Widget *parent = nullptr;
 	std::list<Widget *> children;
-	/** Disables rendering but allow stepping.
-	Use isVisible(), setVisible(), show(), or hide() instead of using this variable directly.
-	*/
 	bool visible = true;
-	/** If set to true, parent will delete Widget in the next step().
-	Use requestDelete() instead of using this variable directly.
-	*/
 	bool requestedDelete = false;
 
 	virtual ~Widget();
@@ -421,48 +409,46 @@ struct Widget {
 	}
 };
 
-} // namespace widget
+} // namespace rack::widget
 
 /** Deprecated Rack v1 event namespace.
 Use events defined in the widget::Widget class instead of this `event::` namespace in new code.
 */
 namespace event
 {
-using Base = widget::BaseEvent;
-using PositionBase = widget::Widget::PositionBaseEvent;
-using KeyBase = widget::Widget::KeyBaseEvent;
-using TextBase = widget::Widget::TextBaseEvent;
-using Hover = widget::Widget::HoverEvent;
-using Button = widget::Widget::ButtonEvent;
-using DoubleClick = widget::Widget::DoubleClickEvent;
-using HoverKey = widget::Widget::HoverKeyEvent;
-using HoverText = widget::Widget::HoverTextEvent;
-using HoverScroll = widget::Widget::HoverScrollEvent;
-using Enter = widget::Widget::EnterEvent;
-using Leave = widget::Widget::LeaveEvent;
-using Select = widget::Widget::SelectEvent;
-using Deselect = widget::Widget::DeselectEvent;
-using SelectKey = widget::Widget::SelectKeyEvent;
-using SelectText = widget::Widget::SelectTextEvent;
-using DragBase = widget::Widget::DragBaseEvent;
-using DragStart = widget::Widget::DragStartEvent;
-using DragEnd = widget::Widget::DragEndEvent;
-using DragMove = widget::Widget::DragMoveEvent;
-using DragHover = widget::Widget::DragHoverEvent;
-using DragEnter = widget::Widget::DragEnterEvent;
-using DragLeave = widget::Widget::DragLeaveEvent;
-using DragDrop = widget::Widget::DragDropEvent;
-using PathDrop = widget::Widget::PathDropEvent;
-using Action = widget::Widget::ActionEvent;
-using Change = widget::Widget::ChangeEvent;
-using Dirty = widget::Widget::DirtyEvent;
-using Reposition = widget::Widget::RepositionEvent;
-using Resize = widget::Widget::ResizeEvent;
-using Add = widget::Widget::AddEvent;
-using Remove = widget::Widget::RemoveEvent;
-using Show = widget::Widget::ShowEvent;
-using Hide = widget::Widget::HideEvent;
+using Base = rack::widget::BaseEvent;
+using PositionBase = rack::widget::Widget::PositionBaseEvent;
+using KeyBase = rack::widget::Widget::KeyBaseEvent;
+using TextBase = rack::widget::Widget::TextBaseEvent;
+using Hover = rack::widget::Widget::HoverEvent;
+using Button = rack::widget::Widget::ButtonEvent;
+using DoubleClick = rack::widget::Widget::DoubleClickEvent;
+using HoverKey = rack::widget::Widget::HoverKeyEvent;
+using HoverText = rack::widget::Widget::HoverTextEvent;
+using HoverScroll = rack::widget::Widget::HoverScrollEvent;
+using Enter = rack::widget::Widget::EnterEvent;
+using Leave = rack::widget::Widget::LeaveEvent;
+using Select = rack::widget::Widget::SelectEvent;
+using Deselect = rack::widget::Widget::DeselectEvent;
+using SelectKey = rack::widget::Widget::SelectKeyEvent;
+using SelectText = rack::widget::Widget::SelectTextEvent;
+using DragBase = rack::widget::Widget::DragBaseEvent;
+using DragStart = rack::widget::Widget::DragStartEvent;
+using DragEnd = rack::widget::Widget::DragEndEvent;
+using DragMove = rack::widget::Widget::DragMoveEvent;
+using DragHover = rack::widget::Widget::DragHoverEvent;
+using DragEnter = rack::widget::Widget::DragEnterEvent;
+using DragLeave = rack::widget::Widget::DragLeaveEvent;
+using DragDrop = rack::widget::Widget::DragDropEvent;
+using PathDrop = rack::widget::Widget::PathDropEvent;
+using Action = rack::widget::Widget::ActionEvent;
+using Change = rack::widget::Widget::ChangeEvent;
+using Dirty = rack::widget::Widget::DirtyEvent;
+using Reposition = rack::widget::Widget::RepositionEvent;
+using Resize = rack::widget::Widget::ResizeEvent;
+using Add = rack::widget::Widget::AddEvent;
+using Remove = rack::widget::Widget::RemoveEvent;
+using Show = rack::widget::Widget::ShowEvent;
+using Hide = rack::widget::Widget::HideEvent;
+
 } // namespace event
-
-} // namespace rack
-

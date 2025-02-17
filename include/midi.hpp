@@ -277,6 +277,9 @@ struct InputQueue : Input {
 };
 
 struct Output : Port {
+	struct Internal;
+	Internal *internal;
+
 	/** Not owned */
 	OutputDevice *outputDevice = NULL;
 

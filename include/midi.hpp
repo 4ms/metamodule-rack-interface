@@ -15,80 +15,58 @@ namespace midi
 {
 
 struct Message {
-	/** Initialized to 3 empty bytes. */
-	// std::vector<uint8_t> bytes;
-	std::array<uint8_t, 3> bytes;
-	/** The Engine frame timestamp of the Message.
-	For output messages, the frame when the message was generated.
-	For input messages, the frame when it is intended to be processed.
-	-1 for undefined, to be sent or processed immediately.
-	*/
-	int8_t frame = -1;
+	std::array<uint8_t, 3> bytes{};
+	uint8_t size = 0;
 
-	Message() {
-	}
+	Message() = default;
 
 	int getSize() const {
-		return bytes.size();
+		return size;
 	}
 	void setSize(int size) {
-		if (size != 3)
+		if (size < 0 || size > 3) {
 			printf("Cannot resize rack::midi::Message::bytes to %u\n", size);
-		// bytes.resize(size);
+		} else
+			this->size = size;
 	}
 
 	uint8_t getChannel() const {
-		if (bytes.size() < 1)
-			return 0;
 		return bytes[0] & 0xf;
 	}
 	void setChannel(uint8_t channel) {
-		if (bytes.size() < 1)
-			return;
 		bytes[0] = (bytes[0] & 0xf0) | (channel & 0xf);
 	}
 
 	uint8_t getStatus() const {
-		if (bytes.size() < 1)
-			return 0;
 		return bytes[0] >> 4;
 	}
 	void setStatus(uint8_t status) {
-		if (bytes.size() < 1)
-			return;
 		bytes[0] = (bytes[0] & 0xf) | (status << 4);
 	}
 
 	uint8_t getNote() const {
-		if (bytes.size() < 2)
-			return 0;
 		return bytes[1];
 	}
 	void setNote(uint8_t note) {
-		if (bytes.size() < 2)
-			return;
 		bytes[1] = note & 0x7f;
 	}
 
 	uint8_t getValue() const {
-		if (bytes.size() < 3)
-			return 0;
 		return bytes[2];
 	}
 	void setValue(uint8_t value) {
-		if (bytes.size() < 3)
-			return;
+		size = 3;
 		bytes[2] = value & 0x7f;
 	}
 
 	std::string toString() const;
 
 	int64_t getFrame() const {
-		return frame;
+		return -1; //frame;
 	}
 
 	void setFrame(int64_t frame) {
-		this->frame = frame;
+		// this->frame = frame;
 	}
 };
 

@@ -32,7 +32,8 @@ struct Message {
 		return bytes.size();
 	}
 	void setSize(int size) {
-		printf("Cannot resize rack::midi::Message::bytes\n");
+		if (size != 3)
+			printf("Cannot resize rack::midi::Message::bytes to %u\n", size);
 		// bytes.resize(size);
 	}
 

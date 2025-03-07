@@ -117,8 +117,8 @@ struct ModuleWidget : widget::Widget {
 	std::vector<PortWidget *> getOutputs();
 
 	std::vector<rack::widget::Widget *> &get_drawable_widgets();
-	void populate_elements_indices(std::vector<MetaModule::Element> &elements,
-								   std::vector<ElementCount::Indices> &indices);
+	__attribute__((visibility("hidden"))) void populate_elements_indices(rack::plugin::Model *model);
+
 	///////////////////////
 
 	void draw(const DrawArgs &args) override;
@@ -164,4 +164,3 @@ struct ModuleWidget : widget::Widget {
 };
 
 } // namespace rack::app
-

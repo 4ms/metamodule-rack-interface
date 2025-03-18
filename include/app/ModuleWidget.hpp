@@ -58,7 +58,6 @@ struct ModuleWidget : widget::Widget {
 	void addChild(Widget *w);
 
 	// Rendered as images:
-	void addChild(widget::TransparentWidget *widget);
 	void addChild(MetaModule::VCVTextDisplay *widget);
 	void addChild(widget::SvgWidget *w);
 	void addChild(app::SvgButton *w);

@@ -21,6 +21,7 @@ struct VCVModuleWrapper : CoreProcessor {
 	};
 
 	VCVModuleWrapper();
+	~VCVModuleWrapper();
 
 	void update() override;
 

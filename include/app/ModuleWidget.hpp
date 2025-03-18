@@ -58,6 +58,7 @@ struct ModuleWidget : widget::Widget {
 	void addChild(Widget *w);
 
 	// Rendered as images:
+	void addChild(widget::TransparentWidget *widget);
 	void addChild(MetaModule::VCVTextDisplay *widget);
 	void addChild(widget::SvgWidget *w);
 	void addChild(app::SvgButton *w);
@@ -116,7 +117,11 @@ struct ModuleWidget : widget::Widget {
 	std::vector<PortWidget *> getInputs();
 	std::vector<PortWidget *> getOutputs();
 
-	std::vector<rack::widget::Widget *> &get_drawable_widgets();
+	struct WidgetElement {
+		unsigned element_idx;
+		rack::widget::Widget *widget;
+	};
+	__attribute__((visibility("hidden"))) std::vector<WidgetElement> &get_drawable_widgets();
 	__attribute__((visibility("hidden"))) void populate_elements_indices(rack::plugin::Model *model);
 
 	///////////////////////

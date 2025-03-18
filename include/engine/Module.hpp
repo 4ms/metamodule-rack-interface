@@ -383,6 +383,12 @@ struct Module : VCVModuleWrapper {
 
 	// MetaModule: audio engine calls this on all modules
 	void set_samplerate(float sr) override;
+
+	void show_graphic_display(int display_id, std::span<uint32_t> pix_buffer, unsigned width, lv_canvas_t *) override;
+
+	bool draw_graphic_display(int display_id) override;
+
+	void hide_graphic_display(int display_id) override;
 };
 
 } // namespace engine

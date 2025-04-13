@@ -9,6 +9,8 @@ struct Label : widget::Widget {
 		LEFT_ALIGNMENT,
 		CENTER_ALIGNMENT,
 		RIGHT_ALIGNMENT,
+		MM_CENTER_ALIGNMENT,
+		MM_RIGHT_ALIGNMENT,
 	};
 
 	std::string text;

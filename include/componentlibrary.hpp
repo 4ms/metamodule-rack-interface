@@ -1,29 +1,28 @@
 #pragma once
-#include <app/AudioDisplay.hpp>
-#include <app/MidiDisplay.hpp>
-#include <app/ModuleLightWidget.hpp>
-#include <app/SvgKnob.hpp>
-#include <app/SvgPort.hpp>
-#include <app/SvgScrew.hpp>
-#include <app/SvgSlider.hpp>
-#include <app/SvgSwitch.hpp>
-#include <asset.hpp>
 #include <widget/FramebufferWidget.hpp>
 #include <widget/SvgWidget.hpp>
-#include <metamodule/VCVTextDisplay.hpp>
-#include <window/Svg.hpp>
+#include <app/SvgKnob.hpp>
+#include <app/SvgSlider.hpp>
+#include <app/SvgPort.hpp>
+#include <app/ModuleLightWidget.hpp>
+#include <app/SvgSwitch.hpp>
+#include <app/SvgScrew.hpp>
+#include <app/AudioDisplay.hpp>
+#include <app/MidiDisplay.hpp>
+#include <asset.hpp>
 
-namespace rack
-{
+
+namespace rack {
 
 /** Library of Rack components: knobs, ports, lights, switches, buttons, etc.
 
 See LICENSE.md for legal details about using Rack component graphics in your Rack plugin.
 */
-namespace componentlibrary
-{
+namespace componentlibrary {
+
 
 using namespace window;
+
 
 ////////////////////
 // Color scheme
@@ -41,6 +40,7 @@ static const NVGcolor SCHEME_BLUE = nvgRGB(0x29, 0xb2, 0xef);
 static const NVGcolor SCHEME_PURPLE = nvgRGB(0xd5, 0x2b, 0xed);
 static const NVGcolor SCHEME_LIGHT_GRAY = nvgRGB(0xe6, 0xe6, 0xe6);
 static const NVGcolor SCHEME_DARK_GRAY = nvgRGB(0x17, 0x17, 0x17);
+
 
 ////////////////////
 // Lights
@@ -60,10 +60,10 @@ For example, need a slider with a green LED? Just use
 	createLightParamCentered<VCVLightSlider<GreenLight>>(...)
 */
 
-template<typename TBase = app::ModuleLightWidget>
+template <typename TBase = app::ModuleLightWidget>
 struct TSvgLight : TBase {
-	widget::FramebufferWidget *fb;
-	widget::SvgWidget *sw;
+	widget::FramebufferWidget* fb;
+	widget::SvgWidget* sw;
 
 	TSvgLight() {
 		fb = new widget::FramebufferWidget;
@@ -81,7 +81,7 @@ struct TSvgLight : TBase {
 };
 using SvgLight = TSvgLight<>;
 
-template<typename TBase = app::ModuleLightWidget>
+template <typename TBase = app::ModuleLightWidget>
 struct TGrayModuleLightWidget : TBase {
 	TGrayModuleLightWidget() {
 		this->bgColor = nvgRGBA(0x33, 0x33, 0x33, 0xff);
@@ -90,7 +90,7 @@ struct TGrayModuleLightWidget : TBase {
 };
 using GrayModuleLightWidget = TGrayModuleLightWidget<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TWhiteLight : TBase {
 	TWhiteLight() {
 		this->addBaseColor(SCHEME_WHITE);
@@ -98,7 +98,7 @@ struct TWhiteLight : TBase {
 };
 using WhiteLight = TWhiteLight<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TRedLight : TBase {
 	TRedLight() {
 		this->addBaseColor(SCHEME_RED);
@@ -106,7 +106,7 @@ struct TRedLight : TBase {
 };
 using RedLight = TRedLight<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TGreenLight : TBase {
 	TGreenLight() {
 		this->addBaseColor(SCHEME_GREEN);
@@ -114,7 +114,7 @@ struct TGreenLight : TBase {
 };
 using GreenLight = TGreenLight<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TBlueLight : TBase {
 	TBlueLight() {
 		this->addBaseColor(SCHEME_BLUE);
@@ -122,7 +122,7 @@ struct TBlueLight : TBase {
 };
 using BlueLight = TBlueLight<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TYellowLight : TBase {
 	TYellowLight() {
 		this->addBaseColor(SCHEME_YELLOW);
@@ -131,7 +131,7 @@ struct TYellowLight : TBase {
 using YellowLight = TYellowLight<>;
 
 /** Reads two adjacent lightIds, so `lightId` and `lightId + 1` must be defined */
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TGreenRedLight : TBase {
 	TGreenRedLight() {
 		this->addBaseColor(SCHEME_GREEN);
@@ -140,7 +140,7 @@ struct TGreenRedLight : TBase {
 };
 using GreenRedLight = TGreenRedLight<>;
 
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TRedGreenBlueLight : TBase {
 	TRedGreenBlueLight() {
 		this->addBaseColor(SCHEME_RED);
@@ -151,7 +151,7 @@ struct TRedGreenBlueLight : TBase {
 using RedGreenBlueLight = TRedGreenBlueLight<>;
 
 /** Based on the size of 5mm LEDs */
-template<typename TBase>
+template <typename TBase>
 struct LargeLight : TSvgLight<TBase> {
 	LargeLight() {
 		this->setSvg(Svg::load(asset::system("res/ComponentLibrary/LargeLight.svg")));
@@ -159,7 +159,7 @@ struct LargeLight : TSvgLight<TBase> {
 };
 
 /** Based on the size of 3mm LEDs */
-template<typename TBase>
+template <typename TBase>
 struct MediumLight : TSvgLight<TBase> {
 	MediumLight() {
 		this->setSvg(Svg::load(asset::system("res/ComponentLibrary/MediumLight.svg")));
@@ -167,7 +167,7 @@ struct MediumLight : TSvgLight<TBase> {
 };
 
 /** Based on the size of 2mm LEDs */
-template<typename TBase>
+template <typename TBase>
 struct SmallLight : TSvgLight<TBase> {
 	SmallLight() {
 		this->setSvg(Svg::load(asset::system("res/ComponentLibrary/SmallLight.svg")));
@@ -175,7 +175,7 @@ struct SmallLight : TSvgLight<TBase> {
 };
 
 /** Based on the size of 1mm LEDs */
-template<typename TBase>
+template <typename TBase>
 struct TinyLight : TSvgLight<TBase> {
 	TinyLight() {
 		this->setSvg(Svg::load(asset::system("res/ComponentLibrary/TinyLight.svg")));
@@ -183,7 +183,7 @@ struct TinyLight : TSvgLight<TBase> {
 };
 
 /** Based on the size of 5mm LEDs */
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct LargeSimpleLight : TBase {
 	LargeSimpleLight() {
 		this->box.size = mm2px(math::Vec(5, 5));
@@ -191,7 +191,7 @@ struct LargeSimpleLight : TBase {
 };
 
 /** Based on the size of 3mm LEDs */
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct MediumSimpleLight : TBase {
 	MediumSimpleLight() {
 		this->box.size = mm2px(math::Vec(3, 3));
@@ -199,7 +199,7 @@ struct MediumSimpleLight : TBase {
 };
 
 /** Based on the size of 2mm LEDs */
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct SmallSimpleLight : TBase {
 	SmallSimpleLight() {
 		this->box.size = mm2px(math::Vec(2, 2));
@@ -207,16 +207,16 @@ struct SmallSimpleLight : TBase {
 };
 
 /** Based on the size of 1mm LEDs */
-template<typename TBase = GrayModuleLightWidget>
+template <typename TBase = GrayModuleLightWidget>
 struct TinySimpleLight : TBase {
 	TinySimpleLight() {
 		this->box.size = mm2px(math::Vec(1, 1));
 	}
 };
 
-template<typename TBase>
+template <typename TBase>
 struct RectangleLight : TBase {
-	void drawBackground(const widget::Widget::DrawArgs &args) override {
+	void drawBackground(const widget::Widget::DrawArgs& args) override {
 		// Derived from LightWidget::drawBackground()
 
 		nvgBeginPath(args.vg);
@@ -236,7 +236,7 @@ struct RectangleLight : TBase {
 		}
 	}
 
-	void drawLight(const widget::Widget::DrawArgs &args) override {
+	void drawLight(const widget::Widget::DrawArgs& args) override {
 		// Derived from LightWidget::drawLight()
 
 		// Foreground
@@ -251,7 +251,7 @@ struct RectangleLight : TBase {
 };
 
 /** A light for displaying on top of VCVBezel. Must add a color by subclassing or templating. */
-template<typename TBase>
+template <typename TBase>
 struct VCVBezelLight : TBase {
 	VCVBezelLight() {
 		this->borderColor = color::BLACK_TRANSPARENT;
@@ -259,12 +259,12 @@ struct VCVBezelLight : TBase {
 		this->box.size = math::Vec(17.545, 17.545);
 	}
 };
-template<typename TBase>
+template <typename TBase>
 using LEDBezelLight = VCVBezelLight<TBase>;
 
 /** A light to displayed over PB61303. Must add a color by subclassing or templating.
 */
-template<typename TBase>
+template <typename TBase>
 struct PB61303Light : TBase {
 	PB61303Light() {
 		this->bgColor = color::BLACK_TRANSPARENT;
@@ -272,16 +272,17 @@ struct PB61303Light : TBase {
 	}
 };
 
+
 ////////////////////
 // Knobs
 ////////////////////
 
 struct RoundKnob : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	RoundKnob() {
-		minAngle = -0.83f * M_PI;
-		maxAngle = 0.83f * M_PI;
+		minAngle = -0.83 * M_PI;
+		maxAngle = 0.83 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -329,12 +330,13 @@ struct RoundBlackSnapKnob : RoundBlackKnob {
 	}
 };
 
+
 struct Davies1900hKnob : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	Davies1900hKnob() {
-		minAngle = -0.83f * M_PI;
-		maxAngle = 0.83f * M_PI;
+		minAngle = -0.83 * M_PI;
+		maxAngle = 0.83 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -383,13 +385,14 @@ struct Davies1900hLargeRedKnob : Davies1900hKnob {
 	}
 };
 
+
 struct Rogan : app::SvgKnob {
-	widget::SvgWidget *bg;
-	widget::SvgWidget *fg;
+	widget::SvgWidget* bg;
+	widget::SvgWidget* fg;
 
 	Rogan() {
-		minAngle = -0.83f * M_PI;
-		maxAngle = 0.83f * M_PI;
+		minAngle = -0.83 * M_PI;
+		maxAngle = 0.83 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -615,12 +618,13 @@ struct Rogan1PWhite : Rogan {
 	}
 };
 
+
 struct SynthTechAlco : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	SynthTechAlco() {
-		minAngle = -0.82f * M_PI;
-		maxAngle = 0.82f * M_PI;
+		minAngle = -0.82 * M_PI;
+		maxAngle = 0.82 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -631,11 +635,11 @@ struct SynthTechAlco : app::SvgKnob {
 };
 
 struct Trimpot : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	Trimpot() {
-		minAngle = -0.75f * M_PI;
-		maxAngle = 0.75f * M_PI;
+		minAngle = -0.75 * M_PI;
+		maxAngle = 0.75 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -646,11 +650,11 @@ struct Trimpot : app::SvgKnob {
 };
 
 struct BefacoBigKnob : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	BefacoBigKnob() {
-		minAngle = -0.75f * M_PI;
-		maxAngle = 0.75f * M_PI;
+		minAngle = -0.75 * M_PI;
+		maxAngle = 0.75 * M_PI;
 		setSvg(Svg::load(asset::system("res/ComponentLibrary/BefacoBigKnob.svg")));
 
 		bg = new widget::SvgWidget;
@@ -660,11 +664,11 @@ struct BefacoBigKnob : app::SvgKnob {
 };
 
 struct BefacoTinyKnob : app::SvgKnob {
-	widget::SvgWidget *bg;
+	widget::SvgWidget* bg;
 
 	BefacoTinyKnob() {
-		minAngle = -0.8f * M_PI;
-		maxAngle = 0.8f * M_PI;
+		minAngle = -0.8 * M_PI;
+		maxAngle = 0.8 * M_PI;
 
 		bg = new widget::SvgWidget;
 		fb->addChildBelow(bg, tw);
@@ -689,8 +693,10 @@ struct VCVSlider : app::SvgSlider {
 	VCVSlider() {
 		setBackgroundSvg(Svg::load(asset::system("res/ComponentLibrary/VCVSlider.svg")));
 		setHandleSvg(Svg::load(asset::system("res/ComponentLibrary/VCVSliderHandle.svg")));
-		setHandlePosCentered(math::Vec(19.84260 / 2, 76.53517 - 11.74218 / 2),
-							 math::Vec(19.84260 / 2, 0.0 + 11.74218 / 2));
+		setHandlePosCentered(
+			math::Vec(19.84260/2, 76.53517 - 11.74218/2),
+			math::Vec(19.84260/2, 0.0 + 11.74218/2)
+		);
 	}
 };
 using LEDSlider = VCVSlider;
@@ -701,8 +707,7 @@ struct VCVSliderHorizontal : app::SvgSlider {
 		// TODO Fix SVG
 		setBackgroundSvg(Svg::load(asset::system("res/ComponentLibrary/VCVSliderHorizontal.svg")));
 		// TODO Fix positions
-		setHandlePos(mm2px(math::Vec(0.738, 0.738).plus(math::Vec(0, 2))),
-					 mm2px(math::Vec(22.078, 0.738).plus(math::Vec(0, 2))));
+		setHandlePos(mm2px(math::Vec(0.738, 0.738).plus(math::Vec(0, 2))), mm2px(math::Vec(22.078, 0.738).plus(math::Vec(0, 2))));
 	}
 };
 using LEDSliderHorizontal = VCVSliderHorizontal;
@@ -710,41 +715,42 @@ using LEDSliderHorizontal = VCVSliderHorizontal;
 /** An SvgSlider with an attached light.
 Construct with createLightParamCentered() helper function.
 */
-template<typename TBase, typename TLightBase = RedLight>
+template <typename TBase, typename TLightBase = RedLight>
 struct LightSlider : TBase {
-	app::ModuleLightWidget *light;
+	app::ModuleLightWidget* light;
 
 	LightSlider() {
 		light = new TLightBase;
 		this->addChild(light);
 	}
 
-	app::ModuleLightWidget *getLight() {
+	app::ModuleLightWidget* getLight() {
 		return light;
 	}
 
 	void step() override {
 		TBase::step();
 		// Move center of light to center of handle
-		light->box.pos = this->handle->box.pos.plus(this->handle->box.size.div(2)).minus(light->box.size.div(2));
+		light->box.pos = this->handle->box.pos
+			.plus(this->handle->box.size.div(2))
+			.minus(light->box.size.div(2));
 	}
 };
 
-template<typename TBase>
+template <typename TBase>
 struct VCVSliderLight : RectangleLight<TSvgLight<TBase>> {
 	VCVSliderLight() {
 		this->setSvg(Svg::load(asset::system("res/ComponentLibrary/VCVSliderLight.svg")));
 	}
 };
-template<typename TBase>
+template <typename TBase>
 using LEDSliderLight = VCVSliderLight<TBase>;
 
-template<typename TLightBase = RedLight>
+template <typename TLightBase = RedLight>
 struct VCVLightSlider : LightSlider<VCVSlider, VCVSliderLight<TLightBase>> {
-	VCVLightSlider() {
-	}
+	VCVLightSlider() {}
 };
-template<typename TLightBase = RedLight>
+template <typename TLightBase = RedLight>
 using LEDLightSlider = VCVLightSlider<TLightBase>;
 
 /** Deprecated. Use VCVSliderLight with your preferred LightWidget. */
@@ -754,7 +760,7 @@ struct LEDSliderYellow : VCVLightSlider<YellowLight> {};
 struct LEDSliderBlue : VCVLightSlider<BlueLight> {};
 struct LEDSliderWhite : VCVLightSlider<WhiteLight> {};
 
-template<typename TLightBase = RedLight>
+template <typename TLightBase = RedLight>
 struct VCVLightSliderHorizontal : LightSlider<VCVSliderHorizontal, TLightBase> {
 	VCVLightSliderHorizontal() {
 		// TODO Fix positions
@@ -763,8 +769,9 @@ struct VCVLightSliderHorizontal : LightSlider<VCVSliderHorizontal, TLightBase> {
 		this->setHandleSvg(Svg::load(asset::system("res/ComponentLibrary/VCVSliderHorizontalHandle.svg")));
 	}
 };
-template<typename TLightBase = RedLight>
+template <typename TLightBase = RedLight>
 using LEDLightSliderHorizontal = VCVLightSliderHorizontal<TLightBase>;
+
 
 ////////////////////
 // Ports
@@ -784,8 +791,7 @@ struct DarkPJ301MPort : app::SvgPort {
 
 struct ThemedPJ301MPort : app::ThemedSvgPort {
 	ThemedPJ301MPort() {
-		setSvg(Svg::load(asset::system("res/ComponentLibrary/PJ301M.svg")),
-			   Svg::load(asset::system("res/ComponentLibrary/PJ301M-dark.svg")));
+		setSvg(Svg::load(asset::system("res/ComponentLibrary/PJ301M.svg")), Svg::load(asset::system("res/ComponentLibrary/PJ301M-dark.svg")));
 	}
 };
 
@@ -801,11 +807,12 @@ struct CL1362Port : app::SvgPort {
 	}
 };
 
+
 ////////////////////
 // Switches
 ////////////////////
 
-template<typename TSwitch>
+template <typename TSwitch>
 struct MomentarySwitch : TSwitch {
 	MomentarySwitch() {
 		this->momentary = true;
@@ -879,9 +886,9 @@ struct VCVLatch : VCVButton {
 	}
 };
 
-template<typename TBase, typename TLight = WhiteLight>
+template <typename TBase, typename TLight = WhiteLight>
 struct LightButton : TBase {
-	app::ModuleLightWidget *light;
+	app::ModuleLightWidget* light;
 
 	LightButton() {
 		light = new TLight;
@@ -890,19 +897,19 @@ struct LightButton : TBase {
 		this->addChild(light);
 	}
 
-	app::ModuleLightWidget *getLight() {
+	app::ModuleLightWidget* getLight() {
 		return light;
 	}
 };
 
-template<typename TLight = WhiteLight>
+template <typename TLight = WhiteLight>
 using VCVLightButton = LightButton<VCVButton, TLight>;
 
 /** Deprecated alias */
-template<typename TLight>
+template <typename TLight>
 using LEDLightButton = VCVLightButton<TLight>;
 
-template<typename TLight>
+template <typename TLight>
 struct VCVLightLatch : VCVLightButton<TLight> {
 	VCVLightLatch() {
 		this->momentary = false;
@@ -941,9 +948,9 @@ struct VCVBezelLatch : VCVBezel {
 	}
 };
 
-template<typename TLightBase = WhiteLight>
+template <typename TLightBase = WhiteLight>
 struct VCVLightBezel : VCVBezel {
-	app::ModuleLightWidget *light;
+	app::ModuleLightWidget* light;
 
 	VCVLightBezel() {
 		light = new VCVBezelLight<TLightBase>;
@@ -952,14 +959,14 @@ struct VCVLightBezel : VCVBezel {
 		addChild(light);
 	}
 
-	app::ModuleLightWidget *getLight() {
+	app::ModuleLightWidget* getLight() {
 		return light;
 	}
 };
-template<typename TLightBase = WhiteLight>
+template <typename TLightBase = WhiteLight>
 using LEDLightBezel = VCVLightBezel<TLightBase>;
 
-template<typename TLightBase = WhiteLight>
+template <typename TLightBase = WhiteLight>
 struct VCVLightBezelLatch : VCVLightBezel<TLightBase> {
 	VCVLightBezelLatch() {
 		this->momentary = false;
@@ -992,17 +999,17 @@ struct ScrewBlack : app::SvgScrew {
 
 struct ThemedScrew : app::ThemedSvgScrew {
 	ThemedScrew() {
-		setSvg(Svg::load(asset::system("res/ComponentLibrary/ScrewSilver.svg")),
-			   Svg::load(asset::system("res/ComponentLibrary/ScrewBlack.svg")));
+		setSvg(Svg::load(asset::system("res/ComponentLibrary/ScrewSilver.svg")), Svg::load(asset::system("res/ComponentLibrary/ScrewBlack.svg")));
 	}
 };
+
 
 struct SegmentDisplay : widget::Widget {
 	int lightsLen = 0;
 	bool vertical = false;
 	float margin = mm2px(0.5);
 
-	void draw(const DrawArgs &args) override {
+	void draw(const DrawArgs& args) override {
 		// Background
 		nvgBeginPath(args.vg);
 		nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
@@ -1011,19 +1018,20 @@ struct SegmentDisplay : widget::Widget {
 		Widget::draw(args);
 	}
 
-	template<typename TLightBase = WhiteLight>
-	void setLights(engine::Module *module, int firstLightId, int lightsLen) {
+	template <typename TLightBase = WhiteLight>
+	void setLights(engine::Module* module, int firstLightId, int lightsLen) {
 		clearChildren();
 		this->lightsLen = lightsLen;
 		float r = (vertical ? box.size.y : box.size.x) - margin;
 		for (int i = 0; i < lightsLen; i++) {
 			float p = float(i) / lightsLen;
-			app::ModuleLightWidget *light = new RectangleLight<TLightBase>;
+			app::ModuleLightWidget* light = new RectangleLight<TLightBase>;
 			if (vertical) {
 				light->box.pos.y = p * r + margin;
 				light->box.size.y = r / lightsLen - margin;
 				light->box.size.x = box.size.x;
-			} else {
+			}
+			else {
 				light->box.pos.x = p * r + margin;
 				light->box.size.x = r / lightsLen - margin;
 				light->box.size.y = box.size.y;
@@ -1036,19 +1044,22 @@ struct SegmentDisplay : widget::Widget {
 	}
 };
 
-// struct AudioButton_ADAT : app::AudioButton {
-// 	AudioButton_ADAT() {
-// 		addFrame(Svg::load(asset::system("res/ComponentLibrary/ADAT.svg")));
-// 		shadow->opacity = 0.0;
-// 	}
-// };
 
-// struct AudioButton_USB_B : app::AudioButton {
-// 	AudioButton_USB_B() {
-// 		addFrame(Svg::load(asset::system("res/ComponentLibrary/USB_B.svg")));
-// 		shadow->opacity = 0.0;
-// 	}
-// };
+struct AudioButton_ADAT : app::AudioButton {
+	AudioButton_ADAT() {
+		addFrame(Svg::load(asset::system("res/ComponentLibrary/ADAT.svg")));
+		shadow->opacity = 0.0;
+	}
+};
+
+
+struct AudioButton_USB_B : app::AudioButton {
+	AudioButton_USB_B() {
+		addFrame(Svg::load(asset::system("res/ComponentLibrary/USB_B.svg")));
+		shadow->opacity = 0.0;
+	}
+};
+
 
 struct MidiButton_MIDI_DIN : app::MidiButton {
 	MidiButton_MIDI_DIN() {
@@ -1056,6 +1067,7 @@ struct MidiButton_MIDI_DIN : app::MidiButton {
 		shadow->opacity = 0.0;
 	}
 };
+
 
 } // namespace componentlibrary
 } // namespace rack

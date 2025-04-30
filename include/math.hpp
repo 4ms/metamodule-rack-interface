@@ -1,7 +1,7 @@
 #pragma once
-#include <complex>
 #include <algorithm>
 #include <cmath>
+#include <complex>
 
 namespace rack::math
 {
@@ -599,3 +599,4 @@ Or passing the values to a C function.
 #define RECT_ARGS(r) (r).pos.x, (r).pos.y, (r).size.x, (r).size.y
 
 } // namespace rack::math
+

@@ -1,18 +1,21 @@
 #pragma once
-#include <list>
-#include <map>
-#include <set>
-#include <tuple>
 #include <vector>
+#include <set>
+#include <map>
+#include <list>
+#include <tuple>
 
 #include <jansson.h>
 
-#include <color.hpp>
 #include <common.hpp>
 #include <math.hpp>
+#include <color.hpp>
 
-namespace rack::settings
-{
+
+namespace rack {
+/** Process-scope globals, most of which are persisted across launches */
+namespace settings {
+
 
 // Runtime state, not serialized.
 
@@ -74,7 +77,10 @@ extern float autosaveInterval;
 extern bool skipLoadOnLaunch;
 extern std::list<std::string> recentPatchPaths;
 extern std::vector<NVGcolor> cableColors;
+extern std::vector<std::string> cableLabels;
+extern bool cableAutoRotate;
 extern bool autoCheckUpdates;
+extern bool verifyHttpsCerts;
 extern bool showTipsOnLaunch;
 extern int tipIndex;
 enum BrowserSort {
@@ -87,7 +93,7 @@ enum BrowserSort {
 };
 extern BrowserSort browserSort;
 extern float browserZoom;
-extern json_t *pluginSettingsJ;
+extern json_t* pluginSettingsJ;
 
 struct ModuleInfo {
 	bool enabled = true;
@@ -99,7 +105,7 @@ struct ModuleInfo {
 extern std::map<std::string, std::map<std::string, ModuleInfo>> moduleInfos;
 /** Returns a ModuleInfo if exists for the given slugs.
 */
-ModuleInfo *getModuleInfo(const std::string &pluginSlug, const std::string &moduleSlug);
+ModuleInfo* getModuleInfo(const std::string& pluginSlug, const std::string& moduleSlug);
 
 /** The VCV JSON API returns the data structure
 {pluginSlug: [moduleSlugs] or true}
@@ -112,13 +118,16 @@ struct PluginWhitelist {
 };
 extern std::map<std::string, PluginWhitelist> moduleWhitelist;
 
-bool isModuleWhitelisted(const std::string &pluginSlug, const std::string &moduleSlug);
+bool isModuleWhitelisted(const std::string& pluginSlug, const std::string& moduleSlug);
+void resetCables();
 
 PRIVATE void init();
 PRIVATE void destroy();
-PRIVATE json_t *toJson();
-PRIVATE void fromJson(json_t *rootJ);
+PRIVATE json_t* toJson();
+PRIVATE void fromJson(json_t* rootJ);
 PRIVATE void save(std::string path = "");
 PRIVATE void load(std::string path = "");
 
-} // namespace rack::settings
+
+} // namespace settings
+} // namespace rack

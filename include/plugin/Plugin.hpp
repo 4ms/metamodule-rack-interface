@@ -9,29 +9,14 @@ struct Model;
 struct json_t;
 
 struct Plugin {
-	Plugin()
-		: slug{""} {
-	}
-
-	Plugin(std::string slug)
-		: slug{slug} {
-	}
-
 	std::vector<Model *> models;
+
+	std::string path;
+
+	void *handle = nullptr;
 
 	std::string slug; //brand slug
 
-	void addModel(Model *model);
-	~Plugin();
-
-	Model *getModel(const std::string &slug);
-	std::string getBrand();
-
-	void fromJson(json_t *rootJ);
-	void modulesFromJson(json_t *rootJ);
-
-	std::string path;
-	void *handle = nullptr;
 	std::string version;
 	std::string license;
 	std::string name;
@@ -46,6 +31,19 @@ struct Plugin {
 	std::string donateUrl;
 	std::string changelogUrl;
 	double modifiedTimestamp{};
+
+	Plugin();
+	Plugin(std::string slug);
+
+	~Plugin();
+	void addModel(Model* model);
+	Model* getModel(const std::string& slug);
+	void fromJson(json_t* rootJ);
+	void modulesFromJson(json_t* rootJ);
+	std::string getBrand();
+
+
 };
 
 } // namespace rack::plugin
+

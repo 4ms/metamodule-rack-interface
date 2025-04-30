@@ -102,8 +102,8 @@ Directly including Rack headers other than rack.hpp in your plugin is unsupporte
 #include <engine/Port.hpp>
 #include <engine/PortInfo.hpp>
 
-#include <plugin/Model.hpp>
-#include <plugin/Plugin.hpp>
+// #include <plugin/Model.hpp>
+#include <plugin/Plugin.hpp> // Must use <plugin/Plugin.hpp>, not <plugin.hpp> like in Rack-SDK
 #include <plugin/callbacks.hpp>
 
 #include <dsp/approx.hpp>
@@ -140,3 +140,4 @@ using namespace engine;
 using namespace componentlibrary;
 
 } // namespace rack
+

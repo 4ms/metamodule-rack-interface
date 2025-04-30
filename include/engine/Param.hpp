@@ -6,7 +6,8 @@ namespace rack::engine
 struct Param {
 	float value = 0.f;
 
-	float getValue() {
+	// MetaModule: must be const
+	float getValue() const {
 		return value;
 	}
 
@@ -16,3 +17,4 @@ struct Param {
 };
 
 } // namespace rack::engine
+

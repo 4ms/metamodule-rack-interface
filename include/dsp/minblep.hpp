@@ -1,16 +1,16 @@
 #pragma once
-#include "dsp/minblep_4_32.h"
 #include "dsp/minblep_16_16.h"
+#include "dsp/minblep_4_32.h"
 #include <math.hpp>
 #include <simd/Vector.hpp>
 
 // Note:
 // Generation of the minBlep impulse table is processor-intensive.
 // Also, some table sizes used by common VCV modules can be reduced to
-// substantially increase performance. 
+// substantially increase performance.
 // To make it possible to support a wider range of VCV modules,
 // the impulse tables are generated at compile time
-// TODO: generate these when plugin is compiled? Or generate some common sizes in the adaptor?
+// TODO: generate these when plugin is compiled? Or generate more common sizes in the adaptor?
 
 namespace rack::dsp
 {

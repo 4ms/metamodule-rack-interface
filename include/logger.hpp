@@ -31,7 +31,8 @@ enum Level {
 	FATAL_LEVEL
 };
 
-PRIVATE void init();
+/** Returns whether logger was successfully initialized. */
+PRIVATE bool init();
 PRIVATE void destroy();
 /** Do not use this function directly. Use the macros above.
 Thread-safe, meaning messages cannot overlap each other in the log.

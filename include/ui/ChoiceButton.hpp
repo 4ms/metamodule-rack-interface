@@ -2,9 +2,16 @@
 #include <ui/Button.hpp>
 #include <ui/common.hpp>
 
-namespace rack::ui
+namespace rack
+{
+namespace ui
 {
 
-struct ChoiceButton : Button {};
+/** Button with a dropdown icon on its right.
+*/
+struct ChoiceButton : Button {
+	void draw(const DrawArgs &args) override;
+};
 
-} // namespace rack::ui
+} // namespace ui
+} // namespace rack

@@ -4,9 +4,7 @@
 #include <simd/Vector.hpp>
 #include <simd/sse_mathfun_extension.h>
 
-namespace rack
-{
-namespace simd
+namespace rack::simd
 {
 
 // Functions based on instructions
@@ -175,9 +173,9 @@ inline float_4 floor(float_4 a) {
 	int32x4_t a_int = vcvtq_s32_f32(a.v);  //a_int = trunc(a); // 1.2 => 1, -1.2 => -1
 	float32x4_t b = vcvtq_f32_s32(a_int);  //b = (float)a_int; // 1.2 => 1.0, -1.2 => -1.0
 	uint32x4_t is_neg = vcgtq_f32(b, a.v); //is_neg = (b > a) ? 0xffffffff : 0; // Note: b>a when a<0
-	is_neg = vshrq_n_u32(is_neg, 31);	   //is_neg = is_neg >> 31; 
-	float32x4_t c = vcvtq_f32_u32(is_neg); //c = (float)is_neg; 
-	return vsubq_f32(b, c);				   //return b - c; 
+	is_neg = vshrq_n_u32(is_neg, 31);	   //is_neg = is_neg >> 31;
+	float32x4_t c = vcvtq_f32_u32(is_neg); //c = (float)is_neg;
+	return vsubq_f32(b, c);				   //return b - c;
 #else
 	return float_4(_mm_round_ps(a.v, _MM_FROUND_TO_NEG_INF | _MM_FROUND_NO_EXC));
 #endif
@@ -281,5 +279,4 @@ inline float_4 sgn(float_4 x) {
 	return signbit | (nonzero & 1.f);
 }
 
-} // namespace simd
-} // namespace rack
+} // namespace rack::simd

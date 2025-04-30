@@ -4,6 +4,8 @@
 namespace rack::ui
 {
 
-struct List : widget::OpaqueWidget {};
+struct List : widget::OpaqueWidget {
+	void step() override;
+};
 
 } // namespace rack::ui

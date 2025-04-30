@@ -9,61 +9,50 @@
 #include <app/SvgSlider.hpp>
 #include <app/common.hpp>
 #include <componentlibrary.hpp>
-#include <engine/Module.hpp>
 #include <history.hpp>
+#include <metamodule/VCVTextDisplay.hpp>
 #include <plugin/Model.hpp>
 #include <ui/Menu.hpp>
-#include <metamodule/VCVTextDisplay.hpp>
 #include <widget/OpaqueWidget.hpp>
 
-namespace MetaModule
+namespace rack::engine
 {
-struct ModuleWidgetAdaptor;
-}
+struct Module;
+};
 
 namespace rack::app
 {
 
 struct ModuleWidget : widget::Widget {
-
-	std::unique_ptr<rack::app::SvgPanel> panel;
-	std::unique_ptr<MetaModule::ModuleWidgetAdaptor> adaptor;
-
-	ModuleWidget();
-	~ModuleWidget() override;
+	struct Internal;
+	Internal *internal;
 
 	plugin::Model *model = nullptr;
 
 	engine::Module *module = nullptr;
 
-	std::string svg_filename;
+	ModuleWidget();
+	~ModuleWidget() override;
 
-	void setModule(engine::Module *m) {
-		module = m;
+	plugin::Model *getModel();
+	void setModule(engine::Module *m);
+
+	engine::Module *getModule();
+
+	template<class TModule>
+	TModule *getModule() {
+		return dynamic_cast<TModule *>(getModule());
 	}
 
-	void setModel(plugin::Model *m) {
-		model = m;
-	}
+	void setModel(plugin::Model *m);
 
-	engine::Module *getModule() {
-		return module;
-	}
+	app::SvgPanel *getPanel();
 
-	template <class TModule>
-	TModule* getModule() {
-		return dynamic_cast<TModule*>(getModule());
-	}
-
-	plugin::Model *getModel() {
-		return model;
-	}
-
+	// In Rack, this is setPanel(Widget*)
+	// but we use setPanel(SvgPanel*) in order to call addChildBottom(SvgPanel*)
+	// because we need to know which widget is the SvgPanel so we make sure to use it as the faceplate
 	void setPanel(app::SvgPanel *newpanel);
-
 	void setPanel(std::shared_ptr<window::Svg> svg);
-
-	widget::Widget *getPanel();
 
 	// Catch-all:
 	void addChild(Widget *w);
@@ -107,7 +96,7 @@ struct ModuleWidget : widget::Widget {
 	template<typename LightBaseT>
 	void addChild(componentlibrary::TSvgLight<LightBaseT> *widget) {
 		if (widget->sw && widget->sw->svg)
-			addSvgLight(widget->sw->svg->filename, widget);
+			addSvgLight(widget->sw->svg->filename(), widget);
 		else
 			addChild(widget);
 	}
@@ -127,48 +116,55 @@ struct ModuleWidget : widget::Widget {
 	std::vector<PortWidget *> getInputs();
 	std::vector<PortWidget *> getOutputs();
 
-	// clang-format off
-	// These are all no-op:
-	void draw(const DrawArgs &args) override { }
-	void drawLayer(const DrawArgs &args, int layer) override { }
-	virtual void appendContextMenu(ui::Menu *menu) {}
-	void onHover(const HoverEvent &e) override { }
-	void onHoverKey(const HoverKeyEvent &e) override { }
-	void onButton(const ButtonEvent &e) override { }
-	void onDragStart(const DragStartEvent &e) override { }
-	void onDragEnd(const DragEndEvent &e) override { }
-	void onDragMove(const DragMoveEvent &e) override { }
-	void onDragHover(const DragHoverEvent &e) override { }
-	json_t *toJson(){ return {}; }
-	void fromJson(json_t *rootJ){}
-	bool pasteJsonAction(json_t *rootJ) { return false; }
-	void copyClipboard(){}
-	bool pasteClipboardAction(){ return {}; }
-	void load(std::string filename){}
-	void loadAction(std::string filename){}
-	void loadTemplate(){}
-	void loadDialog(){}
-	void save(std::string filename){}
-	void saveTemplate(){}
-	void saveTemplateDialog(){}
-	bool hasTemplate(){ return {}; }
-	void clearTemplate(){}
-	void clearTemplateDialog(){}
-	void saveDialog(){}
-	void disconnect(){}
-	void resetAction(){}
-	void randomizeAction(){}
-	void appendDisconnectActions(history::ComplexAction *complexAction){}
-	void disconnectAction(){}
-	void cloneAction(bool cloneCables = true){}
-	void bypassAction(bool bypassed){}
-	void removeAction(){}
-	void createContextMenu(){}
-	math::Vec getGridPosition(){ return {}; }
-	void setGridPosition(math::Vec pos){}
-	math::Vec getGridSize(){ return {}; }
-	math::Rect getGridBox(){ return {}; }
-	// clang-format on
+	struct WidgetElement {
+		unsigned element_idx;
+		rack::widget::Widget *widget;
+	};
+	__attribute__((visibility("hidden"))) std::vector<WidgetElement> &get_drawable_widgets();
+	__attribute__((visibility("hidden"))) void populate_elements_indices(rack::plugin::Model *model);
+
+	///////////////////////
+
+	void draw(const DrawArgs &args) override;
+	void drawLayer(const DrawArgs &args, int layer) override;
+	virtual void appendContextMenu(ui::Menu *menu) {
+	}
+	void onHover(const HoverEvent &e) override;
+	void onHoverKey(const HoverKeyEvent &e) override;
+	void onButton(const ButtonEvent &e) override;
+	void onDragStart(const DragStartEvent &e) override;
+	void onDragEnd(const DragEndEvent &e) override;
+	void onDragMove(const DragMoveEvent &e) override;
+	void onDragHover(const DragHoverEvent &e) override;
+	json_t *toJson();
+	void fromJson(json_t *rootJ);
+	bool pasteJsonAction(json_t *rootJ);
+	void copyClipboard();
+	bool pasteClipboardAction();
+	void load(std::string filename);
+	void loadAction(std::string filename);
+	void loadTemplate();
+	void loadDialog();
+	void save(std::string filename);
+	void saveTemplate();
+	void saveTemplateDialog();
+	bool hasTemplate();
+	void clearTemplate();
+	void clearTemplateDialog();
+	void saveDialog();
+	void disconnect();
+	void resetAction();
+	void randomizeAction();
+	void appendDisconnectActions(history::ComplexAction *complexAction);
+	void disconnectAction();
+	void cloneAction(bool cloneCables = true);
+	void bypassAction(bool bypassed);
+	void removeAction();
+	void createContextMenu();
+	math::Vec getGridPosition();
+	void setGridPosition(math::Vec pos);
+	math::Vec getGridSize();
+	math::Rect getGridBox();
 };
 
 } // namespace rack::app

@@ -58,14 +58,11 @@ struct ParamQuantity : Quantity {
 	virtual json_t *toJson();
 	virtual void fromJson(json_t *rootJ);
 
-	DEPRECATED void setSmoothValue(float value) {
-		setValue(value);
-	}
-	DEPRECATED float getSmoothValue() {
-		return getValue();
-	}
+	DEPRECATED void setSmoothValue(float value);
+	DEPRECATED float getSmoothValue();
 
-	//MM:
+	// MetaModule: put labels in ParamQuantity
+	// so we only have to store ParamQuantitys in Module
 	std::vector<std::string> labels;
 };
 
@@ -75,3 +72,4 @@ struct SwitchQuantity : ParamQuantity {
 };
 
 } // namespace rack::engine
+

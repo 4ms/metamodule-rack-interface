@@ -1,5 +1,4 @@
 #pragma once
-#include "CoreModules/elements/elements.hh"
 #include <list>
 
 #include <color.hpp>
@@ -9,96 +8,56 @@
 #include <widget/event.hpp>
 #include <window/Window.hpp>
 
-namespace rack
-{
-/** Base UI widget types */
-namespace widget
+namespace rack::widget
 {
 
-/** A node in the 2D [scene graph](https://en.wikipedia.org/wiki/Scene_graph).
-The bounding box of a Widget is a rectangle specified by `box` relative to their parent.
-The appearance is defined by overriding `draw()`, and the behavior is defined by overriding `step()` and `on*()` event handlers.
-*/
 struct Widget {
-	MetaModule::Element element;
-
 	/** Position relative to parent and size of widget. */
 	math::Rect box = math::Rect(math::Vec(), math::Vec(INFINITY, INFINITY));
 	/** Automatically set when Widget is added as a child to another Widget */
 	Widget *parent = nullptr;
 	std::list<Widget *> children;
-	/** Disables rendering but allow stepping.
-	Use isVisible(), setVisible(), show(), or hide() instead of using this variable directly.
-	*/
 	bool visible = true;
-	/** If set to true, parent will delete Widget in the next step().
-	Use requestDelete() instead of using this variable directly.
-	*/
 	bool requestedDelete = false;
 
 	virtual ~Widget();
 
-	math::Rect getBox() {
-		return box;
-	}
-	void setBox(math::Rect box) {
-		setPosition(box.pos);
-		setSize(box.size);
-	}
-	math::Vec getPosition() {
-		return box.pos;
-	}
-	void setPosition(math::Vec pos) {
-		box.pos = pos;
-	}
-	math::Vec getSize() {
-		return {box.size};
-	}
-	/** Sets size and triggers ResizeEvent if size changed. */
+	math::Rect getBox();
+	void setBox(math::Rect box);
+
+	math::Vec getPosition();
+	void setPosition(math::Vec pos);
+
+	math::Vec getSize();
 	void setSize(math::Vec size);
-	widget::Widget *getParent() {
-		return parent;
-	}
-	bool isVisible() {
-		return visible;
-	}
-	void setVisible(bool visible) {
-		this->visible = visible;
-	}
-	/** Makes Widget visible and triggers ShowEvent if changed. */
+
+	widget::Widget *getParent();
+
+	bool isVisible();
+	void setVisible(bool visible);
+
 	void show() {
 		setVisible(true);
 	}
-	/** Makes Widget not visible and triggers HideEvent if changed. */
 	void hide() {
 		setVisible(false);
 	}
 
-	/** Requests this Widget's parent to delete it in the next step(). */
 	void requestDelete();
 
-	/** Returns the smallest rectangle containing this widget's children (visible and invisible) in its local coordinates.
-	Returns `Rect(Vec(inf, inf), Vec(-inf, -inf))` if there are no children.
-	*/
 	virtual math::Rect getChildrenBoundingBox();
 	virtual math::Rect getVisibleChildrenBoundingBox();
-	/** Returns whether `ancestor` is a parent or distant parent of this widget.
-	*/
+
 	bool isDescendantOf(Widget *ancestor);
-	/**  Returns `v` (given in local coordinates) transformed into the coordinate system of `ancestor`.
-	*/
+
 	virtual math::Vec getRelativeOffset(math::Vec v, Widget *ancestor);
-	/** Returns `v` transformed into world/root/global/absolute coordinates.
-	*/
+
 	math::Vec getAbsoluteOffset(math::Vec v) {
 		return getRelativeOffset(v, nullptr);
 	}
-	/** Returns the zoom level in the coordinate system of `ancestor`.
-	Only `ZoomWidget` should override this to return value other than 1.
-	*/
-	virtual float getRelativeZoom(Widget *ancestor) {
-		return 1.f;
-	}
+
+	virtual float getRelativeZoom(Widget *ancestor);
+
 	float getAbsoluteZoom() {
 		return getRelativeZoom(nullptr);
 	}
@@ -108,44 +67,35 @@ struct Widget {
 
 	template<class T>
 	T *getAncestorOfType() {
-		//Not supported
-		return nullptr;
+		if (!parent)
+			return nullptr;
+		T *p = dynamic_cast<T *>(parent);
+		if (p)
+			return p;
+		return parent->getAncestorOfType<T>();
 	}
 
 	template<class T>
 	T *getFirstDescendantOfType() {
-		//Not supported
+		for (Widget *child : children) {
+			T *c = dynamic_cast<T *>(child);
+			if (c)
+				return c;
+			c = child->getFirstDescendantOfType<T>();
+			if (c)
+				return c;
+		}
 		return nullptr;
 	}
 
-	/** Checks if the given widget is a child of `this` widget.
-	*/
 	bool hasChild(Widget *child);
-	/** Adds widget to the top of the children.
-	Gives ownership of widget to this widget instance.
-	*/
 	void addChild(Widget *child);
-	/** Adds widget to the bottom of the children.
-	*/
 	void addChildBottom(Widget *child);
-	/** Adds widget directly below another widget.
-	The sibling widget must already be a child of `this` widget.
-	*/
 	void addChildBelow(Widget *child, Widget *sibling);
 	void addChildAbove(Widget *child, Widget *sibling);
-	/** Removes widget from list of children if it exists.
-	Triggers RemoveEvent of child.
-	Does not delete widget but transfers ownership to caller
-	*/
 	void removeChild(Widget *child);
-	/** Removes and deletes all child Widgets.
-	Triggers RemoveEvent of all children.
-	*/
 	void clearChildren();
-
-	/** Advances the module by one frame */
-	virtual void step() {
-	}
+	virtual void step();
 
 	struct DrawArgs {
 		NVGcontext *vg = nullptr;
@@ -154,8 +104,8 @@ struct Widget {
 		NVGLUframebuffer *fb = nullptr;
 	};
 
-	virtual void draw(const DrawArgs &args) {
-	}
+	virtual void draw(const DrawArgs &args);
+	//DEPRECATED virtual void draw(NVGcontext* vg) {}
 
 	/** Draw additional layers.
 
@@ -164,11 +114,9 @@ struct Widget {
 	When overriding, always wrap draw commands in `if (layer == ...) {}` to avoid drawing on all layers.
 	When overriding, call the superclass's `drawLayer(args, layer)` to recurse to children.
 	*/
-	virtual void drawLayer(const DrawArgs &args, int layer) {
-	}
+	virtual void drawLayer(const DrawArgs &args, int layer);
 
-	void drawChild(Widget *child, const DrawArgs &args, int layer = 0) {
-	}
+	void drawChild(Widget *child, const DrawArgs &args, int layer = 0);
 
 	// Events
 
@@ -461,47 +409,46 @@ struct Widget {
 	}
 };
 
-} // namespace widget
+} // namespace rack::widget
 
 /** Deprecated Rack v1 event namespace.
 Use events defined in the widget::Widget class instead of this `event::` namespace in new code.
 */
 namespace event
 {
-using Base = widget::BaseEvent;
-using PositionBase = widget::Widget::PositionBaseEvent;
-using KeyBase = widget::Widget::KeyBaseEvent;
-using TextBase = widget::Widget::TextBaseEvent;
-using Hover = widget::Widget::HoverEvent;
-using Button = widget::Widget::ButtonEvent;
-using DoubleClick = widget::Widget::DoubleClickEvent;
-using HoverKey = widget::Widget::HoverKeyEvent;
-using HoverText = widget::Widget::HoverTextEvent;
-using HoverScroll = widget::Widget::HoverScrollEvent;
-using Enter = widget::Widget::EnterEvent;
-using Leave = widget::Widget::LeaveEvent;
-using Select = widget::Widget::SelectEvent;
-using Deselect = widget::Widget::DeselectEvent;
-using SelectKey = widget::Widget::SelectKeyEvent;
-using SelectText = widget::Widget::SelectTextEvent;
-using DragBase = widget::Widget::DragBaseEvent;
-using DragStart = widget::Widget::DragStartEvent;
-using DragEnd = widget::Widget::DragEndEvent;
-using DragMove = widget::Widget::DragMoveEvent;
-using DragHover = widget::Widget::DragHoverEvent;
-using DragEnter = widget::Widget::DragEnterEvent;
-using DragLeave = widget::Widget::DragLeaveEvent;
-using DragDrop = widget::Widget::DragDropEvent;
-using PathDrop = widget::Widget::PathDropEvent;
-using Action = widget::Widget::ActionEvent;
-using Change = widget::Widget::ChangeEvent;
-using Dirty = widget::Widget::DirtyEvent;
-using Reposition = widget::Widget::RepositionEvent;
-using Resize = widget::Widget::ResizeEvent;
-using Add = widget::Widget::AddEvent;
-using Remove = widget::Widget::RemoveEvent;
-using Show = widget::Widget::ShowEvent;
-using Hide = widget::Widget::HideEvent;
-} // namespace event
+using Base = rack::widget::BaseEvent;
+using PositionBase = rack::widget::Widget::PositionBaseEvent;
+using KeyBase = rack::widget::Widget::KeyBaseEvent;
+using TextBase = rack::widget::Widget::TextBaseEvent;
+using Hover = rack::widget::Widget::HoverEvent;
+using Button = rack::widget::Widget::ButtonEvent;
+using DoubleClick = rack::widget::Widget::DoubleClickEvent;
+using HoverKey = rack::widget::Widget::HoverKeyEvent;
+using HoverText = rack::widget::Widget::HoverTextEvent;
+using HoverScroll = rack::widget::Widget::HoverScrollEvent;
+using Enter = rack::widget::Widget::EnterEvent;
+using Leave = rack::widget::Widget::LeaveEvent;
+using Select = rack::widget::Widget::SelectEvent;
+using Deselect = rack::widget::Widget::DeselectEvent;
+using SelectKey = rack::widget::Widget::SelectKeyEvent;
+using SelectText = rack::widget::Widget::SelectTextEvent;
+using DragBase = rack::widget::Widget::DragBaseEvent;
+using DragStart = rack::widget::Widget::DragStartEvent;
+using DragEnd = rack::widget::Widget::DragEndEvent;
+using DragMove = rack::widget::Widget::DragMoveEvent;
+using DragHover = rack::widget::Widget::DragHoverEvent;
+using DragEnter = rack::widget::Widget::DragEnterEvent;
+using DragLeave = rack::widget::Widget::DragLeaveEvent;
+using DragDrop = rack::widget::Widget::DragDropEvent;
+using PathDrop = rack::widget::Widget::PathDropEvent;
+using Action = rack::widget::Widget::ActionEvent;
+using Change = rack::widget::Widget::ChangeEvent;
+using Dirty = rack::widget::Widget::DirtyEvent;
+using Reposition = rack::widget::Widget::RepositionEvent;
+using Resize = rack::widget::Widget::ResizeEvent;
+using Add = rack::widget::Widget::AddEvent;
+using Remove = rack::widget::Widget::RemoveEvent;
+using Show = rack::widget::Widget::ShowEvent;
+using Hide = rack::widget::Widget::HideEvent;
 
-} // namespace rack
+} // namespace event

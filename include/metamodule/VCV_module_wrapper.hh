@@ -21,21 +21,20 @@ struct VCVModuleWrapper : CoreProcessor {
 	};
 
 	VCVModuleWrapper();
-
-	virtual void process(const ProcessArgs &) {
-		step();
-	}
-
-	virtual void step() {
-	}
+	~VCVModuleWrapper();
 
 	void update() override;
+
+	virtual void update(const ProcessArgs &args, bool bypassed) {
+	}
 
 	void set_samplerate(float rate) override;
 
 	void set_param(int id, float val) override;
 
 	void set_input(int input_id, float val) override;
+
+	float get_param(int id) const override;
 
 	float get_output(int output_id) const override;
 

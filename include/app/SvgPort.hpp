@@ -15,18 +15,25 @@ struct SvgPort : PortWidget {
 	widget::SvgWidget *sw;
 
 	SvgPort();
-
 	void setSvg(std::shared_ptr<window::Svg> svg);
-	void setSVG(std::shared_ptr<window::Svg> svg) {
+
+	[[deprecated]] void setSVG(std::shared_ptr<window::Svg> svg) {
 		setSvg(svg);
 	}
 };
+
+using SVGPort = SvgPort;
 
 struct ThemedSvgPort : SvgPort {
 	std::shared_ptr<window::Svg> lightSvg;
 	std::shared_ptr<window::Svg> darkSvg;
 
 	void setSvg(std::shared_ptr<window::Svg> lightSvg, std::shared_ptr<window::Svg> darkSvg);
+
+	void step() override {
+		SvgPort::setSvg(settings::preferDarkPanels ? darkSvg : lightSvg);
+		SvgPort::step();
+	}
 };
 
 } // namespace rack::app

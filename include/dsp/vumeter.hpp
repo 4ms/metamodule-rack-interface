@@ -1,10 +1,8 @@
 #pragma once
 #include <dsp/common.hpp>
 
-
-namespace rack {
-namespace dsp {
-
+namespace rack::dsp
+{
 
 /** Deprecated. Use VuMeter2 instead. */
 struct VuMeter {
@@ -22,15 +20,13 @@ struct VuMeter {
 	float getBrightness(int i) {
 		if (i == 0) {
 			return (dBScaled >= 0.f) ? 1.f : 0.f;
-		}
-		else {
+		} else {
 			return math::clamp(dBScaled + i, 0.f, 1.f);
 		}
 	}
 };
 
 DEPRECATED typedef VuMeter VUMeter;
-
 
 /** Models a VU meter with smoothing.
 Supports peak and RMS (root-mean-square) metering.
@@ -47,10 +43,7 @@ for (int i = 0; i < 6; i++) {
 ```
 */
 struct VuMeter2 {
-	enum Mode {
-		PEAK,
-		RMS
-	};
+	enum Mode { PEAK, RMS };
 	Mode mode = PEAK;
 	/** Either the smoothed peak or the mean-square of the brightness, depending on the mode. */
 	float v = 0.f;
@@ -65,13 +58,11 @@ struct VuMeter2 {
 		if (mode == RMS) {
 			value = std::pow(value, 2);
 			v += (value - v) * lambda * deltaTime;
-		}
-		else {
+		} else {
 			value = std::fabs(value);
 			if (value >= v) {
 				v = value;
-			}
-			else {
+			} else {
 				v += (value - v) * lambda * deltaTime;
 			}
 		}
@@ -93,6 +84,4 @@ struct VuMeter2 {
 	}
 };
 
-
-} // namespace dsp
-} // namespace rack
+} // namespace rack::dsp

@@ -62,10 +62,16 @@ struct Model {
 	std::string_view add_string(std::string_view str);
 	void debug_dump_strings();
 
-	std::string getFullName();
+	void fromJson(json_t *rootJ);
 
-	void fromJson(json_t *rootJ) {
-	}
+	std::string getFullName();
+	std::string getFactoryPresetDirectory();
+	std::string getUserPresetDirectory();
+	std::string getManualUrl();
+	void appendContextMenu(ui::Menu *menu, bool inBrowser = false);
+	bool isFavorite();
+	void setFavorite(bool favorite);
 };
 
 } // namespace rack::plugin
+

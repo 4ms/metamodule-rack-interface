@@ -22,8 +22,6 @@ struct Manager {
 	std::string templatePath;
 	/** Path to factory template patch */
 	std::string factoryTemplatePath;
-	/** Append to this while loading/saving a patch to display messages to the user after success. */
-	std::string warningLog;
 
 	PRIVATE Manager();
 	PRIVATE ~Manager();
@@ -44,10 +42,13 @@ struct Manager {
 	Returns whether the patch was loaded successfully.
 	*/
 	void load(std::string path);
-	/** Loads the template patch. */
+	/** Loads the template patch file. */
 	void loadTemplate();
 	void loadTemplateDialog();
 	bool hasAutosave();
+	/** Loads the patch from the autosave folder.
+	Throws if loading failed.
+	*/
 	void loadAutosave();
 	/** Loads a patch, sets the current path, and updates the recent patches. */
 	void loadAction(std::string path);
@@ -61,7 +62,10 @@ struct Manager {
 
 	json_t* toJson();
 	void fromJson(json_t* rootJ);
-	void log(std::string msg);
+	/** Checks if the JSON patch object contains modules not found in the loaded plugins, and launches a dialog box asking the user to cancel loading.
+	Returns whether the user requests to cancel loading the patch.
+	*/
+	bool checkUnavailableModulesJson(json_t* rootJ);
 };
 
 

@@ -12,42 +12,32 @@ struct TextField : widget::OpaqueWidget {
 
 	bool password = false;
 	bool multiline = false;
+
 	int cursor = 0;
 	int selection = 0;
 
 	Widget *prevField = nullptr;
 	Widget *nextField = nullptr;
 
-	virtual int getTextPosition(math::Vec mousePos) {
-		return 0;
-	}
+	TextField();
+	void draw(const DrawArgs &args) override;
+	void onDragHover(const DragHoverEvent &e) override;
+	void onButton(const ButtonEvent &e) override;
+	void onSelectText(const SelectTextEvent &e) override;
+	void onSelectKey(const SelectKeyEvent &e) override;
+	virtual int getTextPosition(math::Vec mousePos);
 
-	std::string getText() {
-		return text;
-	}
-	void setText(std::string text) {
-		this->text = text;
-	}
-	void selectAll() {
-	}
-	std::string getSelectedText() {
-		return text;
-	}
-	void insertText(std::string text) {
-		setText(text);
-	}
-	void copyClipboard() {
-	}
-	void cutClipboard() {
-	}
-	void pasteClipboard() {
-	}
-	void cursorToPrevWord() {
-	}
-	void cursorToNextWord() {
-	}
-	void createContextMenu() {
-	}
+	std::string getText();
+	void setText(std::string text);
+	void selectAll();
+	std::string getSelectedText();
+	void insertText(std::string text);
+	void copyClipboard();
+	void cutClipboard();
+	void pasteClipboard();
+	void cursorToPrevWord();
+	void cursorToNextWord();
+	void createContextMenu();
 };
 
 struct PasswordField : TextField {

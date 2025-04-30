@@ -2,9 +2,8 @@
 #include <common.hpp>
 #include <pthread.h>
 
-
-namespace rack {
-
+namespace rack
+{
 
 /** Allows multiple "reader" threads to obtain a lock simultaneously, but only one "writer" thread.
 
@@ -16,52 +15,57 @@ Locking should be avoided in real-time audio threads.
 struct SharedMutex {
 	// pthread_rwlock_t rwlock;
 
-	// SharedMutex() {
-	// 	if (pthread_rwlock_init(&rwlock, NULL))
-	// 		throw Exception("pthread_rwlock_init failed");
-	// }
-	// ~SharedMutex() {
-	// 	pthread_rwlock_destroy(&rwlock);
-	// }
+	SharedMutex() {
+		// int err = pthread_rwlock_init(&rwlock, NULL);
+		// (void) err;
+		// assert(!err);
+	}
+	~SharedMutex() {
+		// pthread_rwlock_destroy(&rwlock);
+	}
 
-	// void lock() {
-	// 	if (pthread_rwlock_wrlock(&rwlock))
-	// 		throw Exception("pthread_rwlock_wrlock failed");
-	// }
-	// /** Returns whether the lock was acquired. */
-	// bool try_lock() {
-	// 	return pthread_rwlock_trywrlock(&rwlock) == 0;
-	// }
-	// void unlock() {
-	// 	if (pthread_rwlock_unlock(&rwlock))
-	// 		throw Exception("pthread_rwlock_unlock failed");
-	// }
+	void lock() {
+		// int err = pthread_rwlock_wrlock(&rwlock);
+		// (void) err;
+		// assert(!err);
+	}
+	/** Returns whether the lock was acquired. */
+	bool try_lock() {
+		return false;
+		// return pthread_rwlock_trywrlock(&rwlock) == 0;
+	}
+	void unlock() {
+		// int err = pthread_rwlock_unlock(&rwlock);
+		// (void) err;
+		// assert(!err);
+	}
 
-	// void lock_shared() {
-	// 	if (pthread_rwlock_rdlock(&rwlock))
-	// 		throw Exception("pthread_rwlock_rdlock failed");
-	// }
-	// /** Returns whether the lock was acquired. */
-	// bool try_lock_shared() {
-	// 	return pthread_rwlock_tryrdlock(&rwlock) == 0;
-	// }
-	// void unlock_shared() {
-	// 	unlock();
-	// }
+	void lock_shared() {
+		// int err = pthread_rwlock_rdlock(&rwlock);
+		// (void) err;
+		// assert(!err);
+	}
+	/** Returns whether the lock was acquired. */
+	bool try_lock_shared() {
+		return false;
+		// return pthread_rwlock_tryrdlock(&rwlock) == 0;
+	}
+	void unlock_shared() {
+		unlock();
+	}
 };
 
-
-template <class TMutex>
+template<class TMutex>
 struct SharedLock {
-	// TMutex& m;
+	TMutex &m;
 
-	// SharedLock(TMutex& m) : m(m) {
-	// 	m.lock_shared();
-	// }
-	// ~SharedLock() {
-	// 	m.unlock_shared();
-	// }
+	SharedLock(TMutex &m)
+		: m(m) {
+		m.lock_shared();
+	}
+	~SharedLock() {
+		m.unlock_shared();
+	}
 };
-
 
 } // namespace rack

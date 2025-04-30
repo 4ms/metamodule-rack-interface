@@ -10,7 +10,11 @@ namespace rack::engine
 {
 
 struct Engine {
-	float sample_rate = 48000.f;
+	struct Internal;
+	Internal *internal;
+
+	PRIVATE Engine();
+	PRIVATE ~Engine();
 
 	void clear();
 	// PRIVATE void clear_NoLock();
@@ -20,6 +24,7 @@ struct Engine {
 	Module *getMasterModule();
 
 	float getSampleRate();
+	PRIVATE void setSampleRate(float sampleRate);
 	void setSuggestedSampleRate(float suggestedSampleRate);
 	float getSampleTime();
 	void yieldWorkers();
@@ -32,13 +37,13 @@ struct Engine {
 	double getMeterAverage();
 	double getMeterMax();
 
-	// Modules
 	size_t getNumModules();
 	size_t getModuleIds(int64_t *moduleIds, size_t len);
 	std::vector<int64_t> getModuleIds();
 	void addModule(Module *module);
+	PRIVATE void addModule_NoLock(Module *module);
 	void removeModule(Module *module);
-	// PRIVATE void removeModule_NoLock(Module *module);
+	PRIVATE void removeModule_NoLock(Module *module);
 	bool hasModule(Module *module);
 	Module *getModule(int64_t moduleId);
 	Module *getModule_NoLock(int64_t moduleId);
@@ -55,8 +60,9 @@ struct Engine {
 	size_t getCableIds(int64_t *cableIds, size_t len);
 	std::vector<int64_t> getCableIds();
 	void addCable(Cable *cable);
+	PRIVATE void addCable_NoLock(Cable *cable);
 	void removeCable(Cable *cable);
-	// PRIVATE void removeCable_NoLock(Cable *cable);
+	PRIVATE void removeCable_NoLock(Cable *cable);
 	bool hasCable(Cable *cable);
 	Cable *getCable(int64_t cableId);
 
@@ -69,7 +75,7 @@ struct Engine {
 	// ParamHandles
 	void addParamHandle(ParamHandle *paramHandle);
 	void removeParamHandle(ParamHandle *paramHandle);
-	// PRIVATE void removeParamHandle_NoLock(ParamHandle *paramHandle);
+	PRIVATE void removeParamHandle_NoLock(ParamHandle *paramHandle);
 	ParamHandle *getParamHandle(int64_t moduleId, int paramId);
 	ParamHandle *getParamHandle_NoLock(int64_t moduleId, int paramId);
 	DEPRECATED ParamHandle *getParamHandle(Module *module, int paramId);
@@ -78,8 +84,7 @@ struct Engine {
 
 	json_t *toJson();
 	void fromJson(json_t *rootJ);
-
-	// PRIVATE void startFallbackThread();
+	PRIVATE void startFallbackThread();
 };
 
 } // namespace rack::engine

@@ -5,6 +5,9 @@
 namespace rack::ui
 {
 
-struct MenuSeparator : MenuEntry {};
+struct MenuSeparator : MenuEntry {
+	MenuSeparator();
+	void draw(const DrawArgs &args) override;
+};
 
 } // namespace rack::ui

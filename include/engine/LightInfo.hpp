@@ -16,13 +16,8 @@ struct LightInfo {
 
 	virtual ~LightInfo() = default;
 
-	virtual std::string getName() {
-		return name;
-	}
-
-	virtual std::string getDescription() {
-		return description;
-	}
+	virtual std::string getName();
+	virtual std::string getDescription();
 };
 
 } // namespace rack::engine

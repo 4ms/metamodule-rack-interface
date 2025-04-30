@@ -18,17 +18,12 @@ struct PortInfo {
 
 	virtual ~PortInfo() = default;
 
-	virtual std::string getName() {
-		return name;
-	}
+	virtual std::string getName();
 
-	std::string getFullName() {
-		return name;
-	}
+	std::string getFullName();
 
-	virtual std::string getDescription() {
-		return description;
-	}
+	virtual std::string getDescription();
 };
 
 } // namespace rack::engine
+

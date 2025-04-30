@@ -47,6 +47,8 @@ T amplitudeToDb(T amp) {
 
 template <typename T>
 T dbToAmplitude(T db) {
+	// MetaModule: use std::pow: more efficient and only floats are used in all plugin examples found.
+	// Rack uses simd::pow
 	return std::pow(10, db / 20);
 }
 

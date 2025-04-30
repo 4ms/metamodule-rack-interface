@@ -26,6 +26,11 @@ namespace engine
 {
 
 struct Module : VCVModuleWrapper {
+	struct Internal;
+	Internal *internal;
+
+	std::shared_ptr<app::ModuleWidget> module_widget{};
+
 	plugin::Model *model = nullptr;
 
 	int64_t id = -1;
@@ -82,8 +87,6 @@ struct Module : VCVModuleWrapper {
 			delete paramQuantities[paramId];
 
 		paramQuantities[paramId] = new TParamQuantity;
-
-		// TODO: is any of this necessary? In case a VCV module reads its own PQs?
 		paramQuantities[paramId]->ParamQuantity::module = this;
 		paramQuantities[paramId]->ParamQuantity::paramId = paramId;
 		paramQuantities[paramId]->ParamQuantity::minValue = minValue;
@@ -110,6 +113,8 @@ struct Module : VCVModuleWrapper {
 								  std::vector<std::string> labels = {}) {
 		TSwitchQuantity *sq = configParam<TSwitchQuantity>(paramId, minValue, maxValue, defaultValue, name);
 		sq->snapEnabled = true;
+		// TODO: does this need to be removed in MM?
+		// sq->ParamQuantity::smoothEnabled = false;
 		sq->labels = labels;
 		return sq;
 	}
@@ -118,6 +123,7 @@ struct Module : VCVModuleWrapper {
 	TSwitchQuantity *configButton(int paramId, std::string name = "") {
 		TSwitchQuantity *sq = configParam<TSwitchQuantity>(paramId, 0.f, 1.f, 0.f, name);
 		// sq->randomizeEnabled = false;
+		// sq->ParamQuantity::smoothEnabled = false;
 		sq->snapEnabled = true;
 		return sq;
 	}
@@ -131,8 +137,6 @@ struct Module : VCVModuleWrapper {
 			delete inputInfos[portId];
 
 		inputInfos[portId] = new TPortInfo;
-
-		// TODO: is any of this necessary? In case a VCV module reads its own inputInfos?
 		inputInfos[portId]->PortInfo::module = this;
 		inputInfos[portId]->PortInfo::type = Port::INPUT;
 		inputInfos[portId]->PortInfo::portId = portId;
@@ -150,9 +154,8 @@ struct Module : VCVModuleWrapper {
 
 		outputInfos[portId] = new TPortInfo;
 
-		// TODO: is any of this necessary? In case a VCV module reads its own outputInfos?
 		outputInfos[portId]->PortInfo::module = this;
-		outputInfos[portId]->PortInfo::type = Port::INPUT;
+		outputInfos[portId]->PortInfo::type = Port::OUTPUT;
 		outputInfos[portId]->PortInfo::portId = portId;
 		outputInfos[portId]->PortInfo::name = name;
 		return outputInfos[portId];
@@ -194,13 +197,8 @@ struct Module : VCVModuleWrapper {
 		bypassRoutes.push_back(br);
 	}
 
-	// Not supported:
-	std::string createPatchStorageDirectory() {
-		return "";
-	}
-	std::string getPatchStorageDirectory() {
-		return "";
-	}
+	std::string createPatchStorageDirectory();
+	std::string getPatchStorageDirectory();
 
 	plugin::Model *getModel() {
 		return model;
@@ -264,14 +262,20 @@ struct Module : VCVModuleWrapper {
 
 	// Virtual methods
 
-	virtual void processBypass(const ProcessArgs &args) {
+	virtual void process(const ProcessArgs &) {
+		step();
 	}
 
-	virtual json_t *toJson() {
-		return nullptr;
+	virtual void step() {
 	}
-	virtual void fromJson(json_t *rootJ) {
-	}
+
+	virtual void processBypass(const ProcessArgs &args);
+
+	// Called by VCVModuleWrapper
+	void update(const ProcessArgs &args, bool bypassed) override;
+
+	virtual json_t *toJson();
+	virtual void fromJson(json_t *rootJ);
 
 	virtual json_t *paramsToJson();
 
@@ -333,12 +337,10 @@ struct Module : VCVModuleWrapper {
 	}
 
 	struct ResetEvent {};
-	virtual void onReset(const ResetEvent &e) {
-	}
+	virtual void onReset(const ResetEvent &e);
 
 	struct RandomizeEvent {};
-	virtual void onRandomize(const RandomizeEvent &e) {
-	}
+	virtual void onRandomize(const RandomizeEvent &e);
 
 	struct SaveEvent {};
 	virtual void onSave(const SaveEvent &e) {
@@ -363,14 +365,30 @@ struct Module : VCVModuleWrapper {
 	virtual void onSampleRateChange() {
 	}
 
-	bool isBypassed() {
-		return false;
-	}
+	bool isBypassed();
 
+	PRIVATE void setBypassed(bool bypassed);
+	PRIVATE const float *meterBuffer();
+	PRIVATE int meterLength();
+	PRIVATE int meterIndex();
+	PRIVATE void doProcess(const ProcessArgs &args);
+	PRIVATE static void jsonStripIds(json_t *rootJ);
+	PRIVATE void setExpanderModule(Module *module, uint8_t side);
+
+	// MetaModule: patch loader calls this to load state from a string (typically json)
 	void load_state(std::string_view state_data) override;
+
+	// MetaModule: patch loader calls this to save state to a string (typically json)
 	std::string save_state() override;
 
+	// MetaModule: audio engine calls this on all modules
 	void set_samplerate(float sr) override;
+
+	void show_graphic_display(int display_id, std::span<uint32_t> pix_buffer, unsigned width, lv_obj_t *) override;
+
+	bool draw_graphic_display(int display_id) override;
+
+	void hide_graphic_display(int display_id) override;
 };
 
 } // namespace engine

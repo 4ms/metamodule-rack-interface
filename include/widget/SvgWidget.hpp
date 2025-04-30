@@ -8,15 +8,19 @@ namespace rack::widget
 struct SvgWidget : Widget {
 	std::shared_ptr<window::Svg> svg;
 
-	NVGcolor bgColor{};
+	SvgWidget();
 
-	void wrap() {
-	}
+	void wrap();
 
 	void setSvg(std::shared_ptr<window::Svg> svg);
-	void setSVG(std::shared_ptr<window::Svg> svg) {
+
+	[[deprecated]] void setSVG(std::shared_ptr<window::Svg> svg) {
 		setSvg(svg);
 	}
+
+	void draw(const DrawArgs &args) override;
 };
+
+[[deprecated]] typedef SvgWidget SVGWidget;
 
 } // namespace rack::widget

@@ -1,9 +1,19 @@
 #pragma once
+#include <app/common.hpp>
 #include <app/Knob.hpp>
 
-namespace rack::app
-{
 
-struct SliderKnob : Knob {};
+namespace rack {
+namespace app {
 
-} // namespace rack::app
+
+struct SliderKnob : Knob {
+	SliderKnob();
+
+	void onHover(const HoverEvent& e) override;
+	void onButton(const ButtonEvent& e) override;
+};
+
+
+} // namespace app
+} // namespace rack

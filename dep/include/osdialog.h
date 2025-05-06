@@ -1,13 +1,13 @@
 #pragma once
 
+#include "osdialog_types.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
-#include <stdint.h>
 #include <stddef.h>
-
+#include <stdint.h>
 
 #ifndef OSDIALOG_MALLOC
 #define OSDIALOG_MALLOC malloc
@@ -17,10 +17,8 @@ extern "C" {
 #define OSDIALOG_FREE free
 #endif
 
-
-char* osdialog_strdup(const char* s);
-char* osdialog_strndup(const char* s, size_t n);
-
+char *osdialog_strdup(const char *s);
+char *osdialog_strndup(const char *s, size_t n);
 
 typedef enum {
 	OSDIALOG_INFO,
@@ -38,7 +36,7 @@ typedef enum {
 
 Returns 1 if the "OK" or "Yes" button was pressed.
 */
-int osdialog_message(osdialog_message_level level, osdialog_message_buttons buttons, const char* message);
+int osdialog_message(osdialog_message_level level, osdialog_message_buttons buttons, const char *message);
 
 /** Launches an input prompt with an "OK" and "Cancel" button.
 
@@ -49,36 +47,28 @@ If the returned result is not NULL, caller must free() it.
 
 TODO: Implement on Windows and GTK2.
 */
-char* osdialog_prompt(osdialog_message_level level, const char* message, const char* text);
-
+char *osdialog_prompt(osdialog_message_level level, const char *message, const char *text);
 
 /** Linked list of patterns. */
 typedef struct osdialog_filter_patterns {
-	char* pattern;
-	struct osdialog_filter_patterns* next;
+	char *pattern;
+	struct osdialog_filter_patterns *next;
 } osdialog_filter_patterns;
 
 /** Linked list of file filters. */
 typedef struct osdialog_filters {
-	char* name;
-	osdialog_filter_patterns* patterns;
-	struct osdialog_filters* next;
+	char *name;
+	osdialog_filter_patterns *patterns;
+	struct osdialog_filters *next;
 } osdialog_filters;
 
 /** Parses a filter string.
 Example: "Source:c,cpp,m;Header:h,hpp"
 Caller must eventually free with osdialog_filters_free().
 */
-osdialog_filters* osdialog_filters_parse(const char* str);
-void osdialog_filter_patterns_free(osdialog_filter_patterns* patterns);
-void osdialog_filters_free(osdialog_filters* filters);
-
-
-typedef enum {
-	OSDIALOG_OPEN,
-	OSDIALOG_OPEN_DIR,
-	OSDIALOG_SAVE,
-} osdialog_file_action;
+osdialog_filters *osdialog_filters_parse(const char *str);
+void osdialog_filter_patterns_free(osdialog_filter_patterns *patterns);
+void osdialog_filters_free(osdialog_filters *filters);
 
 /** Launches a file dialog and returns the selected path or NULL if nothing was selected.
 
@@ -89,8 +79,7 @@ typedef enum {
 Returns the selected file, or NULL if the dialog was cancelled.
 If the return result is not NULL, caller must free() it.
 */
-char* osdialog_file(osdialog_file_action action, const char* path, const char* filename, osdialog_filters* filters);
-
+char *osdialog_file(osdialog_file_action action, const char *path, const char *filename, osdialog_filters *filters);
 
 typedef struct {
 	uint8_t r, g, b, a;
@@ -104,11 +93,10 @@ Returns 1 if "OK" was pressed.
 
 TODO Implement on Mac.
 */
-int osdialog_color_picker(osdialog_color* color, int opacity);
+int osdialog_color_picker(osdialog_color *color, int opacity);
 
-
-typedef void* (*osdialog_save_callback)();
-typedef void (*osdialog_restore_callback)(void* ptr);
+typedef void *(*osdialog_save_callback)();
+typedef void (*osdialog_restore_callback)(void *ptr);
 
 /** Sets callback that is called before each dialog is opened.
 This is useful for saving/restoring global state that an OS dialog might modify.
@@ -120,8 +108,6 @@ The pointer returned by osdialog_save_callback() is passed as an argument to osd
 */
 void osdialog_set_restore_callback(osdialog_restore_callback cb);
 
-
 #ifdef __cplusplus
 }
 #endif
-

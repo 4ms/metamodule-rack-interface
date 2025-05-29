@@ -16,7 +16,7 @@ namespace midi
 
 struct Message {
 	std::array<uint8_t, 3> bytes{};
-	uint8_t size = 0;
+	uint8_t size = 3;
 
 	Message() = default;
 

@@ -25,7 +25,7 @@ struct Message {
 	}
 	void setSize(int size) {
 		if (size < 0 || size > 3) {
-			printf("Cannot resize rack::midi::Message::bytes to %u\n", size);
+			printf("Cannot resize rack::midi::Message::bytes to %d\n", size);
 		} else
 			this->size = size;
 	}
